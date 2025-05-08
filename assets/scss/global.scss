@@ -1,0 +1,152 @@
+@use 'breakpoints' as *;
+
+/* =============================================================================
+   CSS Variables
+   ========================================================================== */
+
+// Variables
+
+:root {
+
+  // Color
+
+  // Base Palette (Keep these if used elsewhere, or remove if redundant)
+  --palette-white: #F3F2ED;
+  --palette-black: #000;
+  --palette-grey: rgba(0,0,0,0.15);
+
+  // Semantic Colors (Light Mode - Default)
+  
+  --color-background: var(--palette-white);
+  --color-text: var(--palette-black);
+  --color-text-muted: var(--palette-grey);
+  --color-border: #000; // Example border color
+  --color-background-projects-light: #EAF5FF; // Projects page light background
+  --color-background-about-light: #FFF0F8; // Projects page light background
+  --color-background-contact-light:#FFF9DE;
+  --color-background-reverse: var(--palette-black);
+  --color-text-reverse: var(--palette-white);
+
+  // Gutters & Layout
+
+  --gutter: 0.938rem;
+  --gutter-2: calc(var(--gutter) * 2);
+  --gutter-half: calc(var(--gutter) / 2);
+  --gutter-quarter: calc(var(--gutter) / 4);
+  overscroll-behavior: none;
+  --control-height: 38px;
+  --border-radius: 8px;
+}
+
+html.dark {
+  --color-background: var(--palette-black);
+  --color-text: #fff;
+  --color-text-muted:   rgba(255,255,255,0.15); // Lighter grey for dark mode
+  --color-border: #fff; 
+  --color-background-reverse: var(--palette-white);
+  --color-text-reverse: var(--palette-black);
+
+}
+
+/* =============================================================================
+  Global Styles
+   ========================================================================== */
+
+::selection {
+  // background: #ccc; 
+}
+body, html {height: 100%; }
+body {overscroll-behavior-y: none;overscroll-behavior-x: none;}
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text);
+  min-height: -webkit-fill-available;
+  height:100%;
+  &.no-overflow {
+    overflow: hidden !important;
+  }
+  .page {opacity:0;}
+  .hide-preloader {opacity:0;}
+  &.preloader-finished {overflow: visible;
+    .main-menu {opacity:1;}
+    .hide-preloader {opacity:1;}
+    .page {opacity:1;}
+  }
+  &.preloader-started {overflow: hidden;
+    .main-menu {opacity:0;} 
+  }
+
+
+}
+
+// Page-specific background overrides (Light Mode)
+body.page-about {
+  background-color: #FFF0F8; // Keep existing about page override
+}
+
+.main, .page{min-height:100%;}
+.page {position: relative;overflow: hidden;}
+
+a {text-decoration:none;color: var(--color-text);
+  &:hover {text-decoration:none;}
+}
+
+
+body.page-routing {
+  cursor: wait;
+  .hide-routing {opacity:0;}
+  .page-content {opacity:0;}
+}
+
+.page-content {
+  min-height: 100%;
+  height: fit-content;
+}
+
+  /* =============================================================================
+   Preloader
+   ========================================================================== */
+
+   .page {}
+
+  /* =============================================================================
+   Mixins
+   ========================================================================== */
+
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// You can then use the class like this:
+.visually-hidden {
+  @include visually-hidden;
+}
+
+
+@mixin noButton {
+  background: transparent;
+  border: none;
+  padding: 0;
+  appearance: none;
+  cursor: pointer;
+  height: auto;
+  display: block;
+  outline: none;  
+  border-radius: 0;
+  text-align:left;
+}
+
+
+  /* =============================================================================
+   Modernizer
+   ========================================================================== */
+
