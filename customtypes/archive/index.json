@@ -1,0 +1,32 @@
+{
+  "format": "page",
+  "id": "archive",
+  "json": {
+    "SEO": {
+      "uid": {
+        "type": "UID",
+        "config": {
+          "label": "Slug",
+          "placeholder": ""
+        }
+      },
+      "page_title": {
+        "type": "Text",
+        "config": {
+          "label": "Page title",
+          "placeholder": ""
+        }
+      },
+      "meta_description": {
+        "config": {
+          "label": "Page description",
+          "placeholder": "A brief summary of the page"
+        },
+        "type": "Text"
+      }
+    }
+  },
+  "label": "Archive",
+  "repeatable": false,
+  "status": true
+}

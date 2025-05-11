@@ -1,0 +1,66 @@
+{
+  "format": "custom",
+  "id": "global",
+  "label": "Global",
+  "repeatable": false,
+  "status": true,
+  "json": {
+    "Main": {
+      "phone": {
+        "type": "Link",
+        "config": {
+          "label": "Phone",
+          "placeholder": "",
+          "select": null,
+          "allowTargetBlank": true,
+          "allowText": true,
+          "repeat": false
+        }
+      },
+      "email": {
+        "type": "Link",
+        "config": {
+          "label": "Email",
+          "placeholder": "",
+          "select": null,
+          "allowTargetBlank": true,
+          "allowText": true,
+          "repeat": false
+        }
+      },
+      "instagram": {
+        "type": "Link",
+        "config": {
+          "label": "Instagram",
+          "placeholder": "",
+          "select": null,
+          "allowTargetBlank": true,
+          "allowText": true,
+          "repeat": false
+        }
+      },
+      "linkedin": {
+        "type": "Link",
+        "config": {
+          "label": "Linkedin",
+          "placeholder": "",
+          "select": null,
+          "allowTargetBlank": true,
+          "allowText": true,
+          "repeat": false
+        }
+      },
+      "directions": {
+        "type": "Link",
+        "config": {
+          "label": "Directions",
+          "placeholder": "",
+          "select": null,
+          "allowTargetBlank": true,
+          "allowText": true,
+          "repeat": false
+        }
+      }
+    }
+  }
+}

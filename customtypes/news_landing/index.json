@@ -1,9 +1,6 @@
 {
   "format": "page",
-  "id": "home",
-  "label": "Home",
-  "repeatable": false,
-  "status": true,
+  "id": "news_landing",
   "json": {
     "SEO": {
       "uid": {
@@ -28,27 +25,28 @@
         "type": "Text"
       }
     },
-    "Footer": {
-      "call_to_action": {
+    "Introduction": {
+      "heading": {
         "type": "StructuredText",
         "config": {
-          "label": "Call to action",
+          "label": "heading",
           "placeholder": "",
-          "allowTargetBlank": true,
-          "multi": "paragraph,em"
+          "allowTargetBlank": false,
+          "multi": "heading1"
         }
       },
-      "call_to_action_link": {
-        "type": "Link",
+      "sub_heading": {
+        "type": "StructuredText",
         "config": {
-          "label": "Call to action link",
+          "label": "Sub heading",
           "placeholder": "",
-          "select": null,
-          "allowTargetBlank": true,
-          "allowText": true,
-          "repeat": false
+          "allowTargetBlank": false,
+          "multi": "heading2"
         }
       }
     }
-  }
+  },
+  "label": "News Landing",
+  "repeatable": false,
+  "status": true
 }

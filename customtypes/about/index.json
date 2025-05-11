@@ -1,9 +1,6 @@
 {
   "format": "page",
-  "id": "home",
-  "label": "Home",
-  "repeatable": false,
-  "status": true,
+  "id": "about",
   "json": {
     "SEO": {
       "uid": {
@@ -28,6 +25,35 @@
         "type": "Text"
       }
     },
+    "Introduction": {
+      "heading": {
+        "type": "StructuredText",
+        "config": {
+          "label": "heading",
+          "placeholder": "",
+          "allowTargetBlank": false,
+          "multi": "heading1"
+        }
+      },
+      "sub_heading": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Sub heading",
+          "placeholder": "",
+          "allowTargetBlank": false,
+          "multi": "heading2"
+        }
+      },
+      "paragraph": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Paragraph",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "paragraph,hyperlink,em"
+        }
+      }
+    },
     "Footer": {
       "call_to_action": {
         "type": "StructuredText",
@@ -50,5 +76,8 @@
         }
       }
     }
-  }
+  },
+  "label": "About Landing",
+  "repeatable": false,
+  "status": true
 }

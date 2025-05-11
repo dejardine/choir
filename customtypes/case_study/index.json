@@ -1,0 +1,217 @@
+{
+  "format": "page",
+  "id": "case_study",
+  "label": "Case Study",
+  "repeatable": true,
+  "status": true,
+  "json": {
+    "SEO": {
+      "uid": {
+        "type": "UID",
+        "config": {
+          "label": "Slug",
+          "placeholder": ""
+        }
+      },
+      "page_title": {
+        "type": "Text",
+        "config": {
+          "label": "Page title",
+          "placeholder": ""
+        }
+      },
+      "meta_description": {
+        "config": {
+          "label": "Page description",
+          "placeholder": "A brief summary of the page"
+        },
+        "type": "Text"
+      }
+    },
+    "Thumbnail": {
+      "image_thumbnail": {
+        "type": "Image",
+        "config": {
+          "label": "Image Thumbnail",
+          "constraint": {},
+          "thumbnails": []
+        }
+      },
+      "video_thumbnail": {
+        "type": "Link",
+        "config": {
+          "label": "Video Thumbnail",
+          "placeholder": "",
+          "select": null,
+          "allowTargetBlank": false,
+          "allowText": false,
+          "repeat": false
+        }
+      },
+      "square_thumbnail": {
+        "type": "Image",
+        "config": {
+          "label": "Square Thumbnail",
+          "constraint": {},
+          "thumbnails": []
+        }
+      },
+      "thumbnail_title": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Thumbnail Title",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "paragraph,strong"
+        }
+      }
+    },
+    "Info": {
+      "client": {
+        "type": "Group",
+        "config": {
+          "label": "Client",
+          "repeat": true,
+          "fields": {
+            "client": {
+              "type": "Link",
+              "config": {
+                "label": "Client",
+                "select": "document",
+                "repeat": false,
+                "customtypes": ["client"]
+              }
+            }
+          }
+        }
+      },
+      "industry": {
+        "type": "Group",
+        "config": {
+          "label": "Industry",
+          "repeat": true,
+          "fields": {
+            "industry": {
+              "type": "Link",
+              "config": {
+                "label": "Industry",
+                "select": "document",
+                "repeat": false,
+                "customtypes": ["industry"]
+              }
+            }
+          }
+        }
+      },
+      "scope": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Scope",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "paragraph"
+        }
+      },
+      "year": {
+        "type": "Number",
+        "config": {
+          "label": "Year",
+          "placeholder": ""
+        }
+      },
+      "link": {
+        "type": "Link",
+        "config": {
+          "label": "Link",
+          "placeholder": "",
+          "select": null,
+          "allowTargetBlank": true,
+          "allowText": true,
+          "repeat": false
+        }
+      },
+      "information": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Information",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "paragraph,hyperlink"
+        }
+      }
+    },
+    "Content": {
+      "slices4": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {}
+        }
+      }
+    },
+    "Status": {
+      "archived": {
+        "type": "Boolean",
+        "config": {
+          "label": "Archived",
+          "placeholder_false": "false",
+          "placeholder_true": "true",
+          "default_value": false
+        }
+      }
+    },
+    "Footer": {
+      "call_to_action": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Call to action",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "paragraph,em",
+          "labels": ["micro-text"]
+        }
+      },
+      "call_to_action_link": {
+        "type": "Link",
+        "config": {
+          "label": "Call to action link",
+          "placeholder": "",
+          "select": null,
+          "allowTargetBlank": true,
+          "allowText": true,
+          "repeat": false
+        }
+      }
+    },
+    "Header": {
+      "header_image": {
+        "type": "Image",
+        "config": {
+          "label": "Header Image",
+          "constraint": {},
+          "thumbnails": []
+        }
+      },
+      "header_video": {
+        "type": "Link",
+        "config": {
+          "label": "Header Video",
+          "placeholder": "",
+          "select": null,
+          "allowTargetBlank": true,
+          "allowText": true,
+          "repeat": false
+        }
+      },
+      "header_paragraph": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Header Paragraph",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "heading2,strong"
+        }
+      }
+    }
+  }
+}

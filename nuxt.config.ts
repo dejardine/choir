@@ -3,7 +3,7 @@ import { apiEndpoint, repositoryName } from "./slicemachine.config.json";
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
-  modules: ["@nuxtjs/prismic", "@nuxt/image"],
+  modules: ["@nuxtjs/prismic", "@nuxt/image", "@nuxtjs/color-mode"],
   nitro: {
     preset: "static",
     output: {
@@ -18,6 +18,22 @@ export default defineNuxtConfig({
         {
           type: "home",
           path: "/",
+        },
+        {
+          type: "about",
+          path: "/about",
+        },
+        {
+          type: "work",
+          path: "/work",
+        },
+        {
+          type: "news_landing",
+          path: "/news",
+        },
+        {
+          type: "contact",
+          path: "/contact",
         },
       ],
     },
