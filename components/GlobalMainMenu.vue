@@ -1,9 +1,14 @@
 <template>
   <nav ref="mainMenu" class="global-main-menu" aria-label="Main">
-    <ThemeSwitcher class="theme-switcher-menu" />
-
     <div class="default-menu-columns" v-if="defaultMenuLinks.length">
-      <ul class="default-menu-list">
+      <ul class="default-menu-column-left">
+        <li>
+          <NuxtLink to="/">Choir</NuxtLink>
+        </li>
+      </ul>
+      <ThemeSwitcher class="theme-switcher-menu" />
+
+      <ul class="default-menu-column-right">
         <li
           v-for="(item, index) in defaultMenuLinks"
           :key="'home-col-' + index"
@@ -51,20 +56,48 @@ const defaultMenuLinks = computed(() => {
 
 // Styles specific to home menu
 .global-main-menu {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  grid-gap: var(--gutter);
-  padding: var(--gutter);
   padding-bottom: 0;
   @include menuType;
   width: 100%;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
-
-  // Hide on mobile
-  @include breakpoint(mobile) {
-    display: none;
+  :deep(ul) {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
   }
+}
+
+.default-menu-columns {
+  grid-template-columns: repeat(12, 1fr);
+  grid-gap: var(--gutter);
+  padding: var(--gutter);
+  display: grid;
+}
+.default-menu-column-left {
+  grid-column: 1 / span 6;
+}
+.default-menu-column-right {
+  grid-column: 10 / span 3;
+
+  display: flex;
+  justify-content: flex-end;
+  li {
+    margin-right: 3px;
+    &:after {
+      content: ", ";
+      white-space: pre;
+    }
+    &:last-of-type {
+      &:after {
+        content: none;
+      }
+    }
+  }
+}
+.theme-switcher {
+  grid-column: 9 / span 1;
+  margin-top: 3px;
 }
 </style>

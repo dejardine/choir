@@ -1,4 +1,4 @@
-import { apiEndpoint, repositoryName } from "./slicemachine.config.json";
+import { repositoryName } from "./slicemachine.config.json";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
@@ -12,7 +12,7 @@ export default defineNuxtConfig({
     },
   },
   prismic: {
-    endpoint: apiEndpoint || repositoryName,
+    endpoint: repositoryName,
     clientConfig: {
       routes: [
         {
@@ -38,6 +38,10 @@ export default defineNuxtConfig({
       ],
     },
   },
+  colorMode: {
+    preference: "dark", // Set default theme to dark
+    classSuffix: "",
+  },
   app: {
     pageTransition: false,
     head: {
@@ -56,53 +60,53 @@ export default defineNuxtConfig({
           content: "width=device-width, initial-scale=1",
         },
         {
-          hid: "og:title",
+          key: "og:title",
           property: "og:title",
           content: "Choir",
         },
         {
-          hid: "og:description",
+          key: "og:description",
           property: "og:description",
           content: "Content here.",
         },
         {
-          hid: "og:image",
+          key: "og:image",
           property: "og:image",
           content: "",
         },
         {
-          hid: "og:image:secure_url",
+          key: "og:image:secure_url",
           property: "og:image:secure_url",
           content: "",
         },
         {
-          hid: "og:image:alt",
+          key: "og:image:alt",
           property: "og:image:alt",
           content: "Choir",
         },
         {
-          hid: "og:type",
+          key: "og:type",
           property: "og:type",
           content: "website",
         },
 
         {
-          hid: "twitter:title",
+          key: "twitter:title",
           name: "twitter:title",
           content: "Choir",
         },
         {
-          hid: "twitter:description",
+          key: "twitter:description",
           name: "twitter:description",
           content: "Content here",
         },
         {
-          hid: "twitter:image",
+          key: "twitter:image",
           name: "twitter:image",
           content: "",
         },
         {
-          hid: "twitter:image:alt",
+          key: "twitter:image:alt",
           name: "twitter:image:alt",
           content: "Choir",
         },

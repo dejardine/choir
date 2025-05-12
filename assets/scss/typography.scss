@@ -4,185 +4,72 @@
 @use 'breakpoints' as *;
 
 
-// Atlas Grotesk Regular
+// Founders Grotesk Regular
 
 @font-face {
-  font-family: "Atlas Grotesk Regular";
-  src: url("@/assets/fonts/AtlasGrotesk-Regular-Web.woff2") format("woff2");
+  font-family: "Founders Grotesk Regular";
+  src: url("@/assets/fonts/FoundersGroteskWeb-Regular.woff2") format("woff2");
   font-style: normal;
   font-weight: normal;    
 
 }
 
-@mixin atlasRegular {
-  font-family: "Atlas Grotesk Regular", sans-serif;
+@mixin foundersRegular {
+  font-family: "Founders Grotesk Regular", sans-serif;
   font-style: normal;
   font-weight:normal;    
 }
 
-// Atlas Grotesk Bold
+// Founders Grotesk Semi Bold
 
 @font-face {
-  font-family: "Atlas Grotesk Bold";
-  src: url("@/assets/fonts/AtlasGrotesk-Bold-Web.woff2") format("woff2");
+  font-family: "Founders Grotesk Bold";
+  src: url("@/assets/fonts/FoundersGroteskWeb-Bold.woff2") format("woff2");
   font-style: normal;
   font-weight: normal;    
 }
 
-@mixin atlasBold {
-  font-family: "Atlas Grotesk Bold", sans-serif;
+@mixin foundersBold {
+  font-family: "Founders Grotesk Bold", sans-serif;
   font-style: normal;
   font-weight:normal;    
 }
 
-// Family Regular
-
-@font-face {
-  font-family: "Family Regular";
-  src: url("@/assets/fonts/family-regular.woff2") format("woff2");
-  font-style: normal;
-  font-weight: normal;    
-}
-
-@mixin familyRegular {
-  font-family: "Family Regular", sans-serif;
-  font-style: normal;
-  font-weight:normal;    
-}
-
-// Marr Sans
-
-@font-face {
-  font-family: "Marr Sans";
-  src: url("@/assets/fonts/MarrSansCondensed-Semibold-Web.woff2") format("woff2");
-  font-style: normal;
-  font-weight: normal;    
-}
-
-@mixin marrSans {
-  font-family: "Marr Sans", sans-serif;
-  font-style: normal;
-  font-weight:normal;    
-}
 
 /* =============================================================================
    Font sizes
    ========================================================================== */
 :root {
-  /* Fluid Typography: Min @ 1512px (94.5rem), Max @ 2560px (160rem) */
-  --body: clamp(0.9375rem, calc(0.9375rem + 0.3125 * (100vw - 94.5rem) / 65.5), 1.25rem); /* 15px to 20px */
+ 
+  --body:0.875rem;
   --body-l: 1.4;
-  --small: clamp(0.75rem, calc(0.75rem + 0.25 * (100vw - 94.5rem) / 65.5), 1rem); /* 12px to 16px */
-  --small-l: 1.2;
-  --menuType: clamp(2rem, calc(2rem + 1.125 * (100vw - 94.5rem) / 65.5), 3.125rem); /* 32px to 50px */
-  --menuType-l: 1;
-  --largeHeading: clamp(2.375rem, calc(2.375rem + 1.625 * (100vw - 94.5rem) / 65.5), 4rem); /* 38px to 64px */
-  --largeHeading-l: 1.1;
-  --mediumHeading: clamp(1.125rem, calc(1.125rem + 2 * (100vw - 94.5rem) / 65.5), 3.125rem); /* 18px to 50px */
-  --mediumHeading-l: 1.2;
-  --smallHeading: clamp(1.375rem, calc(1.375rem + 0.375 * (100vw - 94.5rem) / 65.5), 1.75rem); /* 22px to 28px */
-  --smallHeading-l: 1.2;
+  
 }
 
-/* Fluid Typography: Laptop @ 1280px (80rem) to 1512px (94.5rem) */
-@include breakpoint(laptop) {
-  :root {
-    --body: clamp(0.875rem, calc(0.875rem + 0.0625 * (100vw - 80rem) / 14.5), 0.9375rem); /* 14px to 15px */
-    --small: clamp(0.6875rem, calc(0.6875rem + 0.0625 * (100vw - 80rem) / 14.5), 0.75rem); /* 11px to 12px */
-    --menuType: clamp(1.75rem, calc(1.75rem + 0.25 * (100vw - 80rem) / 14.5), 2rem); /* 28px to 32px */
-    --largeHeading: clamp(2.125rem, calc(2.125rem + 0.25 * (100vw - 80rem) / 14.5), 2.375rem); /* 34px to 38px */
-    --mediumHeading: clamp(1rem, calc(1rem + 0.125 * (100vw - 80rem) / 14.5), 1.125rem); /* 16px to 18px */
-    --smallHeading: clamp(1.25rem, calc(1.25rem + 0.125 * (100vw - 80rem) / 14.5), 1.375rem); /* 20px to 22px */
-  }
-}
 
-/* Fluid Typography: Small Laptop/Tablet @ 812px (50.75rem) to 1280px (80rem) */
-@include breakpoint(smallLaptop) {
-  :root {
-    --body: clamp(0.8125rem, calc(0.8125rem + 0.0625 * (100vw - 50.75rem) / 29.25), 0.875rem); /* 13px to 14px */
-    --small: clamp(0.625rem, calc(0.625rem + 0.0625 * (100vw - 50.75rem) / 29.25), 0.6875rem); /* 10px to 11px */
-    --menuType: clamp(1.5rem, calc(1.5rem + 0.25 * (100vw - 50.75rem) / 29.25), 1.75rem); /* 24px to 28px */
-    --largeHeading: clamp(1.875rem, calc(1.875rem + 0.25 * (100vw - 50.75rem) / 29.25), 2.125rem); /* 30px to 34px */
-    --mediumHeading: clamp(0.9375rem, calc(0.9375rem + 0.0625 * (100vw - 50.75rem) / 29.25), 1rem); /* 15px to 16px */
-    --smallHeading: clamp(1.125rem, calc(1.125rem + 0.125 * (100vw - 50.75rem) / 29.25), 1.25rem); /* 18px to 20px */
-  }
-}
-
-/* Fixed Typography: Mobile @ < 812px (50.75rem) */
-@include breakpoint(mobile) {
-  :root {
-    --body: 0.8125rem; /* 13px */
-    --small: 0.625rem; /* 10px */
-    --menuType: 1.5rem; /* 24px */
-    --largeHeading: 1.875rem; /* 30px */
-    --mediumHeading: 0.9375rem; /* 15px */
-    --smallHeading: 1.125rem; /* 18px */
-    --mobileMenuType: 2.25rem;
-  }
-}
 
 /* =============================================================================
    Typographic Mixins 
    ========================================================================== */
 
-// Atlas Regular
+// Founders Regular
 
 @mixin bodyType {
   font-size: var(--body);
   line-height: var(--body-l);
-  @include atlasRegular;
+  @include foundersRegular;
   letter-spacing: 0; 
 }
-
-@mixin smallType {
-  font-size: var(--small);
-  line-height: var(--small-l);
-  @include atlasRegular;
-  letter-spacing: 0; 
-}
-
-// Marr Sans 
 
 @mixin menuType {
-  font-size: var(--menuType);
-  line-height: var(--menuType-l);
-  @include marrSans;
-  letter-spacing: 0;
-  text-transform:uppercase; 
-}
-
-@mixin smallHeading {
-  font-size: var(--smallHeading);
-  line-height: var(--smallHeading-l);
-  @include marrSans;
-  letter-spacing: 0;
-  text-transform:uppercase; 
-}
-@mixin mediumHeading {
-  font-size: var(--mediumHeading);
-  line-height: var(--mediumHeading-l);
-  @include marrSans;
-  letter-spacing: 0;
-  text-transform:uppercase; 
-}
-
-@mixin mobileMenuType {
-  font-size: var(--mobileMenuType);
-  line-height: var(--menuType-l);
-  @include marrSans;
-  letter-spacing: 0;
-  text-transform:uppercase; 
+  font-size: var(--body);
+  line-height: 1;
+  @include foundersRegular;
+  text-transform: uppercase;  
+  letter-spacing: 0.01em;
 }
 
 
-// Family
-
-@mixin largeHeading {
-  font-size: var(--largeHeading);
-  line-height: var(--largeHeading-l);
-  @include familyRegular;
-  letter-spacing: 0;
-}
 
 /* =============================================================================
    basic rules 
