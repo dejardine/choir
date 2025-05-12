@@ -18,6 +18,8 @@
   --color-background: var(--palette-white);
   --color-text: var(--palette-black);
   --color-border: var(--palette-black-mute);
+  --color-reverse: var(--palette-white);
+
 
   // Gutters & Layout
 
@@ -34,7 +36,7 @@ html.dark {
   --color-background: var(--palette-black);
   --color-text: var(--palette-white);
   --color-border:  var(--palette-white-mute);
- 
+  --color-reverse: var(--palette-white);
 }
 
 /* =============================================================================

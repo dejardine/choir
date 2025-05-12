@@ -62,10 +62,15 @@ const defaultMenuLinks = computed(() => {
   position: fixed;
   top: 0;
   left: 0;
+  mix-blend-mode: difference;
+  z-index: 3000;
   :deep(ul) {
     list-style-type: none;
     padding: 0;
     margin: 0;
+    a {
+      color: var(--color-reverse);
+    }
   }
 }
 

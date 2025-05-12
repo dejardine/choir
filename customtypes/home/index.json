@@ -28,6 +28,56 @@
         "type": "Text"
       }
     },
+    "Slideshow": {
+      "slideshow": {
+        "type": "Group",
+        "config": {
+          "label": "Slideshow",
+          "repeat": true,
+          "fields": {
+            "image": {
+              "type": "Image",
+              "config": {
+                "label": "Image",
+                "constraint": {},
+                "thumbnails": []
+              }
+            },
+            "video": {
+              "type": "Link",
+              "config": {
+                "label": "Video Loop",
+                "placeholder": "",
+                "select": null,
+                "allowTargetBlank": false,
+                "allowText": false,
+                "repeat": false
+              }
+            },
+            "caption": {
+              "type": "StructuredText",
+              "config": {
+                "label": "Caption",
+                "placeholder": "",
+                "allowTargetBlank": false,
+                "single": "paragraph,strong"
+              }
+            },
+            "link": {
+              "type": "Link",
+              "config": {
+                "label": "Link",
+                "placeholder": "",
+                "select": null,
+                "allowTargetBlank": false,
+                "allowText": false,
+                "repeat": false
+              }
+            }
+          }
+        }
+      }
+    },
     "Footer": {
       "call_to_action": {
         "type": "StructuredText",

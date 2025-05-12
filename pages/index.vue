@@ -1,7 +1,9 @@
 <template>
   <div class="page page-home" ref="pageRoot">
     <GlobalMainMenu />
-    <div id="content"></div>
+    <div id="content">
+      <HomeHero :home="page?.home" />
+    </div>
     <GlobalFooter />
   </div>
 </template>

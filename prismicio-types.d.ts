@@ -572,6 +572,51 @@ export type GlobalDocument<Lang extends string = string> =
   >;
 
 /**
+ * Item in *Home → Slideshow*
+ */
+export interface HomeDocumentDataSlideshowItem {
+  /**
+   * Image field in *Home → Slideshow*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: home.slideshow[].image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * Video Loop field in *Home → Slideshow*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: home.slideshow[].video
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  video: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+
+  /**
+   * Caption field in *Home → Slideshow*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: home.slideshow[].caption
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  caption: prismic.RichTextField;
+
+  /**
+   * Link field in *Home → Slideshow*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: home.slideshow[].link
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+}
+
+/**
  * Content for Home documents
  */
 interface HomeDocumentData {
@@ -596,6 +641,15 @@ interface HomeDocumentData {
    * - **Documentation**: https://prismic.io/docs/field#key-text
    */
   meta_description: prismic.KeyTextField /**
+   * Slideshow field in *Home*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: home.slideshow[]
+   * - **Tab**: Slideshow
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */;
+  slideshow: prismic.GroupField<Simplify<HomeDocumentDataSlideshowItem>> /**
    * Call to action field in *Home*
    *
    * - **Field Type**: Rich Text
@@ -1068,6 +1122,7 @@ declare module "@prismicio/client" {
       GlobalDocumentData,
       HomeDocument,
       HomeDocumentData,
+      HomeDocumentDataSlideshowItem,
       IndustryDocument,
       IndustryDocumentData,
       MainMenuDocument,
