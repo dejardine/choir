@@ -47,6 +47,9 @@ const { data: globalData } = await useAsyncData("global", async () => {
 <style lang="scss" scoped>
 @use "@/assets/scss/global.scss" as *;
 
+footer {
+  margin-top: 50vh;
+}
 .row {
   @include gridSetup;
   padding-bottom: var(--gutter-quarter);

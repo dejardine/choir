@@ -98,6 +98,9 @@ const defaultMenuLinks = computed(() => {
       &:hover,
       &.router-link-active {
         text-decoration: underline;
+        text-decoration-color: var(--color-border);
+        text-decoration-thickness: 1px;
+        text-underline-offset: 1px;
       }
     }
   }

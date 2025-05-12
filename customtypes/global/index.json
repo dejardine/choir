@@ -50,15 +50,13 @@
           "repeat": false
         }
       },
-      "directions": {
-        "type": "Link",
+      "address": {
+        "type": "StructuredText",
         "config": {
-          "label": "Directions",
+          "label": "Address",
           "placeholder": "",
-          "select": null,
           "allowTargetBlank": true,
-          "allowText": true,
-          "repeat": false
+          "multi": "paragraph,hyperlink"
         }
       }
     }

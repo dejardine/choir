@@ -17,6 +17,6 @@ const props = defineProps({});
   z-index: 2000;
   opacity: 0;
   display: none;
-  background-color: #000;
+  background-color: var(--color-background);
 }
 </style>

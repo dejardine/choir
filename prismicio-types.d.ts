@@ -544,21 +544,15 @@ interface GlobalDocumentData {
   >;
 
   /**
-   * Directions field in *Global*
+   * Address field in *Global*
    *
-   * - **Field Type**: Link
+   * - **Field Type**: Rich Text
    * - **Placeholder**: *None*
-   * - **API ID Path**: global.directions
+   * - **API ID Path**: global.address
    * - **Tab**: Main
-   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
    */
-  directions: prismic.LinkField<
-    string,
-    string,
-    unknown,
-    prismic.FieldState,
-    never
-  >;
+  address: prismic.RichTextField;
 }
 
 /**

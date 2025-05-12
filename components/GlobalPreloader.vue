@@ -55,7 +55,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 #preloader {
-  background: #000;
+  background-color: var(--color-background);
   position: fixed;
   z-index: 2000;
   display: block;
