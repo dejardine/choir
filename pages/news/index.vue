@@ -1,6 +1,7 @@
 <template>
   <div class="page page-news" ref="pageRoot">
     <GlobalMainMenu />
+    <GlobalFooter />
   </div>
 </template>
 

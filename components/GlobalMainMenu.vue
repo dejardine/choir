@@ -94,6 +94,12 @@ const defaultMenuLinks = computed(() => {
         content: none;
       }
     }
+    a {
+      &:hover,
+      &.router-link-active {
+        text-decoration: underline;
+      }
+    }
   }
 }
 .theme-switcher {

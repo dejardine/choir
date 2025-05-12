@@ -1,6 +1,8 @@
 <template>
   <div class="page page-home" ref="pageRoot">
     <GlobalMainMenu />
+    <div id="content"></div>
+    <GlobalFooter />
   </div>
 </template>
 

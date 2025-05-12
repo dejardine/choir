@@ -1,6 +1,7 @@
 <template>
   <div class="page page-contact" ref="pageRoot">
     <GlobalMainMenu />
+    <GlobalFooter />
   </div>
 </template>
 

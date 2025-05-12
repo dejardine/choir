@@ -8,24 +8,17 @@
 
 :root {
 
-  // Color
 
-  // Base Palette (Keep these if used elsewhere, or remove if redundant)
-  --palette-white: #F3F2ED;
-  --palette-black: #000;
-  --palette-grey: rgba(0,0,0,0.15);
+  --palette-white: rgba(248, 245, 240, 1);
+  --palette-white-mute: rgba(248, 245, 240, 0.5);
+  
+  --palette-black:  rgba(23, 23, 23, 1);
+  --palette-black-mute: rgba(23, 23, 23, 0.5);
 
-  // Semantic Colors (Light Mode - Default)
   
   --color-background: var(--palette-white);
   --color-text: var(--palette-black);
-  --color-text-muted: var(--palette-grey);
-  --color-border: #000; // Example border color
-  --color-background-projects-light: #EAF5FF; // Projects page light background
-  --color-background-about-light: #FFF0F8; // Projects page light background
-  --color-background-contact-light:#FFF9DE;
-  --color-background-reverse: var(--palette-black);
-  --color-text-reverse: var(--palette-white);
+  --color-border: var(--palette-black-mute);
 
   // Gutters & Layout
 
@@ -40,12 +33,9 @@
 
 html.dark {
   --color-background: var(--palette-black);
-  --color-text: #fff;
-  --color-text-muted:   rgba(255,255,255,0.15); // Lighter grey for dark mode
-  --color-border: #fff; 
-  --color-background-reverse: var(--palette-white);
-  --color-text-reverse: var(--palette-black);
-
+  --color-text: var(--palette-white);
+  --color-border:  var(--palette-white-mute);
+ 
 }
 
 /* =============================================================================
@@ -80,10 +70,6 @@ body {
 
 }
 
-// Page-specific background overrides (Light Mode)
-body.page-about {
-  background-color: #FFF0F8; // Keep existing about page override
-}
 
 .main, .page{min-height:100%;}
 .page {position: relative;overflow: hidden;}
@@ -145,6 +131,12 @@ body.page-routing {
   text-align:left;
 }
 
+@mixin gridSetup {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-gap: var(--gutter);
+  padding: var(--gutter);
+}
 
   /* =============================================================================
    Modernizer
