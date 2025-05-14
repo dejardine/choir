@@ -54,14 +54,15 @@
         }
       }
     },
-    "Footer": {
+   "Footer": {
       "call_to_action": {
         "type": "StructuredText",
         "config": {
           "label": "Call to action",
           "placeholder": "",
           "allowTargetBlank": true,
-          "multi": "paragraph,em"
+          "multi": "paragraph,em",
+          "labels": ["micro-text"]
         }
       },
       "call_to_action_link": {
@@ -72,11 +73,11 @@
           "select": null,
           "allowTargetBlank": true,
           "allowText": true,
-          "repeat": false
+          "repeat": false,
+          "labels": ["micro-text"]
         }
       }
-    }
-  },
+    },
   "label": "About Landing",
   "repeatable": false,
   "status": true
