@@ -62,7 +62,7 @@ const defaultMenuLinks = computed(() => {
   position: fixed;
   top: 0;
   left: 0;
-  mix-blend-mode: difference;
+  mix-blend-mode: exclusion;
   z-index: 3000;
   :deep(ul) {
     list-style-type: none;
@@ -79,7 +79,9 @@ const defaultMenuLinks = computed(() => {
   grid-gap: var(--gutter);
   padding: var(--gutter);
   display: grid;
+  align-items: center;
 }
+
 .default-menu-column-left {
   grid-column: 1 / span 6;
 }
@@ -112,6 +114,5 @@ const defaultMenuLinks = computed(() => {
 }
 .theme-switcher {
   grid-column: 9 / span 1;
-  margin-top: 3px;
 }
 </style>

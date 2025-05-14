@@ -3,8 +3,15 @@
     <GlobalMainMenu />
     <div id="content">
       <HomeHero :home="page?.home" />
+      <HomeProjects :home="page?.home" />
     </div>
-    <GlobalFooter />
+    <div class="footer-wrap">
+      <CTA
+        :cta="page.home.data.call_to_action"
+        :ctaLink="page.home.data.call_to_action_link"
+      />
+      <GlobalFooter />
+    </div>
   </div>
 </template>
 

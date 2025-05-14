@@ -23,18 +23,47 @@
 // Founders Grotesk Semi Bold
 
 @font-face {
-  font-family: "Founders Grotesk Bold";
-  src: url("@/assets/fonts/FoundersGroteskWeb-Bold.woff2") format("woff2");
+  font-family: "Founders Grotesk Semi Bold";
+  src: url("@/assets/fonts/FoundersGroteskWeb-Semibold.woff2") format("woff2");
   font-style: normal;
   font-weight: normal;    
 }
 
-@mixin foundersBold {
-  font-family: "Founders Grotesk Bold", sans-serif;
+@mixin foundersSemiBold {
+  font-family: "Founders Grotesk Semi Bold", sans-serif;
   font-style: normal;
   font-weight:normal;    
 }
 
+// Heldane Text
+
+@font-face {
+  font-family: "Heldane Text";
+  src: url("@/assets/fonts/heldane-text-web-regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: normal;    
+}
+
+@mixin heldaneText {
+  font-family: "Heldane Text", sans-serif;
+  font-style: normal;
+  font-weight:normal;    
+}
+
+// Heldane Text Italic
+
+@font-face {
+  font-family: "Heldane Text Italic";
+  src: url("@/assets/fonts/heldane-text-web-regular-italic.woff2") format("woff2");
+  font-style: italic;
+  font-weight: normal;    
+}
+
+@mixin heldaneTextItalic {
+  font-family: "Heldane Text Italic", sans-serif;
+  font-style: italic;
+  font-weight:normal;    
+}
 
 /* =============================================================================
    Font sizes
@@ -43,7 +72,12 @@
  
   --body:0.875rem;
   --body-l: 1.4;
-  
+  --small: 0.75rem;
+  --small-l:1.4;
+  --heading: 2.875rem;
+  --heading-l: 1.087;
+  --cta: 3.375rem;
+  --cta-l: 1;
 }
 
 
@@ -70,6 +104,36 @@
 }
 
 
+@mixin smallType {
+  font-size: var(--small);
+  line-height: var(--small-l);
+  @include foundersRegular;
+
+}
+
+// Heldane Text
+
+@mixin heldaneHeading {
+  font-size: var(--heading);
+  line-height: var(--heading-l);
+  @include heldaneText;
+  letter-spacing: -0.014em;
+  font-feature-settings: "dlig", "ss03", "liga", "calt";
+}
+
+@mixin heldaneHeadingItalic {
+  font-size: var(--heading);
+  line-height: var(--heading-l);
+  @include heldaneTextItalic; 
+  font-feature-settings: "dlig", "ss03", "liga", "calt";
+}
+
+@mixin ctaText {
+  @include heldaneText;
+  font-size: var(--cta);
+  line-height: var(--cta-l);
+}
+
 
 /* =============================================================================
    basic rules 
@@ -84,6 +148,11 @@ p {@include bodyType;}
 em,
 i {
   font-style: normal;
+}
+
+strong {
+    font-weight: normal;
+    @include foundersSemiBold;
 }
 
 // Optimize legibility for better kerning
@@ -126,3 +195,4 @@ h3,
 h4 {
   margin: 0;
 }
+

@@ -48,7 +48,8 @@ const { data: globalData } = await useAsyncData("global", async () => {
 @use "@/assets/scss/global.scss" as *;
 
 footer {
-  margin-top: 50vh;
+  position: relative;
+  z-index: 5;
 }
 .row {
   @include gridSetup;

@@ -78,6 +78,17 @@
         }
       }
     },
+    "Projects": {
+      "introduction": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Introduction",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "heading2,em"
+        }
+      }
+    },
     "Footer": {
       "call_to_action": {
         "type": "StructuredText",
@@ -85,7 +96,8 @@
           "label": "Call to action",
           "placeholder": "",
           "allowTargetBlank": true,
-          "multi": "paragraph,em"
+          "multi": "paragraph,em",
+          "labels": ["micro-text"]
         }
       },
       "call_to_action_link": {
@@ -96,7 +108,8 @@
           "select": null,
           "allowTargetBlank": true,
           "allowText": true,
-          "repeat": false
+          "repeat": false,
+          "labels": ["micro-text"]
         }
       }
     }

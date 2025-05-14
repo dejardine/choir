@@ -675,7 +675,16 @@ interface HomeDocumentData {
     unknown,
     prismic.FieldState,
     never
-  >;
+  > /**
+   * Introduction field in *Home*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: home.introduction
+   * - **Tab**: Projects
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */;
+  introduction: prismic.RichTextField;
 }
 
 /**
