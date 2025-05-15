@@ -226,7 +226,7 @@ interface CaseStudyDocumentData {
   image_thumbnail: prismic.ImageField<never>;
 
   /**
-   * Video Thumbnail field in *Case Study*
+   * Vimeo Loop Thumbnail field in *Case Study*
    *
    * - **Field Type**: Link
    * - **Placeholder**: *None*

@@ -134,26 +134,9 @@ const props = defineProps({
     margin-bottom: var(--gutter-half);
   }
 
-  /*
-  The .thumbnail-gallery class and its .gallery-image child styling
-  are now handled within the ThumbnailGallery.vue component itself.
-  The ThumbnailGallery component root element will have aspect-ratio: 3/2.
-  We might need to adjust margin-bottom if it was previously applied to .thumbnail-gallery
-  or its children directly affecting layout here.
-  The ThumbnailGallery component itself will take up the 3/2 space.
-  If a margin-bottom is needed for spacing below the gallery, it should be applied
-  to the ThumbnailGallery component instance or a wrapper if necessary.
-  For now, we assume the existing margin-bottom on .thumbnail-image / .thumbnail-video
-  was for the media element itself, and the title had its own top margin.
-  The new ThumbnailGallery component will also need a margin-bottom to match.
-  */
-  :deep(.thumbnail-gallery) {
-    // Target the root of the ThumbnailGallery component
-    margin-bottom: var(--gutter-half);
-  }
-
   .thumbnail-title {
-    margin-top: var(--gutter);
+    margin-top: var(--gutter-half);
+    margin-bottom: var(--gutter-3);
     :deep(p) {
       margin: 0;
       @include smallType;

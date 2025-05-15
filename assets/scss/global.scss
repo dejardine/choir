@@ -25,6 +25,10 @@
 
   --gutter: 0.938rem;
   --gutter-2: calc(var(--gutter) * 2);
+  --gutter-3: calc(var(--gutter) * 3);
+  --gutter-4: calc(var(--gutter) * 4);
+  --gutter-5: calc(var(--gutter) * 5);
+  --gutter-6: calc(var(--gutter) * 6);
   --gutter-half: calc(var(--gutter) / 2);
   --gutter-quarter: calc(var(--gutter) / 4);
   overscroll-behavior: none;

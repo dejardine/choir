@@ -40,7 +40,7 @@
       "video_thumbnail": {
         "type": "Link",
         "config": {
-          "label": "Video Thumbnail",
+          "label": "Vimeo Loop Thumbnail",
           "placeholder": "",
           "select": null,
           "allowTargetBlank": false,
