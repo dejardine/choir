@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="thumbnail-gallery"
-    @mouseenter="startAutoplay"
-    @mouseleave="stopAutoplay"
-  >
+  <div class="thumbnail-gallery">
     <swiper-container
       ref="swiperRef"
       :slides-per-view="1"
@@ -12,7 +8,7 @@
       :fade-effect="{ crossFade: true }"
       :loop="true"
       :autoplay="{
-        delay: 0,
+        delay: 2500, // Using a more standard delay for testing continuous loop
         disableOnInteraction: false,
         pauseOnMouseEnter: false, // We handle this manually
       }"
@@ -52,9 +48,10 @@ onMounted(() => {
     const assignSwiperInstance = () => {
       if (swiperEl && swiperEl.swiper) {
         swiperInstance = swiperEl.swiper;
-        // Initially stop autoplay until hover
+        // Temporarily removed initial autoplay.stop() for diagnostics
+        // Explicitly try to start autoplay for diagnostics
         if (swiperInstance && swiperInstance.autoplay) {
-          swiperInstance.autoplay.stop();
+          swiperInstance.autoplay.start();
         }
       } else if (swiperEl) {
         // If swiper instance not immediately available, listen for init
@@ -65,25 +62,7 @@ onMounted(() => {
   }
 });
 
-const startAutoplay = () => {
-  if (
-    swiperInstance &&
-    swiperInstance.autoplay &&
-    !swiperInstance.autoplay.running
-  ) {
-    swiperInstance.autoplay.start();
-  }
-};
-
-const stopAutoplay = () => {
-  if (
-    swiperInstance &&
-    swiperInstance.autoplay &&
-    swiperInstance.autoplay.running
-  ) {
-    swiperInstance.autoplay.stop();
-  }
-};
+// Temporarily removed startAutoplay and stopAutoplay functions for diagnostics
 </script>
 
 <style lang="scss" scoped>
