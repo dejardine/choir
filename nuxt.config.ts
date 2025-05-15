@@ -28,6 +28,10 @@ export default defineNuxtConfig({
           path: "/work",
         },
         {
+          type: "case_study",
+          path: "/work/:uid",
+        },
+        {
           type: "news_landing",
           path: "/news",
         },

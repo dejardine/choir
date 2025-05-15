@@ -1,10 +1,11 @@
 <template>
-  <div class="page page-about" ref="pageRoot">
+  <div class="page page-project" ref="pageRoot">
     <GlobalMainMenu />
+
     <div class="footer-wrap">
       <CTA
-        :cta="page.about.data.call_to_action"
-        :ctaLink="page.about.data.call_to_action_link"
+        :cta="page.project.data.call_to_action"
+        :ctaLink="page.project.data.call_to_action_link"
       />
       <GlobalFooter />
     </div>
@@ -12,34 +13,57 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick, watchEffect } from "vue";
+import {
+  ref,
+  computed,
+  onMounted,
+  nextTick,
+  onBeforeUnmount,
+  watchEffect,
+} from "vue";
 
 import {
   useColorMode,
   useHead,
   useNuxtApp,
+  useRoute,
   usePrismic,
   useAsyncData,
-} from "#imports";
+  createError,
+} from "#imports"; // Added imports
 
 // Page Transition
 import { globalRouteTransition } from "~/utils/GlobalRouteTransition";
 
+import { useRouter } from "vue-router";
+
+// Add router
+const router = useRouter();
+
+// Load GSAP libraries we need
+const { $gsap, $ScrollTrigger } = useNuxtApp();
+
 // Get the data
 const prismic = usePrismic();
+const route = useRoute();
 
-const { data: page } = await useAsyncData("aboutData", async () => {
+const { data: page } = await useAsyncData(route.params.uid, async () => {
   try {
-    const [about] = await Promise.all([prismic.client.getSingle("about")]);
+    // Remove menu fetch from here
+    const [project] = await Promise.all([
+      prismic.client.getByUID("case_study", route.params.uid),
+    ]);
 
     return {
-      about,
+      project,
+      // menu, // Removed
     };
   } catch (error) {
-    console.error("Error fetching about page data:", error);
-    // You might want to handle the error appropriately here
-    // For example, redirect to an error page or show a notification
-    throw error; // This will propagate the error to Nuxt's error handling
+    throw createError({
+      statusCode: 500,
+      message: error.message || "Internal Server Error",
+      cause: error,
+    });
   }
 });
 
@@ -70,18 +94,13 @@ onMounted(async () => {
   await updateThemeColor(); // Initial set on mount
 });
 
-// SEO and Theme Color
 useHead({
-  title: `Choir — ${page?.value?.about?.data?.page_title || ""}`,
+  title: `Choir — ${page?.value?.project?.data?.page_title || ""}`,
   meta: [
+    // Standard Meta
     {
       name: "description",
-      content: page?.value?.about?.data?.meta_description,
-    },
-    // Add the dynamic theme-color meta tag
-    {
-      name: "theme-color",
-      content: currentThemeColor,
+      content: page?.value?.project?.data?.meta_description,
     },
   ],
 });
@@ -90,4 +109,10 @@ useHead({
 definePageMeta({
   pageTransition: globalRouteTransition,
 });
+
+onBeforeUnmount(() => {
+  console.log("project before unmounted");
+});
 </script>
+
+<style scoped lang="scss"></style>

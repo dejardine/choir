@@ -160,29 +160,7 @@
         }
       }
     },
-    "Footer": {
-      "call_to_action": {
-        "type": "StructuredText",
-        "config": {
-          "label": "Call to action",
-          "placeholder": "",
-          "allowTargetBlank": true,
-          "multi": "paragraph,em",
-          "labels": ["micro-text"]
-        }
-      },
-      "call_to_action_link": {
-        "type": "Link",
-        "config": {
-          "label": "Call to action link",
-          "placeholder": "",
-          "select": null,
-          "allowTargetBlank": true,
-          "allowText": true,
-          "repeat": false
-        }
-      }
-    },
+
     "Header": {
       "header_image": {
         "type": "Image",
@@ -210,6 +188,30 @@
           "placeholder": "",
           "allowTargetBlank": true,
           "multi": "heading2,strong"
+        }
+      }
+    },
+    "Footer": {
+      "call_to_action": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Call to action",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "paragraph,em",
+          "labels": ["micro-text"]
+        }
+      },
+      "call_to_action_link": {
+        "type": "Link",
+        "config": {
+          "label": "Call to action link",
+          "placeholder": "",
+          "select": null,
+          "allowTargetBlank": true,
+          "allowText": true,
+          "repeat": false,
+          "labels": ["micro-text"]
         }
       }
     }
