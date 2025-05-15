@@ -1,12 +1,16 @@
 <template>
   <div class="page page-work" ref="pageRoot">
     <GlobalMainMenu />
+
+    <WorkGrid v-if="page?.work?.data?.projects" :page="page" />
+
     <GlobalFooter />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, nextTick, watchEffect } from "vue";
+import WorkGrid from "~/components/WorkGrid.vue";
 
 import {
   useColorMode,
@@ -22,9 +26,28 @@ import { globalRouteTransition } from "~/utils/GlobalRouteTransition";
 // Get the data
 const prismic = usePrismic();
 
+const graphQuery = `{
+  work {
+    projects {
+      case_study {
+        ...on case_study {
+          image_thumbnail
+          thumbnail_title
+          video_thumbnail
+          gallery_thumbnail {
+            image
+          }
+        }
+      }
+    }
+  }
+}`;
+
 const { data: page } = await useAsyncData("workData", async () => {
   try {
-    const [work] = await Promise.all([prismic.client.getSingle("work")]);
+    const [work] = await Promise.all([
+      prismic.client.getSingle("work", { graphQuery }),
+    ]);
 
     return {
       work,

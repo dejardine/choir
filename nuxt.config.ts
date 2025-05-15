@@ -162,4 +162,10 @@ export default defineNuxtConfig({
       cors: true, // Only for dev
     },
   },
+  vue: {
+    compilerOptions: {
+      isCustomElement: (tag) =>
+        ["swiper-container", "swiper-slide"].includes(tag),
+    },
+  },
 });

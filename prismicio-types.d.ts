@@ -144,6 +144,21 @@ export type ArchiveDocument<Lang extends string = string> =
   >;
 
 /**
+ * Item in *Case Study → Gallery Thumbnail*
+ */
+export interface CaseStudyDocumentDataGalleryThumbnailItem {
+  /**
+   * Image field in *Case Study → Gallery Thumbnail*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: case_study.gallery_thumbnail[].image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image: prismic.ImageField<never>;
+}
+
+/**
  * Item in *Case Study → Client*
  */
 export interface CaseStudyDocumentDataClientItem {
@@ -247,7 +262,20 @@ interface CaseStudyDocumentData {
    * - **Tab**: Thumbnail
    * - **Documentation**: https://prismic.io/docs/field#rich-text-title
    */
-  thumbnail_title: prismic.RichTextField /**
+  thumbnail_title: prismic.RichTextField;
+
+  /**
+   * Gallery Thumbnail field in *Case Study*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: case_study.gallery_thumbnail[]
+   * - **Tab**: Thumbnail
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  gallery_thumbnail: prismic.GroupField<
+    Simplify<CaseStudyDocumentDataGalleryThumbnailItem>
+  > /**
    * Client field in *Case Study*
    *
    * - **Field Type**: Group
@@ -331,32 +359,6 @@ interface CaseStudyDocumentData {
    * - **Documentation**: https://prismic.io/docs/field#boolean
    */;
   archived: prismic.BooleanField /**
-   * Call to action field in *Case Study*
-   *
-   * - **Field Type**: Rich Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: case_study.call_to_action
-   * - **Tab**: Footer
-   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
-   */;
-  call_to_action: prismic.RichTextField;
-
-  /**
-   * Call to action link field in *Case Study*
-   *
-   * - **Field Type**: Link
-   * - **Placeholder**: *None*
-   * - **API ID Path**: case_study.call_to_action_link
-   * - **Tab**: Footer
-   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
-   */
-  call_to_action_link: prismic.LinkField<
-    string,
-    string,
-    unknown,
-    prismic.FieldState,
-    never
-  > /**
    * Header Image field in *Case Study*
    *
    * - **Field Type**: Image
@@ -393,7 +395,33 @@ interface CaseStudyDocumentData {
    * - **Tab**: Header
    * - **Documentation**: https://prismic.io/docs/field#rich-text-title
    */
-  header_paragraph: prismic.RichTextField;
+  header_paragraph: prismic.RichTextField /**
+   * Call to action field in *Case Study*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: case_study.call_to_action
+   * - **Tab**: Footer
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */;
+  call_to_action: prismic.RichTextField;
+
+  /**
+   * Call to action link field in *Case Study*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: case_study.call_to_action_link
+   * - **Tab**: Footer
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  call_to_action_link: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >;
 }
 
 /**
@@ -650,6 +678,15 @@ interface HomeDocumentData {
    * - **Documentation**: https://prismic.io/docs/field#group
    */;
   slideshow: prismic.GroupField<Simplify<HomeDocumentDataSlideshowItem>> /**
+   * Introduction field in *Home*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: home.introduction
+   * - **Tab**: Projects
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */;
+  introduction: prismic.RichTextField /**
    * Call to action field in *Home*
    *
    * - **Field Type**: Rich Text
@@ -675,16 +712,7 @@ interface HomeDocumentData {
     unknown,
     prismic.FieldState,
     never
-  > /**
-   * Introduction field in *Home*
-   *
-   * - **Field Type**: Rich Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: home.introduction
-   * - **Tab**: Projects
-   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
-   */;
-  introduction: prismic.RichTextField;
+  >;
 }
 
 /**
@@ -1120,6 +1148,7 @@ declare module "@prismicio/client" {
       ArchiveDocumentData,
       CaseStudyDocument,
       CaseStudyDocumentData,
+      CaseStudyDocumentDataGalleryThumbnailItem,
       CaseStudyDocumentDataClientItem,
       CaseStudyDocumentDataIndustryItem,
       CaseStudyDocumentDataSlices4Slice,
