@@ -1,48 +1,50 @@
 <template>
   <div class="home-hero">
-    <swiper
-      v-if="props.home?.data?.slideshow?.length"
-      :modules="[EffectFade, Autoplay, Navigation]"
-      effect="fade"
-      :loop="true"
-      :autoplay="{
-        delay: 5000,
-        disableOnInteraction: false,
-      }"
-      :navigation="{
-        nextEl: nextButton,
-        prevEl: prevButton,
-      }"
-      class="home-hero-slider"
-    >
-      <swiper-slide
-        v-for="(slide, index) in props?.home?.data?.slideshow"
-        :key="`slide-${index}`"
+    <client-only>
+      <swiper
+        v-if="isMounted && props.home?.data?.slideshow?.length"
+        :modules="[EffectFade, Autoplay, Navigation]"
+        effect="fade"
+        :loop="true"
+        :autoplay="{
+          delay: 5000,
+          disableOnInteraction: false,
+        }"
+        :navigation="{
+          nextEl: nextButton,
+          prevEl: prevButton,
+        }"
+        class="home-hero-slider"
       >
-        <ImageFull :imageField="slide?.image" v-if="slide?.image?.url" />
-        <video
-          v-else-if="slide.video?.url"
-          :src="slide?.video?.url"
-          autoplay
-          muted
-          loop
-          playsinline
-        ></video>
-        <div class="caption-controls">
-          <prismic-rich-text :field="slide?.caption" />
-          <div class="caption-controls-controls">
-            <button ref="prevButton" class="swiper-button-prev">Prev</button>
-            <span class="nav-separator">/</span>
-            <button ref="nextButton" class="swiper-button-next">Next</button>
+        <swiper-slide
+          v-for="(slide, index) in props?.home?.data?.slideshow"
+          :key="`slide-${index}`"
+        >
+          <ImageFull :imageField="slide?.image" v-if="slide?.image?.url" />
+          <video
+            v-else-if="slide.video?.url"
+            :src="slide?.video?.url"
+            autoplay
+            muted
+            loop
+            playsinline
+          ></video>
+          <div class="caption-controls">
+            <prismic-rich-text :field="slide?.caption" />
+            <div class="caption-controls-controls">
+              <button ref="prevButton" class="swiper-button-prev">Prev</button>
+              <span class="nav-separator">/</span>
+              <button ref="nextButton" class="swiper-button-next">Next</button>
+            </div>
           </div>
-        </div>
-      </swiper-slide>
-    </swiper>
+        </swiper-slide>
+      </swiper>
+    </client-only>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue"; // <-- Import ref
+import { ref, onMounted } from "vue"; // <-- Import ref and onMounted
 
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from "swiper/vue";
@@ -62,9 +64,15 @@ const props = defineProps({
   },
 });
 
+const isMounted = ref(false);
+
 // Refs for custom navigation buttons
 const prevButton = ref(null);
 const nextButton = ref(null);
+
+onMounted(() => {
+  isMounted.value = true;
+});
 </script>
 
 <style lang="scss" scoped>
