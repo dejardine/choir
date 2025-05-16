@@ -223,7 +223,7 @@ interface CaseStudyDocumentData {
    * - **Tab**: Thumbnail
    * - **Documentation**: https://prismic.io/docs/field#image
    */;
-  image_thumbnail: prismic.ImageField<never>;
+  image_thumbnail: prismic.ImageField<"Square">;
 
   /**
    * Vimeo Loop Thumbnail field in *Case Study*
@@ -243,28 +243,6 @@ interface CaseStudyDocumentData {
   >;
 
   /**
-   * Square Thumbnail field in *Case Study*
-   *
-   * - **Field Type**: Image
-   * - **Placeholder**: *None*
-   * - **API ID Path**: case_study.square_thumbnail
-   * - **Tab**: Thumbnail
-   * - **Documentation**: https://prismic.io/docs/field#image
-   */
-  square_thumbnail: prismic.ImageField<never>;
-
-  /**
-   * Thumbnail Title field in *Case Study*
-   *
-   * - **Field Type**: Rich Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: case_study.thumbnail_title
-   * - **Tab**: Thumbnail
-   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
-   */
-  thumbnail_title: prismic.RichTextField;
-
-  /**
    * Gallery Thumbnail field in *Case Study*
    *
    * - **Field Type**: Group
@@ -275,7 +253,18 @@ interface CaseStudyDocumentData {
    */
   gallery_thumbnail: prismic.GroupField<
     Simplify<CaseStudyDocumentDataGalleryThumbnailItem>
-  > /**
+  >;
+
+  /**
+   * Thumbnail Title field in *Case Study*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: case_study.thumbnail_title
+   * - **Tab**: Thumbnail
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  thumbnail_title: prismic.RichTextField /**
    * Client field in *Case Study*
    *
    * - **Field Type**: Group
@@ -1091,7 +1080,16 @@ interface WorkDocumentData {
    * - **Tab**: Projects
    * - **Documentation**: https://prismic.io/docs/field#group
    */;
-  projects: prismic.GroupField<Simplify<WorkDocumentDataProjectsItem>>;
+  projects: prismic.GroupField<Simplify<WorkDocumentDataProjectsItem>> /**
+   * Call to action field in *Work Landing*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: work.call_to_action
+   * - **Tab**: Footer
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */;
+  call_to_action: prismic.RichTextField;
 }
 
 /**

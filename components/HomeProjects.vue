@@ -37,7 +37,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 .home-projects {
   margin-top: 100vh;
-  padding: var(--gutter);
+  padding: var(--gutterPadding);
   position: relative;
   z-index: 10;
   background-color: var(--color-background);

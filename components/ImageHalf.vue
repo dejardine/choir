@@ -7,7 +7,7 @@
       :alt="imageField?.alt || ''"
       :width="imageField?.dimensions?.width"
       :height="imageField?.dimensions?.height"
-      sizes="sm:100vw md:100vw lg:100vw xl:100vw"
+      sizes="sm:400px md:500px lg:700px xl:800px"
       loading="lazy"
       class="full-width-image"
       placeholder

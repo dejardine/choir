@@ -4,6 +4,9 @@ export default defineNuxtConfig({
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
   modules: ["@nuxtjs/prismic", "@nuxt/image", "@nuxtjs/color-mode"],
+  build: {
+    transpile: ["vue-vimeo-player"],
+  },
   nitro: {
     preset: "static",
     output: {
@@ -38,6 +41,10 @@ export default defineNuxtConfig({
         {
           type: "contact",
           path: "/contact",
+        },
+        {
+          type: "archive",
+          path: "/archive",
         },
       ],
     },

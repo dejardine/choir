@@ -34,7 +34,13 @@
         "config": {
           "label": "Image Thumbnail",
           "constraint": {},
-          "thumbnails": []
+          "thumbnails": [
+            {
+              "name": "Square",
+              "width": 1000,
+              "height": 1000
+            }
+          ]
         }
       },
       "video_thumbnail": {
@@ -46,23 +52,6 @@
           "allowTargetBlank": false,
           "allowText": false,
           "repeat": false
-        }
-      },
-      "square_thumbnail": {
-        "type": "Image",
-        "config": {
-          "label": "Square Thumbnail",
-          "constraint": {},
-          "thumbnails": []
-        }
-      },
-      "thumbnail_title": {
-        "type": "StructuredText",
-        "config": {
-          "label": "Thumbnail Title",
-          "placeholder": "",
-          "allowTargetBlank": true,
-          "multi": "paragraph,strong"
         }
       },
       "gallery_thumbnail": {
@@ -80,6 +69,15 @@
               }
             }
           }
+        }
+      },
+      "thumbnail_title": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Thumbnail Title",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "paragraph,strong"
         }
       }
     },

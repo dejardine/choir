@@ -20,7 +20,7 @@
 <style lang="scss" scoped>
 footer {
   position: fixed;
-  bottom: var(--gutter);
-  left: var(--gutter);
+  bottom: var(--gutterPadding);
+  left: var(--gutterPadding);
 }
 </style>

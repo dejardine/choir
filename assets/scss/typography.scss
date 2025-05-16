@@ -76,6 +76,8 @@
   --small-l:1.4;
   --heading: 2.875rem;
   --heading-l: 1.087;
+  --medium: 1.938rem;
+  --medium-l: 1.087;
   --cta: 3.375rem;
   --cta-l: 1;
 }
@@ -132,6 +134,13 @@
   @include heldaneText;
   font-size: var(--cta);
   line-height: var(--cta-l);
+}
+
+@mixin mediumType {
+  font-size: var(--medium);
+  line-height: var(--medium-l);  
+  @include heldaneText;
+
 }
 
 

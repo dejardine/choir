@@ -77,7 +77,7 @@ const defaultMenuLinks = computed(() => {
 .default-menu-columns {
   grid-template-columns: repeat(12, 1fr);
   grid-gap: var(--gutter);
-  padding: var(--gutter);
+  padding: var(--gutterPadding);
   display: grid;
   align-items: center;
 }

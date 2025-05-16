@@ -2,9 +2,17 @@
   <div class="page page-work" ref="pageRoot">
     <GlobalMainMenu />
 
-    <WorkGrid v-if="page?.work?.data?.projects" :page="page" />
+    <PageHeader
+      :heading="page?.work?.data?.heading"
+      :subheading="page?.work?.data?.sub_heading"
+      :paragraph="page?.work?.data?.paragraph"
+    />
 
-    <GlobalFooter />
+    <WorkGrid v-if="page?.work?.data?.projects" :page="page" />
+    <div class="footer-wrap">
+      <CTATop :cta="page?.work?.data?.call_to_action" />
+      <GlobalFooter />
+    </div>
   </div>
 </template>
 
@@ -39,7 +47,12 @@ const graphQuery = `{
           }
         }
       }
+
     }
+      heading
+      sub_heading
+      paragraph
+      call_to_action
   }
 }`;
 

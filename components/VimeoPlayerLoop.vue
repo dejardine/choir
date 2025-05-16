@@ -1,20 +1,9 @@
 <template>
-  <div
-    ref="playerContainer"
-    class="vimeo-player-wrapper"
-    :style="{
-      aspectRatio:
-        coverImage?.dimensions?.width / coverImage?.dimensions?.height,
-    }"
-  >
+  <div ref="playerContainer" class="vimeo-player-wrapper">
     <img
       :src="coverImageUrl"
       class="cover-image"
       :class="{ 'fade-out': isFadingOut }"
-      :style="{
-        aspectRatio:
-          coverImage?.dimensions?.width / coverImage?.dimensions?.height,
-      }"
       alt="Video cover"
     />
   </div>
@@ -60,7 +49,7 @@ onMounted(() => {
       portrait: false,
       title: false,
       background: true,
-      responsive: true,
+      responsive: true, // Re-enable player's responsive handling
       dnt: true,
       muted: true,
       preload: true,
@@ -100,21 +89,17 @@ onBeforeUnmount(() => {
   position: relative;
   width: 100%;
   overflow: hidden;
-  background-color: var(
-    --color-background
-  ); // Use background color for placeholder
-  border-radius: var(--border-radius);
   pointer-events: none;
   display: block;
   width: 100%;
-  height: 100%;
-
+  /* height: 100%; Removed to allow aspect-ratio to control height */
+  /* aspect-ratio: 3/2; Removed as player's inner div will handle this */
   .cover-image {
-    position: absolute; // Position over the iframe initially
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%; // Ensure it covers the container
+    height: 100%;
     z-index: 1;
     display: block;
     object-fit: cover;
@@ -125,6 +110,11 @@ onBeforeUnmount(() => {
     &.fade-out {
       opacity: 0;
     }
+  }
+
+  /* Target the div directly injected by Vimeo player for responsive aspect ratio */
+  :deep(> div[style*="padding"]) {
+    padding-top: 66.6666% !important; /* 2 (height) / 3 (width) * 100% */
   }
 
   :deep(iframe) {

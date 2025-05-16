@@ -50,6 +50,7 @@ const { data: globalData } = await useAsyncData("global", async () => {
 footer {
   position: relative;
   z-index: 5;
+  padding-bottom: var(--gutterPadding-2);
 }
 .row {
   @include gridSetup;

@@ -102,7 +102,7 @@ const addressLines = computed(() => {
 
 .contact-grid-item {
   border-bottom: 1px solid var(--color-border);
-  padding: var(--gutter-quarter) var(--gutter);
+  padding: var(--gutter-quarter) var(--gutterPadding);
   width: 100%;
 }
 </style>
