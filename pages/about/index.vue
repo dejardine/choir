@@ -1,6 +1,13 @@
 <template>
   <div class="page page-about" ref="pageRoot">
     <GlobalMainMenu />
+
+    <PageHeader
+      :heading="page?.about?.data?.heading"
+      :subheading="page?.about?.data?.sub_heading"
+      :paragraph="page?.about?.data?.paragraph"
+    />
+
     <div class="footer-wrap">
       <CTA
         :cta="page.about.data.call_to_action"
