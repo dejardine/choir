@@ -59,25 +59,37 @@ const props = defineProps({
   },
 });
 
-// Load GSAP libraries we need
+// GSAP and Prismic instances
 const { $gsap, $ScrollTrigger, $ScrollToPlugin } = useNuxtApp();
-
 const { client: prismicClient } = usePrismic();
-const clientNames = ref({});
 
+// --- Component State & Data ---
+const clientNames = ref({}); // Stores fetched client names
+const isInfoVisible = ref(false); // Controls visibility of detailed project info
+
+// --- Template Refs ---
+// Main layout elements
+const projectInformationContainerEl = ref(null); // The main container div for margin adjustment
+const projectInformationHeaderEl = ref(null); // The header div, its height is used for calculations
+const projectInformationEl = ref(null); // Ref for the .project-information-content div
+
+// Elements for "More Info" toggle animation
 const moreInfoButtonEl = ref(null);
-const revealLeftEl = ref(null);
-const revealRightEl = ref(null);
-const projectInformationEl = ref(null); // This ref seems to be for the content area, let's keep it for now.
-const projectInformationContainerEl = ref(null); // Ref for the main container
-const projectInformationHeaderEl = ref(null); // Ref for the header
-let headerObserver = null; // To store the MutationObserver instance
-const isInfoVisible = ref(false);
+const revealLeftEl = ref(null); // Left column content to reveal
+const revealRightEl = ref(null); // Right column content to reveal
 
+// --- Observers ---
+let headerObserver = null; // MutationObserver to detect header height changes
+
+// --- Computed Properties ---
+// Dynamically sets the text for the "More Info" / "Less Info" button
 const buttonText = computed(() => {
   return isInfoVisible.value ? "Less info" : "More info";
 });
 
+// --- Methods ---
+
+// Handles the animation for showing/hiding detailed project information
 const toggleInfo = () => {
   isInfoVisible.value = !isInfoVisible.value;
   const revealElements = [revealLeftEl.value, revealRightEl.value].filter(
@@ -133,7 +145,34 @@ const toggleInfo = () => {
   }
 };
 
+// Dynamically calculates and sets the top margin of the component
+// to position it 100vh below the bottom of its header, plus an offset.
+const MARGIN_TOP_OFFSET = 48; // Additional offset in pixels
+
+const calculateMarginTop = async () => {
+  // Ensure Vue has processed DOM updates before measurement
+  await nextTick();
+
+  // Defer measurement to the next browser paint cycle for accuracy
+  requestAnimationFrame(() => {
+    if (
+      projectInformationContainerEl.value &&
+      projectInformationHeaderEl.value
+    ) {
+      const headerHeight = projectInformationHeaderEl.value.offsetHeight;
+      if (typeof headerHeight === "number" && headerHeight >= 0) {
+        projectInformationContainerEl.value.style.marginTop = `calc(100vh - (${headerHeight}px + ${MARGIN_TOP_OFFSET}px))`;
+      } else {
+        // console.warn("ProjectInformationHeader: Could not determine valid header height on RAF.");
+      }
+    }
+  });
+};
+
+// --- Lifecycle Hooks & Watchers ---
+
 onMounted(() => {
+  // Set initial state for GSAP-animated "reveal" elements
   const revealElements = [revealLeftEl.value, revealRightEl.value].filter(
     Boolean
   );
@@ -141,67 +180,47 @@ onMounted(() => {
     const childrenToAnimate = revealElements.flatMap((el) =>
       Array.from(el.children)
     );
-    // Set initial state for content inside reveal divs
     $gsap.set(childrenToAnimate, { opacity: 0, y: "10px" });
   }
 
-  // Calculate and set margin-top
-  calculateMarginTop(); // Initial calculation
+  // Initial margin calculation
+  calculateMarginTop();
+
+  // Recalculate margin on window resize
   window.addEventListener("resize", calculateMarginTop);
 
-  // Setup MutationObserver for the header
+  // Observe the header for content/size changes to recalculate margin
   if (projectInformationHeaderEl.value) {
     headerObserver = new MutationObserver(async () => {
-      // console.log('MutationObserver triggered for header');
       await calculateMarginTop();
     });
-
     const observerConfig = {
-      childList: true, // Watch for direct children changes (nodes added or removed)
-      subtree: true, // Watch for changes in all descendants
-      characterData: true, // Watch for text content changes
-      // attributes: true, // Optionally watch for attribute changes if they affect layout
+      childList: true, // Detect direct children changes
+      subtree: true, // Detect changes in all descendants
+      characterData: true, // Detect text content changes
     };
-
     headerObserver.observe(projectInformationHeaderEl.value, observerConfig);
   }
 });
 
-const calculateMarginTop = async () => {
-  await nextTick(); // Wait for Vue's DOM updates to complete
-  requestAnimationFrame(() => {
-    // Defer to next browser paint cycle
-    if (
-      projectInformationContainerEl.value &&
-      projectInformationHeaderEl.value
-    ) {
-      const headerHeight = projectInformationHeaderEl.value.offsetHeight;
-      if (typeof headerHeight === "number" && headerHeight >= 0) {
-        // Check if headerHeight is a valid number
-        projectInformationContainerEl.value.style.marginTop = `calc(100vh - (${headerHeight}px + 48px))`;
-      } else {
-        // Optional: console.warn("ProjectInformationHeader: Could not determine valid header height on RAF.");
-      }
-    }
-  });
-};
-
-// Watch for changes in the project prop (e.g., route changes)
-watch(
-  () => props.project,
-  () => {
-    calculateMarginTop();
-  },
-  { deep: true }
-);
-
 onBeforeUnmount(() => {
+  // Clean up listeners and observers to prevent memory leaks
   window.removeEventListener("resize", calculateMarginTop);
   if (headerObserver) {
     headerObserver.disconnect();
   }
 });
 
+// Recalculate margin if the project data changes (e.g., on route navigation)
+watch(
+  () => props.project,
+  () => {
+    calculateMarginTop();
+  },
+  { deep: true } // Watch for nested changes within the project object
+);
+
+// Fetches and stores client names when project data is available or changes
 watchEffect(async () => {
   if (
     props.project &&
