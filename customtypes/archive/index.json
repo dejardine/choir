@@ -1,6 +1,9 @@
 {
   "format": "page",
   "id": "archive",
+  "label": "Archive Landing",
+  "repeatable": false,
+  "status": true,
   "json": {
     "SEO": {
       "uid": {
@@ -24,9 +27,26 @@
         },
         "type": "Text"
       }
+    },
+    "Projects": {
+      "projects": {
+        "type": "Group",
+        "config": {
+          "label": "Projects",
+          "repeat": true,
+          "fields": {
+            "case_study": {
+              "type": "Link",
+              "config": {
+                "label": "Case study",
+                "select": "document",
+                "repeat": false,
+                "customtypes": ["case_study"]
+              }
+            }
+          }
+        }
+      }
     }
-  },
-  "label": "Archive",
-  "repeatable": false,
-  "status": true
+  }
 }

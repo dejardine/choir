@@ -101,11 +101,11 @@ export type AboutDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<Simplify<AboutDocumentData>, "about", Lang>;
 
 /**
- * Content for Archive documents
+ * Content for Archive Landing documents
  */
 interface ArchiveDocumentData {
   /**
-   * Page title field in *Archive*
+   * Page title field in *Archive Landing*
    *
    * - **Field Type**: Text
    * - **Placeholder**: *None*
@@ -116,7 +116,7 @@ interface ArchiveDocumentData {
   page_title: prismic.KeyTextField;
 
   /**
-   * Page description field in *Archive*
+   * Page description field in *Archive Landing*
    *
    * - **Field Type**: Text
    * - **Placeholder**: A brief summary of the page
@@ -128,7 +128,7 @@ interface ArchiveDocumentData {
 }
 
 /**
- * Archive document from Prismic
+ * Archive Landing document from Prismic
  *
  * - **API ID**: `archive`
  * - **Repeatable**: `false`
