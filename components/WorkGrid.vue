@@ -178,7 +178,7 @@ const props = defineProps({
 
   .thumbnail-title {
     margin-top: var(--gutter-half);
-    margin-bottom: var(--gutter-3);
+    margin-bottom: var(--gutter-5);
     :deep(p) {
       margin: 0;
       @include bodyType;

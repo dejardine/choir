@@ -101,6 +101,21 @@ export type AboutDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<Simplify<AboutDocumentData>, "about", Lang>;
 
 /**
+ * Item in *Archive Landing → Projects*
+ */
+export interface ArchiveDocumentDataProjectsItem {
+  /**
+   * Case study field in *Archive Landing → Projects*
+   *
+   * - **Field Type**: Content Relationship
+   * - **Placeholder**: *None*
+   * - **API ID Path**: archive.projects[].case_study
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  case_study: prismic.ContentRelationshipField<"case_study">;
+}
+
+/**
  * Content for Archive Landing documents
  */
 interface ArchiveDocumentData {
@@ -124,7 +139,16 @@ interface ArchiveDocumentData {
    * - **Tab**: SEO
    * - **Documentation**: https://prismic.io/docs/field#key-text
    */
-  meta_description: prismic.KeyTextField;
+  meta_description: prismic.KeyTextField /**
+   * Projects field in *Archive Landing*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: archive.projects[]
+   * - **Tab**: Projects
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */;
+  projects: prismic.GroupField<Simplify<ArchiveDocumentDataProjectsItem>>;
 }
 
 /**
@@ -265,89 +289,6 @@ interface CaseStudyDocumentData {
    * - **Documentation**: https://prismic.io/docs/field#rich-text-title
    */
   thumbnail_title: prismic.RichTextField /**
-   * Client field in *Case Study*
-   *
-   * - **Field Type**: Group
-   * - **Placeholder**: *None*
-   * - **API ID Path**: case_study.client[]
-   * - **Tab**: Info
-   * - **Documentation**: https://prismic.io/docs/field#group
-   */;
-  client: prismic.GroupField<Simplify<CaseStudyDocumentDataClientItem>>;
-
-  /**
-   * Industry field in *Case Study*
-   *
-   * - **Field Type**: Group
-   * - **Placeholder**: *None*
-   * - **API ID Path**: case_study.industry[]
-   * - **Tab**: Info
-   * - **Documentation**: https://prismic.io/docs/field#group
-   */
-  industry: prismic.GroupField<Simplify<CaseStudyDocumentDataIndustryItem>>;
-
-  /**
-   * Scope field in *Case Study*
-   *
-   * - **Field Type**: Rich Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: case_study.scope
-   * - **Tab**: Info
-   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
-   */
-  scope: prismic.RichTextField;
-
-  /**
-   * Year field in *Case Study*
-   *
-   * - **Field Type**: Number
-   * - **Placeholder**: *None*
-   * - **API ID Path**: case_study.year
-   * - **Tab**: Info
-   * - **Documentation**: https://prismic.io/docs/field#number
-   */
-  year: prismic.NumberField;
-
-  /**
-   * Link field in *Case Study*
-   *
-   * - **Field Type**: Link
-   * - **Placeholder**: *None*
-   * - **API ID Path**: case_study.link
-   * - **Tab**: Info
-   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
-   */
-  link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
-
-  /**
-   * Information field in *Case Study*
-   *
-   * - **Field Type**: Rich Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: case_study.information
-   * - **Tab**: Info
-   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
-   */
-  information: prismic.RichTextField /**
-   * Slice Zone field in *Case Study*
-   *
-   * - **Field Type**: Slice Zone
-   * - **Placeholder**: *None*
-   * - **API ID Path**: case_study.slices4[]
-   * - **Tab**: Content
-   * - **Documentation**: https://prismic.io/docs/field#slices
-   */;
-  slices4: prismic.SliceZone<CaseStudyDocumentDataSlices4Slice> /**
-   * Archived field in *Case Study*
-   *
-   * - **Field Type**: Boolean
-   * - **Placeholder**: *None*
-   * - **Default Value**: false
-   * - **API ID Path**: case_study.archived
-   * - **Tab**: Status
-   * - **Documentation**: https://prismic.io/docs/field#boolean
-   */;
-  archived: prismic.BooleanField /**
    * Header Image field in *Case Study*
    *
    * - **Field Type**: Image
@@ -385,6 +326,117 @@ interface CaseStudyDocumentData {
    * - **Documentation**: https://prismic.io/docs/field#rich-text-title
    */
   header_paragraph: prismic.RichTextField /**
+   * Client field in *Case Study*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: case_study.client[]
+   * - **Tab**: Meta
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */;
+  client: prismic.GroupField<Simplify<CaseStudyDocumentDataClientItem>>;
+
+  /**
+   * Industry field in *Case Study*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: case_study.industry[]
+   * - **Tab**: Meta
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  industry: prismic.GroupField<Simplify<CaseStudyDocumentDataIndustryItem>>;
+
+  /**
+   * Scope field in *Case Study*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: case_study.scope
+   * - **Tab**: Meta
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  scope: prismic.RichTextField;
+
+  /**
+   * Year field in *Case Study*
+   *
+   * - **Field Type**: Number
+   * - **Placeholder**: *None*
+   * - **API ID Path**: case_study.year
+   * - **Tab**: Meta
+   * - **Documentation**: https://prismic.io/docs/field#number
+   */
+  year: prismic.NumberField;
+
+  /**
+   * External Link field in *Case Study*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: case_study.link
+   * - **Tab**: Meta
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  link: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  > /**
+   * Information field in *Case Study*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: case_study.information
+   * - **Tab**: Content
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */;
+  information: prismic.RichTextField;
+
+  /**
+   * Quote field in *Case Study*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: case_study.quote
+   * - **Tab**: Content
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  quote: prismic.RichTextField;
+
+  /**
+   * Quote Cite field in *Case Study*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: case_study.quote_cite
+   * - **Tab**: Content
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  quote_cite: prismic.RichTextField;
+
+  /**
+   * Slice Zone field in *Case Study*
+   *
+   * - **Field Type**: Slice Zone
+   * - **Placeholder**: *None*
+   * - **API ID Path**: case_study.slices4[]
+   * - **Tab**: Content
+   * - **Documentation**: https://prismic.io/docs/field#slices
+   */
+  slices4: prismic.SliceZone<CaseStudyDocumentDataSlices4Slice> /**
+   * Archived field in *Case Study*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: case_study.archived
+   * - **Tab**: Status
+   * - **Documentation**: https://prismic.io/docs/field#boolean
+   */;
+  archived: prismic.BooleanField /**
    * Call to action field in *Case Study*
    *
    * - **Field Type**: Rich Text
@@ -1144,6 +1196,7 @@ declare module "@prismicio/client" {
       AboutDocumentData,
       ArchiveDocument,
       ArchiveDocumentData,
+      ArchiveDocumentDataProjectsItem,
       CaseStudyDocument,
       CaseStudyDocumentData,
       CaseStudyDocumentDataGalleryThumbnailItem,

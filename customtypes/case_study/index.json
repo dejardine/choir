@@ -81,7 +81,37 @@
         }
       }
     },
-    "Info": {
+    "Header": {
+      "header_image": {
+        "type": "Image",
+        "config": {
+          "label": "Header Image",
+          "constraint": {},
+          "thumbnails": []
+        }
+      },
+      "header_video": {
+        "type": "Link",
+        "config": {
+          "label": "Header Video",
+          "placeholder": "",
+          "select": null,
+          "allowTargetBlank": false,
+          "allowText": false,
+          "repeat": false
+        }
+      },
+      "header_paragraph": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Header Paragraph",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "heading2,strong"
+        }
+      }
+    },
+    "Meta": {
       "client": {
         "type": "Group",
         "config": {
@@ -137,14 +167,16 @@
       "link": {
         "type": "Link",
         "config": {
-          "label": "Link",
+          "label": "External Link",
           "placeholder": "",
           "select": null,
           "allowTargetBlank": true,
           "allowText": true,
           "repeat": false
         }
-      },
+      }
+    },
+    "Content": {
       "information": {
         "type": "StructuredText",
         "config": {
@@ -153,9 +185,25 @@
           "allowTargetBlank": true,
           "multi": "paragraph,hyperlink"
         }
-      }
-    },
-    "Content": {
+      },
+      "quote": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Quote",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "paragraph"
+        }
+      },
+      "quote_cite": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Quote Cite",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "paragraph"
+        }
+      },
       "slices4": {
         "type": "Slices",
         "fieldset": "Slice Zone",
@@ -172,36 +220,6 @@
           "placeholder_false": "false",
           "placeholder_true": "true",
           "default_value": false
-        }
-      }
-    },
-    "Header": {
-      "header_image": {
-        "type": "Image",
-        "config": {
-          "label": "Header Image",
-          "constraint": {},
-          "thumbnails": []
-        }
-      },
-      "header_video": {
-        "type": "Link",
-        "config": {
-          "label": "Header Video",
-          "placeholder": "",
-          "select": null,
-          "allowTargetBlank": true,
-          "allowText": true,
-          "repeat": false
-        }
-      },
-      "header_paragraph": {
-        "type": "StructuredText",
-        "config": {
-          "label": "Header Paragraph",
-          "placeholder": "",
-          "allowTargetBlank": true,
-          "multi": "heading2,strong"
         }
       }
     },

@@ -76,6 +76,8 @@
   --small-l:1.4;
   --heading: 2.875rem;
   --heading-l: 1.087;
+  --subheading: 2.375rem;
+  --subheading-l: 1.087;
   --medium: 1.938rem;
   --medium-l: 1.087;
   --cta: 3.375rem;
@@ -127,6 +129,14 @@
   font-size: var(--heading);
   line-height: var(--heading-l);
   @include heldaneTextItalic; 
+  font-feature-settings: "dlig", "ss03", "liga", "calt";
+}
+
+@mixin heldaneSubheading {
+  font-size: var(--subheading);
+  line-height: var(--subheading-l);
+  @include heldaneText;
+  letter-spacing: -0.014em;
   font-feature-settings: "dlig", "ss03", "liga", "calt";
 }
 

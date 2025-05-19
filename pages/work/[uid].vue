@@ -1,7 +1,10 @@
 <template>
   <div class="page page-project" ref="pageRoot">
     <GlobalMainMenu />
-
+    <div id="content">
+      <ProjectHeader :project="page.project.data" />
+      <ProjectInformation :project="page.project.data" />
+    </div>
     <div class="footer-wrap">
       <CTA
         :cta="page.project.data.call_to_action"
