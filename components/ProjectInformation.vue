@@ -3,7 +3,7 @@
     <div class="project-information-header">
       <prismic-rich-text :field="project?.header_paragraph" />
     </div>
-    <div class="project-information-content">
+    <div class="project-information-content" ref="projectInformationEl">
       <div class="project-information-content-left">
         <div v-for="(item, index) in project.client" :key="index">
           {{ clientNames[item.client.uid] || "Loading client..." }}
@@ -60,6 +60,7 @@ const clientNames = ref({});
 const moreInfoButtonEl = ref(null);
 const revealLeftEl = ref(null);
 const revealRightEl = ref(null);
+const projectInformationEl = ref(null);
 const isInfoVisible = ref(false);
 
 const buttonText = computed(() => {
