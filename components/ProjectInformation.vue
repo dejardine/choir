@@ -1,6 +1,6 @@
 <template>
-  <div class="project-information">
-    <div class="project-information-header">
+  <div class="project-information" ref="projectInformationContainerEl">
+    <div class="project-information-header" ref="projectInformationHeaderEl">
       <prismic-rich-text :field="project?.header_paragraph" />
     </div>
     <div class="project-information-content" ref="projectInformationEl">
@@ -41,7 +41,15 @@
 </template>
 
 <script setup>
-import { ref, watchEffect, onMounted, computed } from "vue";
+import {
+  ref,
+  watchEffect,
+  onMounted,
+  computed,
+  watch,
+  nextTick,
+  onBeforeUnmount,
+} from "vue";
 import { usePrismic } from "@prismicio/vue";
 
 const props = defineProps({
@@ -60,7 +68,10 @@ const clientNames = ref({});
 const moreInfoButtonEl = ref(null);
 const revealLeftEl = ref(null);
 const revealRightEl = ref(null);
-const projectInformationEl = ref(null);
+const projectInformationEl = ref(null); // This ref seems to be for the content area, let's keep it for now.
+const projectInformationContainerEl = ref(null); // Ref for the main container
+const projectInformationHeaderEl = ref(null); // Ref for the header
+let headerObserver = null; // To store the MutationObserver instance
 const isInfoVisible = ref(false);
 
 const buttonText = computed(() => {
@@ -133,6 +144,62 @@ onMounted(() => {
     // Set initial state for content inside reveal divs
     $gsap.set(childrenToAnimate, { opacity: 0, y: "10px" });
   }
+
+  // Calculate and set margin-top
+  calculateMarginTop(); // Initial calculation
+  window.addEventListener("resize", calculateMarginTop);
+
+  // Setup MutationObserver for the header
+  if (projectInformationHeaderEl.value) {
+    headerObserver = new MutationObserver(async () => {
+      // console.log('MutationObserver triggered for header');
+      await calculateMarginTop();
+    });
+
+    const observerConfig = {
+      childList: true, // Watch for direct children changes (nodes added or removed)
+      subtree: true, // Watch for changes in all descendants
+      characterData: true, // Watch for text content changes
+      // attributes: true, // Optionally watch for attribute changes if they affect layout
+    };
+
+    headerObserver.observe(projectInformationHeaderEl.value, observerConfig);
+  }
+});
+
+const calculateMarginTop = async () => {
+  await nextTick(); // Wait for Vue's DOM updates to complete
+  requestAnimationFrame(() => {
+    // Defer to next browser paint cycle
+    if (
+      projectInformationContainerEl.value &&
+      projectInformationHeaderEl.value
+    ) {
+      const headerHeight = projectInformationHeaderEl.value.offsetHeight;
+      if (typeof headerHeight === "number" && headerHeight >= 0) {
+        // Check if headerHeight is a valid number
+        projectInformationContainerEl.value.style.marginTop = `calc(100vh - (${headerHeight}px + 48px))`;
+      } else {
+        // Optional: console.warn("ProjectInformationHeader: Could not determine valid header height on RAF.");
+      }
+    }
+  });
+};
+
+// Watch for changes in the project prop (e.g., route changes)
+watch(
+  () => props.project,
+  () => {
+    calculateMarginTop();
+  },
+  { deep: true }
+);
+
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", calculateMarginTop);
+  if (headerObserver) {
+    headerObserver.disconnect();
+  }
 });
 
 watchEffect(async () => {
@@ -177,7 +244,6 @@ watchEffect(async () => {
 @import "@/assets/scss/global.scss";
 
 .project-information {
-  margin-top: 80vh;
   position: relative;
   z-index: 10;
   background-color: var(--color-background);
