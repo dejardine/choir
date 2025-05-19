@@ -11,19 +11,29 @@
       </div>
       <div class="project-information-content-right">
         <div class="project-information-content-right-left">
-          <button class="more-button">More info</button>
-          <prismic-rich-text :field="project?.scope" />
-          <p class="year">{{ project?.year }}</p>
-          <prismic-link :field="project?.link"></prismic-link>
+          <button
+            class="more-info-button"
+            @click="toggleInfo"
+            ref="moreInfoButtonEl"
+          >
+            {{ buttonText }}
+          </button>
+          <div class="project-information-reveal" ref="revealLeftEl">
+            <prismic-rich-text :field="project?.scope" />
+            <p class="year">{{ project?.year }}</p>
+            <prismic-link :field="project?.link" class="link"></prismic-link>
+          </div>
         </div>
         <div class="project-information-content-right-right">
-          <prismic-rich-text :field="project?.information" />
-          <blockquote>
-            <prismic-rich-text :field="project?.quote" />
-            <cite>
-              <prismic-rich-text :field="project?.quote_cite" />
-            </cite>
-          </blockquote>
+          <div class="project-information-reveal" ref="revealRightEl">
+            <prismic-rich-text :field="project?.information" />
+            <blockquote>
+              <prismic-rich-text :field="project?.quote" />
+              <cite>
+                <prismic-rich-text :field="project?.quote_cite" />
+              </cite>
+            </blockquote>
+          </div>
         </div>
       </div>
     </div>
@@ -31,7 +41,7 @@
 </template>
 
 <script setup>
-import { ref, watchEffect } from "vue";
+import { ref, watchEffect, onMounted, computed } from "vue";
 import { usePrismic } from "@prismicio/vue";
 
 const props = defineProps({
@@ -41,8 +51,88 @@ const props = defineProps({
   },
 });
 
+// Load GSAP libraries we need
+const { $gsap, $ScrollTrigger, $ScrollToPlugin } = useNuxtApp();
+
 const { client: prismicClient } = usePrismic();
 const clientNames = ref({});
+
+const moreInfoButtonEl = ref(null);
+const revealLeftEl = ref(null);
+const revealRightEl = ref(null);
+const isInfoVisible = ref(false);
+
+const buttonText = computed(() => {
+  return isInfoVisible.value ? "Less info" : "More info";
+});
+
+const toggleInfo = () => {
+  isInfoVisible.value = !isInfoVisible.value;
+  const revealElements = [revealLeftEl.value, revealRightEl.value].filter(
+    Boolean
+  );
+
+  if (revealElements.length === 0) return;
+
+  const tl = $gsap.timeline();
+  const childrenToAnimate = revealElements.flatMap((el) =>
+    Array.from(el.children)
+  );
+
+  if (isInfoVisible.value) {
+    // Animate open
+    tl.to(revealElements, {
+      height: "auto",
+      duration: 0.6,
+      ease: "expo.inOut",
+      onComplete: () => {
+        revealElements.forEach((el) => $gsap.set(el, { overflow: "visible" }));
+      },
+    }).to(
+      childrenToAnimate,
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        stagger: 0.05,
+        ease: "expo.out",
+      },
+      "-=0.3" // Start fading in content slightly before height animation finishes
+    );
+  } else {
+    // Animate close
+    // Set overflow to hidden before starting the close animation
+    revealElements.forEach((el) => $gsap.set(el, { overflow: "hidden" }));
+    tl.to(childrenToAnimate, {
+      opacity: 0,
+      y: "10px", // Slight upward movement before disappearing
+      duration: 0.4,
+      stagger: 0.03,
+      ease: "expo.in",
+    }).to(
+      revealElements,
+      {
+        height: 0,
+        duration: 0.5,
+        ease: "expo.inOut",
+      },
+      "-=0.2" // Start height animation slightly before children fully faded
+    );
+  }
+};
+
+onMounted(() => {
+  const revealElements = [revealLeftEl.value, revealRightEl.value].filter(
+    Boolean
+  );
+  if (revealElements.length > 0) {
+    const childrenToAnimate = revealElements.flatMap((el) =>
+      Array.from(el.children)
+    );
+    // Set initial state for content inside reveal divs
+    $gsap.set(childrenToAnimate, { opacity: 0, y: "10px" });
+  }
+});
 
 watchEffect(async () => {
   if (
@@ -120,13 +210,14 @@ watchEffect(async () => {
 .project-information-content-right {
   grid-column: 5 / span 8;
 }
-.more-button {
+.more-info-button {
   @include noButton;
   color: var(--color-text);
   @include foundersMedium;
   position: absolute;
   top: 0;
   left: 0;
+  @include linkStyle;
 }
 
 .project-information-content-right {
@@ -144,6 +235,13 @@ watchEffect(async () => {
   }
   :deep(a) {
     @include foundersMedium;
+    margin-top: var(--gutter);
+    display: block;
+    @include linkStyle;
+  }
+  .year {
+    margin-top: var(--gutter);
+    display: block;
   }
 }
 
@@ -177,5 +275,10 @@ watchEffect(async () => {
       transform: translateX(calc(-100% - 1px));
     }
   }
+}
+
+.project-information-reveal {
+  height: 0px;
+  overflow: hidden;
 }
 </style>

@@ -170,6 +170,15 @@ body.page-routing {
   padding: var(--gutterPadding);
 }
 
+@mixin linkStyle {
+  text-underline-offset: 1px;
+  text-decoration:underline;
+  text-decoration-thickness: 1px;
+  &:hover {
+    text-decoration: none;
+  }
+}
+
   /* =============================================================================
    Modernizer
    ========================================================================== */
