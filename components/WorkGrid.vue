@@ -183,7 +183,7 @@ const props = defineProps({
       margin: 0;
       @include bodyType;
       strong {
-        @include foundersSemiBold;
+        @include foundersMedium;
         font-weight: normal;
       }
     }

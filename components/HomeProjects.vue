@@ -56,7 +56,7 @@ onMounted(() => {
   h3 {
     @include smallType;
     text-transform: uppercase;
-    @include foundersSemiBold;
+    @include foundersMedium;
     letter-spacing: 0.05rem;
     margin-top: 33.333vh;
   }

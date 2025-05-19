@@ -23,14 +23,14 @@
 // Founders Grotesk Semi Bold
 
 @font-face {
-  font-family: "Founders Grotesk Semi Bold";
-  src: url("@/assets/fonts/FoundersGroteskWeb-Semibold.woff2") format("woff2");
+  font-family: "Founders Grotesk Medium";
+  src: url("@/assets/fonts/FoundersGroteskWeb-Medium.woff2") format("woff2");
   font-style: normal;
   font-weight: normal;    
 }
 
-@mixin foundersSemiBold {
-  font-family: "Founders Grotesk Semi Bold", sans-serif;
+@mixin foundersMedium {
+  font-family: "Founders Grotesk Medium", sans-serif;
   font-style: normal;
   font-weight:normal;    
 }
@@ -72,6 +72,8 @@
  
   --body:0.875rem;
   --body-l: 1.4;
+  --largeBody:1.06rem;
+  --largeBody-l:1.4;
   --small: 0.75rem;
   --small-l:1.4;
   --heading: 2.875rem;
@@ -96,6 +98,13 @@
   font-size: var(--body);
   line-height: var(--body-l);
   @include foundersRegular;
+  letter-spacing: 0; 
+}
+
+@mixin largeBodyType {
+  font-size: var(--largeBody);
+  line-height: var(--largeBody-l);
+  @include foundersRegular;  
   letter-spacing: 0; 
 }
 
@@ -171,7 +180,7 @@ i {
 
 strong {
     font-weight: normal;
-    @include foundersSemiBold;
+    @include foundersMedium;
 }
 
 // Optimize legibility for better kerning
