@@ -21,9 +21,13 @@ const props = defineProps({
 });
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .image-full-container {
   width: 100%;
   line-height: 0; /* Prevent extra space below image */
+  :deep(img) {
+    width: 100%;
+    height: auto;
+  }
 }
 </style>

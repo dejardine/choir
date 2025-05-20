@@ -14,6 +14,13 @@ const props = defineProps(
   ])
 );
 
+const sectionClasses = computed(() => {
+  return {
+    "medium-media-slice": true,
+    "has-bottom-margin": props.slice.primary.bottom_margin === true,
+  };
+});
+
 const vimeoVideoId = computed(() => {
   if (
     props.slice.variation === "video" &&
@@ -48,7 +55,7 @@ const videoCoverImageUrl = computed(() => {
   <section
     :data-slice-type="slice.slice_type"
     :data-slice-variation="slice.variation"
-    class="large-media-slice"
+    :class="sectionClasses"
   >
     <template v-if="slice.variation === 'default'">
       <ImageFull
@@ -72,16 +79,23 @@ const videoCoverImageUrl = computed(() => {
   </section>
 </template>
 
-<style scoped>
-.large-media-slice {
+<style scoped lang="scss">
+.medium-media-slice {
   width: 100%;
   padding-left: var(--gutterPadding);
   padding-right: var(--gutterPadding);
   padding-bottom: var(--gutter);
   padding-top: 0;
-  :deep(img) {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--gutter);
+  :deep(.image-full-container) {
     width: 100%;
     height: auto;
+    grid-column: 5 / span 8;
+  }
+  &.has-bottom-margin {
+    padding-bottom: 25vh;
   }
 }
 </style>

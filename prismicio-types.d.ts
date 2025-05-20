@@ -1279,6 +1279,17 @@ export interface MediumMediaSliceDefaultPrimary {
    * - **Documentation**: https://prismic.io/docs/field#image
    */
   image: prismic.ImageField<never>;
+
+  /**
+   * Bottom Margin field in *MediumMedia → Image → Primary*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: medium_media.default.primary.bottom_margin
+   * - **Documentation**: https://prismic.io/docs/field#boolean
+   */
+  bottom_margin: prismic.BooleanField;
 }
 
 /**
@@ -1323,6 +1334,17 @@ export interface MediumMediaSliceVideoPrimary {
     prismic.FieldState,
     never
   >;
+
+  /**
+   * Bottom Margin field in *MediumMedia → Video → Primary*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: medium_media.video.primary.bottom_margin
+   * - **Documentation**: https://prismic.io/docs/field#boolean
+   */
+  bottom_margin: prismic.BooleanField;
 }
 
 /**

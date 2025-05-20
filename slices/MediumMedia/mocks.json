@@ -25,6 +25,10 @@
 				"credits": null,
 				"__TYPE__": "ImageContent",
 				"thumbnails": {}
+			},
+			"bottom_margin": {
+				"__TYPE__": "BooleanContent",
+				"value": true
 			}
 		},
 		"items": []
@@ -57,12 +61,16 @@
 				"thumbnails": {}
 			},
 			"vimeo_video_link": {
-				"__TYPE__": "LinkContent",
 				"key": "98f3ab11-f96a-467d-b161-a84dd844f014",
+				"__TYPE__": "LinkContent",
 				"value": {
 					"__TYPE__": "ExternalLink",
 					"url": "https://prismic.io"
 				}
+			},
+			"bottom_margin": {
+				"__TYPE__": "BooleanContent",
+				"value": true
 			}
 		},
 		"items": [
