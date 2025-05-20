@@ -1,0 +1,16 @@
+{
+  "id": "small_gallery",
+  "type": "SharedSlice",
+  "name": "SmallGallery",
+  "description": "SmallGallery",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": ""
+    }
+  ]
+}

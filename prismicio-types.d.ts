@@ -212,7 +212,13 @@ export interface CaseStudyDocumentDataIndustryItem {
   industry: prismic.ContentRelationshipField<"industry">;
 }
 
-type CaseStudyDocumentDataSlices4Slice = never;
+type CaseStudyDocumentDataSlices4Slice =
+  | TextSliceSlice
+  | VideoPlayerSlice
+  | SmallMediaSlice
+  | SmallGallerySlice
+  | LargeMediaSlice
+  | MediumMediaSlice;
 
 /**
  * Content for Case Study documents
@@ -300,7 +306,7 @@ interface CaseStudyDocumentData {
   header_image: prismic.ImageField<never>;
 
   /**
-   * Header Video field in *Case Study*
+   * Vimeo Video Link field in *Case Study*
    *
    * - **Field Type**: Link
    * - **Placeholder**: *None*
@@ -1171,6 +1177,306 @@ export type AllDocumentTypes =
   | NewsLandingDocument
   | WorkDocument;
 
+/**
+ * Primary content in *LargeMedia → Image → Primary*
+ */
+export interface LargeMediaSliceDefaultPrimary {
+  /**
+   * Image field in *LargeMedia → Image → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: large_media.default.primary.image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image: prismic.ImageField<never>;
+}
+
+/**
+ * Image variation for LargeMedia Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type LargeMediaSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<LargeMediaSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Primary content in *LargeMedia → Video Loop → Primary*
+ */
+export interface LargeMediaSliceVideoPrimary {
+  /**
+   * Video Placeholder Image field in *LargeMedia → Video Loop → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: large_media.video.primary.video_placeholder_image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  video_placeholder_image: prismic.ImageField<never>;
+
+  /**
+   * Vimeo Video Link field in *LargeMedia → Video Loop → Primary*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: large_media.video.primary.vimeo_video_link
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  vimeo_video_link: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >;
+}
+
+/**
+ * Video Loop variation for LargeMedia Slice
+ *
+ * - **API ID**: `video`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type LargeMediaSliceVideo = prismic.SharedSliceVariation<
+  "video",
+  Simplify<LargeMediaSliceVideoPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *LargeMedia*
+ */
+type LargeMediaSliceVariation = LargeMediaSliceDefault | LargeMediaSliceVideo;
+
+/**
+ * LargeMedia Shared Slice
+ *
+ * - **API ID**: `large_media`
+ * - **Description**: LargeMedia
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type LargeMediaSlice = prismic.SharedSlice<
+  "large_media",
+  LargeMediaSliceVariation
+>;
+
+/**
+ * Primary content in *MediumMedia → Image → Primary*
+ */
+export interface MediumMediaSliceDefaultPrimary {
+  /**
+   * Image field in *MediumMedia → Image → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: medium_media.default.primary.image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image: prismic.ImageField<never>;
+}
+
+/**
+ * Image variation for MediumMedia Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type MediumMediaSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<MediumMediaSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Primary content in *MediumMedia → Video → Primary*
+ */
+export interface MediumMediaSliceVideoPrimary {
+  /**
+   * Image field in *MediumMedia → Video → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: medium_media.video.primary.image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * Vimeo Video Link field in *MediumMedia → Video → Primary*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: medium_media.video.primary.vimeo_video_link
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  vimeo_video_link: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >;
+}
+
+/**
+ * Video variation for MediumMedia Slice
+ *
+ * - **API ID**: `video`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type MediumMediaSliceVideo = prismic.SharedSliceVariation<
+  "video",
+  Simplify<MediumMediaSliceVideoPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *MediumMedia*
+ */
+type MediumMediaSliceVariation =
+  | MediumMediaSliceDefault
+  | MediumMediaSliceVideo;
+
+/**
+ * MediumMedia Shared Slice
+ *
+ * - **API ID**: `medium_media`
+ * - **Description**: MediumMedia
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type MediumMediaSlice = prismic.SharedSlice<
+  "medium_media",
+  MediumMediaSliceVariation
+>;
+
+/**
+ * Default variation for SmallGallery Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type SmallGallerySliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Record<string, never>,
+  never
+>;
+
+/**
+ * Slice variation for *SmallGallery*
+ */
+type SmallGallerySliceVariation = SmallGallerySliceDefault;
+
+/**
+ * SmallGallery Shared Slice
+ *
+ * - **API ID**: `small_gallery`
+ * - **Description**: SmallGallery
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type SmallGallerySlice = prismic.SharedSlice<
+  "small_gallery",
+  SmallGallerySliceVariation
+>;
+
+/**
+ * Default variation for SmallMedia Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type SmallMediaSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Record<string, never>,
+  never
+>;
+
+/**
+ * Slice variation for *SmallMedia*
+ */
+type SmallMediaSliceVariation = SmallMediaSliceDefault;
+
+/**
+ * SmallMedia Shared Slice
+ *
+ * - **API ID**: `small_media`
+ * - **Description**: SmallMedia
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type SmallMediaSlice = prismic.SharedSlice<
+  "small_media",
+  SmallMediaSliceVariation
+>;
+
+/**
+ * Default variation for TextSlice Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type TextSliceSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Record<string, never>,
+  never
+>;
+
+/**
+ * Slice variation for *TextSlice*
+ */
+type TextSliceSliceVariation = TextSliceSliceDefault;
+
+/**
+ * TextSlice Shared Slice
+ *
+ * - **API ID**: `text_slice`
+ * - **Description**: TextSlice
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type TextSliceSlice = prismic.SharedSlice<
+  "text_slice",
+  TextSliceSliceVariation
+>;
+
+/**
+ * Default variation for VideoPlayer Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type VideoPlayerSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Record<string, never>,
+  never
+>;
+
+/**
+ * Slice variation for *VideoPlayer*
+ */
+type VideoPlayerSliceVariation = VideoPlayerSliceDefault;
+
+/**
+ * VideoPlayer Shared Slice
+ *
+ * - **API ID**: `video_player`
+ * - **Description**: VideoPlayer
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type VideoPlayerSlice = prismic.SharedSlice<
+  "video_player",
+  VideoPlayerSliceVariation
+>;
+
 declare module "@prismicio/client" {
   interface CreateClient {
     (
@@ -1228,6 +1534,30 @@ declare module "@prismicio/client" {
       WorkDocumentData,
       WorkDocumentDataProjectsItem,
       AllDocumentTypes,
+      LargeMediaSlice,
+      LargeMediaSliceDefaultPrimary,
+      LargeMediaSliceVideoPrimary,
+      LargeMediaSliceVariation,
+      LargeMediaSliceDefault,
+      LargeMediaSliceVideo,
+      MediumMediaSlice,
+      MediumMediaSliceDefaultPrimary,
+      MediumMediaSliceVideoPrimary,
+      MediumMediaSliceVariation,
+      MediumMediaSliceDefault,
+      MediumMediaSliceVideo,
+      SmallGallerySlice,
+      SmallGallerySliceVariation,
+      SmallGallerySliceDefault,
+      SmallMediaSlice,
+      SmallMediaSliceVariation,
+      SmallMediaSliceDefault,
+      TextSliceSlice,
+      TextSliceSliceVariation,
+      TextSliceSliceDefault,
+      VideoPlayerSlice,
+      VideoPlayerSliceVariation,
+      VideoPlayerSliceDefault,
     };
   }
 }

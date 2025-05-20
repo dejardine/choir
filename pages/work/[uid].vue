@@ -4,6 +4,12 @@
     <div id="content">
       <ProjectHeader :project="page.project.data" />
       <ProjectInformation :project="page.project.data" />
+      <div class="project-slices">
+        <SliceZone
+          :slices="page?.project?.data?.slices4 ?? []"
+          :components="components"
+        />
+      </div>
     </div>
     <div class="footer-wrap">
       <CTA
@@ -33,7 +39,9 @@ import {
   usePrismic,
   useAsyncData,
   createError,
-} from "#imports"; // Added imports
+} from "#imports";
+
+import { components } from "~/slices";
 
 // Page Transition
 import { globalRouteTransition } from "~/utils/GlobalRouteTransition";
@@ -118,4 +126,10 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.project-slices {
+  background-color: var(--color-background);
+  position: relative;
+  z-index: 10;
+}
+</style>

@@ -28,9 +28,9 @@ function toggleMode() {
 @use "@/assets/scss/breakpoints" as *;
 
 .theme-switcher {
-  background-color: var(--color-text);
-  color: var(--color-background);
-  border: 1px solid var(--color-text);
+  background-color: var(--color-reverse);
+  color: var(--color-reverse);
+  border: 1px solid var(--color-reverse);
   width: var(--gutter-half);
   height: var(--gutter-half);
   border-radius: 50%;

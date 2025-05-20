@@ -93,7 +93,7 @@
       "header_video": {
         "type": "Link",
         "config": {
-          "label": "Header Video",
+          "label": "Vimeo Video Link",
           "placeholder": "",
           "select": null,
           "allowTargetBlank": false,
@@ -208,7 +208,26 @@
         "type": "Slices",
         "fieldset": "Slice Zone",
         "config": {
-          "choices": {}
+          "choices": {
+            "text_slice": {
+              "type": "SharedSlice"
+            },
+            "video_player": {
+              "type": "SharedSlice"
+            },
+            "small_media": {
+              "type": "SharedSlice"
+            },
+            "small_gallery": {
+              "type": "SharedSlice"
+            },
+            "large_media": {
+              "type": "SharedSlice"
+            },
+            "medium_media": {
+              "type": "SharedSlice"
+            }
+          }
         }
       }
     },

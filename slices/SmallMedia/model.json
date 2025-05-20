@@ -1,0 +1,16 @@
+{
+  "id": "small_media",
+  "type": "SharedSlice",
+  "name": "SmallMedia",
+  "description": "SmallMedia",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": ""
+    }
+  ]
+}

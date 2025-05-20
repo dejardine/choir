@@ -112,11 +112,6 @@ onBeforeUnmount(() => {
     }
   }
 
-  /* Target the div directly injected by Vimeo player for responsive aspect ratio */
-  :deep(> div[style*="padding"]) {
-    padding-top: 66.6666% !important; /* 2 (height) / 3 (width) * 100% */
-  }
-
   :deep(iframe) {
     position: absolute;
     top: 0;

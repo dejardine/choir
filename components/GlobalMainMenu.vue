@@ -95,6 +95,7 @@ const defaultMenuLinks = computed(() => {
     &:after {
       content: ", ";
       white-space: pre;
+      color: var(--color-reverse);
     }
     &:last-of-type {
       &:after {
@@ -105,7 +106,7 @@ const defaultMenuLinks = computed(() => {
       &:hover,
       &.router-link-active {
         text-decoration: underline;
-        text-decoration-color: var(--color-border);
+        text-decoration-color: var(--color-reverse);
         text-decoration-thickness: 1px;
         text-underline-offset: 1px;
       }
