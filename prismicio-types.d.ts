@@ -1190,6 +1190,17 @@ export interface LargeMediaSliceDefaultPrimary {
    * - **Documentation**: https://prismic.io/docs/field#image
    */
   image: prismic.ImageField<never>;
+
+  /**
+   * Bottom Margin field in *LargeMedia → Image → Primary*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: large_media.default.primary.bottom_margin
+   * - **Documentation**: https://prismic.io/docs/field#boolean
+   */
+  bottom_margin: prismic.BooleanField;
 }
 
 /**
@@ -1234,6 +1245,17 @@ export interface LargeMediaSliceVideoPrimary {
     prismic.FieldState,
     never
   >;
+
+  /**
+   * Bottom Margin field in *LargeMedia → Video Loop → Primary*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: large_media.video.primary.bottom_margin
+   * - **Documentation**: https://prismic.io/docs/field#boolean
+   */
+  bottom_margin: prismic.BooleanField;
 }
 
 /**
@@ -1440,6 +1462,21 @@ export type SmallMediaSlice = prismic.SharedSlice<
 >;
 
 /**
+ * Primary content in *TextSlice → Default → Primary*
+ */
+export interface TextSliceSliceDefaultPrimary {
+  /**
+   * Text field in *TextSlice → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: text_slice.default.primary.text
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  text: prismic.RichTextField;
+}
+
+/**
  * Default variation for TextSlice Slice
  *
  * - **API ID**: `default`
@@ -1448,7 +1485,7 @@ export type SmallMediaSlice = prismic.SharedSlice<
  */
 export type TextSliceSliceDefault = prismic.SharedSliceVariation<
   "default",
-  Record<string, never>,
+  Simplify<TextSliceSliceDefaultPrimary>,
   never
 >;
 
@@ -1575,6 +1612,7 @@ declare module "@prismicio/client" {
       SmallMediaSliceVariation,
       SmallMediaSliceDefault,
       TextSliceSlice,
+      TextSliceSliceDefaultPrimary,
       TextSliceSliceVariation,
       TextSliceSliceDefault,
       VideoPlayerSlice,

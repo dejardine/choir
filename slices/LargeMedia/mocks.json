@@ -25,6 +25,10 @@
 				"credits": null,
 				"__TYPE__": "ImageContent",
 				"thumbnails": {}
+			},
+			"bottom_margin": {
+				"__TYPE__": "BooleanContent",
+				"value": true
 			}
 		},
 		"items": []
@@ -63,6 +67,10 @@
 					"__TYPE__": "ExternalLink",
 					"url": "http://google.com"
 				}
+			},
+			"bottom_margin": {
+				"__TYPE__": "BooleanContent",
+				"value": true
 			}
 		},
 		"items": [

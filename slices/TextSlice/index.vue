@@ -9,7 +9,7 @@ defineProps(
     "index",
     "slices",
     "context",
-  ]),
+  ])
 );
 </script>
 
@@ -17,8 +17,18 @@ defineProps(
   <section
     :data-slice-type="slice.slice_type"
     :data-slice-variation="slice.variation"
+    class="text_slice"
   >
-    Placeholder component for text_slice (variation: {{ slice.variation }})
-    Slices
+    <prismic-rich-text :field="slice.primary.text" />
   </section>
 </template>
+
+<style scoped lang="scss">
+.text_slice {
+  padding-left: var(--gutterPadding);
+  padding-right: var(--gutterPadding);
+  :deep(p) {
+    @include heldaneSubheading;
+  }
+}
+</style>
