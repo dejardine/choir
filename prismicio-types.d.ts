@@ -1402,6 +1402,38 @@ export type MediumMediaSlice = prismic.SharedSlice<
 >;
 
 /**
+ * Item in *SmallGallery → Default → Primary → Images*
+ */
+export interface SmallGallerySliceDefaultPrimaryImagesItem {
+  /**
+   * Image field in *SmallGallery → Default → Primary → Images*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: small_gallery.default.primary.images[].image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image: prismic.ImageField<never>;
+}
+
+/**
+ * Primary content in *SmallGallery → Default → Primary*
+ */
+export interface SmallGallerySliceDefaultPrimary {
+  /**
+   * Images field in *SmallGallery → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: small_gallery.default.primary.images[]
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  images: prismic.GroupField<
+    Simplify<SmallGallerySliceDefaultPrimaryImagesItem>
+  >;
+}
+
+/**
  * Default variation for SmallGallery Slice
  *
  * - **API ID**: `default`
@@ -1410,7 +1442,7 @@ export type MediumMediaSlice = prismic.SharedSlice<
  */
 export type SmallGallerySliceDefault = prismic.SharedSliceVariation<
   "default",
-  Record<string, never>,
+  Simplify<SmallGallerySliceDefaultPrimary>,
   never
 >;
 
@@ -1606,6 +1638,8 @@ declare module "@prismicio/client" {
       MediumMediaSliceDefault,
       MediumMediaSliceVideo,
       SmallGallerySlice,
+      SmallGallerySliceDefaultPrimaryImagesItem,
+      SmallGallerySliceDefaultPrimary,
       SmallGallerySliceVariation,
       SmallGallerySliceDefault,
       SmallMediaSlice,
