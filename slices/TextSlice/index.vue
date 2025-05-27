@@ -24,11 +24,16 @@ defineProps(
 </template>
 
 <style scoped lang="scss">
+@use "@/assets/scss/global.scss" as *;
 .text_slice {
   padding-left: var(--gutterPadding);
   padding-right: var(--gutterPadding);
   :deep(p) {
     @include heldaneSubheading;
   }
+  padding-top: var(--gutter);
+
+  padding-bottom: 25vh;
+  border-top: 1px solid var(--color-border);
 }
 </style>

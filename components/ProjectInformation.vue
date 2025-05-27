@@ -6,7 +6,7 @@
     <div class="project-information-content" ref="projectInformationEl">
       <div class="project-information-content-left">
         <div v-for="(item, index) in project.client" :key="index">
-          {{ clientNames[item.client.uid] || "Loading client..." }}
+          {{ clientNames[item.client.uid] || "" }}
         </div>
       </div>
       <div class="project-information-content-right">
@@ -27,7 +27,7 @@
         <div class="project-information-content-right-right">
           <div class="project-information-reveal" ref="revealRightEl">
             <prismic-rich-text :field="project?.information" />
-            <blockquote>
+            <blockquote v-if="project?.quote[0]">
               <prismic-rich-text :field="project?.quote" />
               <cite>
                 <prismic-rich-text :field="project?.quote_cite" />

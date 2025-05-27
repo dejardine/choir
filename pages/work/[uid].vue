@@ -16,6 +16,11 @@
         :cta="page.project.data.call_to_action"
         :ctaLink="page.project.data.call_to_action_link"
       />
+      <ProjectNavigation
+        :currentProjectUID="page?.project?.uid"
+        :projectsGroup="page?.workPage?.data?.projects"
+      />
+
       <GlobalFooter />
     </div>
   </div>
@@ -58,25 +63,59 @@ const { $gsap, $ScrollTrigger } = useNuxtApp();
 const prismic = usePrismic();
 const route = useRoute();
 
-const { data: page } = await useAsyncData(route.params.uid, async () => {
-  try {
-    // Remove menu fetch from here
-    const [project] = await Promise.all([
-      prismic.client.getByUID("case_study", route.params.uid),
-    ]);
+const { data: page } = await useAsyncData(
+  `${route.params.uid}-workdata`,
+  async () => {
+    try {
+      const projectPromise = prismic.client.getByUID(
+        "case_study",
+        route.params.uid
+      );
 
-    return {
-      project,
-      // menu, // Removed
-    };
-  } catch (error) {
-    throw createError({
-      statusCode: 500,
-      message: error.message || "Internal Server Error",
-      cause: error,
-    });
+      // GraphQuery to fetch thumbnail_title from linked case_study documents
+      // within the 'work' page's 'projects' group.
+      const workPageGraphQuery = `{
+        work {
+          projects {
+            case_study {
+              ...on case_study {
+                thumbnail_title
+              }
+            }
+          }
+        }
+      }`;
+
+      const workPagePromise = prismic.client.getSingle("work", {
+        graphQuery: workPageGraphQuery,
+      });
+
+      const [project, workPage] = await Promise.all([
+        projectPromise,
+        workPagePromise,
+      ]);
+
+      if (!project) {
+        throw createError({
+          statusCode: 404,
+          message: `Case study with UID ${route.params.uid} not found`,
+        });
+      }
+
+      return {
+        project,
+        workPage,
+      };
+    } catch (error) {
+      console.error("Error fetching project or work page data:", error);
+      throw createError({
+        statusCode: error.statusCode || 500,
+        message: error.message || "Internal Server Error",
+        cause: error,
+      });
+    }
   }
-});
+);
 
 // --- Theme Color Meta Tag Logic ---
 const colorMode = useColorMode();
@@ -131,5 +170,9 @@ onBeforeUnmount(() => {
   background-color: var(--color-background);
   position: relative;
   z-index: 10;
+  padding-bottom: 33.3333vh;
+}
+
+#content {
 }
 </style>
