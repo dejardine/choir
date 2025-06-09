@@ -33,7 +33,7 @@ defineProps(
   }
   padding-top: var(--gutter);
 
-  padding-bottom: 25vh;
+  padding-bottom: var(--slide-padding);
   border-top: 1px solid var(--color-border);
 }
 </style>

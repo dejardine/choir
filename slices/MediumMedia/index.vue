@@ -95,7 +95,7 @@ const videoCoverImageUrl = computed(() => {
     grid-column: 5 / span 8;
   }
   &.has-bottom-margin {
-    padding-bottom: 25vh;
+    padding-bottom: var(--slide-padding);
   }
 }
 </style>

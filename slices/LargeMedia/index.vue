@@ -91,7 +91,7 @@ const videoCoverImageUrl = computed(() => {
     height: auto;
   }
   &.has-bottom-margin {
-    padding-bottom: 25vh;
+    padding-bottom: var(--slide-padding);
   }
 }
 </style>

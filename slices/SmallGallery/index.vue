@@ -3,29 +3,34 @@
     class="small-gallery"
     :data-slice-type="slice.slice_type"
     :data-slice-variation="slice.variation"
+    :class="sectionClasses"
   >
     <client-only>
-      <swiper-container
-        ref="swiperRef"
-        :slides-per-view="1"
-        :space-between="10"
-        effect="fade"
-        :fade-effect="{ crossFade: true }"
-        :loop="true"
-        :autoplay="swiperAutoplayOptions"
-        :navigation="slice.primary.images.length > 1"
-        :pagination="{ clickable: true }"
-        class="small-gallery-swiper"
-        @mouseenter="startAutoplay"
-        @mouseleave="stopAutoplay"
-      >
-        <swiper-slide
-          v-for="(item, index) in slice.primary.images"
-          :key="index"
+      <div class="swiper-container-wrapper">
+        <swiper
+          ref="swiperRef"
+          :slides-per-view="1"
+          :space-between="10"
+          effect="fade"
+          :fade-effect="{ crossFade: true }"
+          :loop="true"
+          :autoplay="swiperAutoplayOptions"
+          :autoHeight="true"
+          :navigation="slice.primary.images.length > 1"
+          :pagination="paginationOptions"
+          class="small-gallery-swiper"
+          @mouseenter="startAutoplay"
+          @mouseleave="stopAutoplay"
         >
-          <prismic-image :field="item.image" class="gallery-image" />
-        </swiper-slide>
-      </swiper-container>
+          <swiper-slide
+            v-for="(item, index) in slice.primary.images"
+            :key="index"
+          >
+            <prismic-image :field="item.image" class="gallery-image" />
+          </swiper-slide>
+        </swiper>
+        <div class="swiper-pagination-custom"></div>
+      </div>
     </client-only>
   </section>
 </template>
@@ -33,6 +38,16 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import { register } from "swiper/element/bundle";
+// Import Swiper Vue.js components
+import { Swiper, SwiperSlide } from "swiper/vue";
+// Import Swiper modules
+import { EffectFade, Autoplay, Navigation } from "swiper/modules"; // <-- Added Navigation
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/effect-fade";
+// Optionally import basic navigation styles (can be overridden)
+// import 'swiper/css/navigation';
 
 // Define props using defineProps
 const props = defineProps({
@@ -41,6 +56,16 @@ const props = defineProps({
     required: true,
     default: () => ({}),
   },
+});
+
+const sectionClasses = computed(() => {
+  return {
+    "small-gallery-slice": true,
+    "has-bottom-margin": props.slice.primary.bottom_margin === true,
+    "small-gallery--left": props.slice.variation === "default",
+    "small-gallery--center": props.slice.variation === "center",
+    "small-gallery--right": props.slice.variation === "right",
+  };
 });
 
 const swiperRef = ref(null);
@@ -54,6 +79,12 @@ onMounted(() => {
     const assignSwiperInstance = () => {
       if (swiperEl && swiperEl.swiper) {
         swiperInstance = swiperEl.swiper;
+        // Manually update pagination if swiper is already initialized
+        if (swiperInstance.pagination) {
+          swiperInstance.pagination.init();
+          swiperInstance.pagination.render();
+          swiperInstance.pagination.update();
+        }
       } else if (swiperEl) {
         swiperEl.addEventListener("init", assignSwiperInstance, { once: true });
       }
@@ -61,6 +92,23 @@ onMounted(() => {
     assignSwiperInstance();
   }
 });
+
+const paginationOptions = computed(() => ({
+  el: ".swiper-pagination-custom",
+  type: "fraction",
+  clickable: true, // Keep clickable if you want to allow clicking on the fraction (though it's less common for fraction)
+  renderFraction: function (currentClass, totalClass) {
+    return (
+      '<span class="' +
+      currentClass +
+      '"></span>' +
+      " of " +
+      '<span class="' +
+      totalClass +
+      '"></span>'
+    );
+  },
+}));
 
 const swiperAutoplayOptions = ref({
   delay: 3000,
@@ -103,46 +151,60 @@ const images = computed(() => {
 <style lang="scss" scoped>
 .small-gallery {
   width: 100%;
-  max-width: 600px; // Example max-width, adjust as needed
-  margin: 0 auto; // Center the gallery
-  padding: 2rem 0; // Add some vertical spacing
+  padding: var(--gutter) var(--gutterPadding);
+  padding-top: 0;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  &.has-bottom-margin {
+    padding-bottom: var(--slide-padding);
+  }
+  &.small-gallery--left {
+    grid-column: 1 / span 4;
+    .swiper-container-wrapper {
+      grid-column: 1 / span 4;
+    }
+  }
+  &.small-gallery--center {
+    grid-column: 5 / span 4;
+    .swiper-container-wrapper {
+      grid-column: 5 / span 4;
+    }
+  }
+  &.small-gallery--right {
+    grid-column: 9 / span 4;
+    .swiper-container-wrapper {
+      grid-column: 9 / span 4;
+    }
+  }
+}
+
+.swiper-container-wrapper {
+  grid-column: 1 / span 4;
+  width: 100%;
+  position: relative; /* Needed for absolute positioning of custom pagination if required */
 }
 
 .small-gallery-swiper {
   width: 100%;
-  aspect-ratio: 4 / 3; // Adjust aspect ratio as needed
-  overflow: hidden;
+  /* Remove direct grid positioning from swiper, now handled by wrapper */
+}
 
-  // Basic Swiper navigation and pagination styles
-  // You might need to import Swiper's CSS or define these more thoroughly
-  &::part(button-next),
-  &::part(button-prev) {
-    color: #fff; // Example color
-    background-color: rgba(0, 0, 0, 0.3);
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    &::after {
-      font-size: 16px;
-    }
-  }
-
-  &::part(pagination) {
-    bottom: 10px;
-  }
-  &::part(bullet) {
-    background-color: rgba(255, 255, 255, 0.5);
-    opacity: 1;
-  }
-  &::part(bullet-active) {
-    background-color: #fff;
-  }
+.swiper-pagination-custom {
+  text-align: left;
+  padding-top: var(--gutter);
+  @include smallType;
+  @include heldaneTextItalic;
+  color: var(--text);
+  position: relative; // Or static, depending on layout needs
+  bottom: auto; // Reset any inherited bottom positioning
+  left: 0;
+  width: 100%;
 }
 
 .gallery-image {
   display: block;
   width: 100%;
-  height: 100%;
+  height: auto; /* Let image maintain aspect ratio */
   object-fit: cover;
 }
 </style>

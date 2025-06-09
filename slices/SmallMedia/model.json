@@ -6,11 +6,13 @@
   "variations": [
     {
       "id": "default",
-      "name": "Default",
+      "name": "Align Left",
       "docURL": "...",
       "version": "initial",
       "description": "Default",
-      "imageUrl": ""
+      "imageUrl": "",
+      "primary": {},
+      "items": {}
     }
   ]
 }

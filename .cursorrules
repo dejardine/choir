@@ -1,0 +1,15 @@
+this is a nuxt3 project that uses prismic and is deployed on netlify as a static build 
+
+please where possible use existing parts of the setup when coding (research and analyse the project if you need to)
+
+when doing responsive work use the breakpoint mixins we already have defined in breakpoints.scss eg @include breakpoint(mobile) etc 
+
+if you are going to run the project, first check that we are not already running the project (chances are we will be!)
+
+any terminal commands need to be started with nvm use to make sure we are on the correct version of node 
+
+we are using yarn for most things
+
+we import gsap as a plugin
+
+dont worry about scss import rules
