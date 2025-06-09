@@ -110,19 +110,25 @@ const videoCoverImageUrl = computed(() => {
 
   &.small-media--left {
     .small-media-container {
-      grid-column: 1 / span 4;
+      grid-column: 1 / span 3;
     }
   }
 
   &.small-media--center {
     .small-media-container {
-      grid-column: 5 / span 4;
+      grid-column: 1 / -1; // Span the full width
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(
+        (100% - 11 * var(--gutter)) / 4 + 2 * var(--gutter)
+      ); // 3 columns + 2 gaps, accounting for total grid gaps
     }
   }
 
   &.small-media--right {
     .small-media-container {
-      grid-column: 9 / span 4;
+      grid-column: 10 / span 3;
     }
   }
 
