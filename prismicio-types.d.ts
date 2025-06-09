@@ -1402,11 +1402,11 @@ export type MediumMediaSlice = prismic.SharedSlice<
 >;
 
 /**
- * Item in *SmallGallery → Align Left → Primary → Images*
+ * Item in *SmallGallery → Default → Primary → Images*
  */
 export interface SmallGallerySliceDefaultPrimaryImagesItem {
   /**
-   * Image field in *SmallGallery → Align Left → Primary → Images*
+   * Image field in *SmallGallery → Default → Primary → Images*
    *
    * - **Field Type**: Image
    * - **Placeholder**: *None*
@@ -1417,41 +1417,11 @@ export interface SmallGallerySliceDefaultPrimaryImagesItem {
 }
 
 /**
- * Item in *SmallGallery → Align Center → Primary → Images*
- */
-export interface SmallGallerySliceCenterPrimaryImagesItem {
-  /**
-   * Image field in *SmallGallery → Align Center → Primary → Images*
-   *
-   * - **Field Type**: Image
-   * - **Placeholder**: *None*
-   * - **API ID Path**: small_gallery.center.primary.images[].image
-   * - **Documentation**: https://prismic.io/docs/field#image
-   */
-  image: prismic.ImageField<never>;
-}
-
-/**
- * Item in *SmallGallery → Align Right → Primary → Images*
- */
-export interface SmallGallerySliceRightPrimaryImagesItem {
-  /**
-   * Image field in *SmallGallery → Align Right → Primary → Images*
-   *
-   * - **Field Type**: Image
-   * - **Placeholder**: *None*
-   * - **API ID Path**: small_gallery.right.primary.images[].image
-   * - **Documentation**: https://prismic.io/docs/field#image
-   */
-  image: prismic.ImageField<never>;
-}
-
-/**
- * Primary content in *SmallGallery → Align Left → Primary*
+ * Primary content in *SmallGallery → Default → Primary*
  */
 export interface SmallGallerySliceDefaultPrimary {
   /**
-   * Images field in *SmallGallery → Align Left → Primary*
+   * Images field in *SmallGallery → Default → Primary*
    *
    * - **Field Type**: Group
    * - **Placeholder**: *None*
@@ -1463,7 +1433,7 @@ export interface SmallGallerySliceDefaultPrimary {
   >;
 
   /**
-   * Bottom Margin field in *SmallGallery → Align Left → Primary*
+   * Bottom Margin field in *SmallGallery → Default → Primary*
    *
    * - **Field Type**: Boolean
    * - **Placeholder**: *None*
@@ -1472,10 +1442,22 @@ export interface SmallGallerySliceDefaultPrimary {
    * - **Documentation**: https://prismic.io/docs/field#boolean
    */
   bottom_margin: prismic.BooleanField;
+
+  /**
+   * Align Gallery field in *SmallGallery → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: small_gallery.default.primary.align_gallery
+   * - **Documentation**: https://prismic.io/docs/field#select
+   */
+  align_gallery: prismic.SelectField<
+    "Align left" | "Align center" | "Align right"
+  >;
 }
 
 /**
- * Align Left variation for SmallGallery Slice
+ * Default variation for SmallGallery Slice
  *
  * - **API ID**: `default`
  * - **Description**: Default
@@ -1488,92 +1470,9 @@ export type SmallGallerySliceDefault = prismic.SharedSliceVariation<
 >;
 
 /**
- * Primary content in *SmallGallery → Align Center → Primary*
- */
-export interface SmallGallerySliceCenterPrimary {
-  /**
-   * Images field in *SmallGallery → Align Center → Primary*
-   *
-   * - **Field Type**: Group
-   * - **Placeholder**: *None*
-   * - **API ID Path**: small_gallery.center.primary.images[]
-   * - **Documentation**: https://prismic.io/docs/field#group
-   */
-  images: prismic.GroupField<
-    Simplify<SmallGallerySliceCenterPrimaryImagesItem>
-  >;
-
-  /**
-   * Bottom Margin field in *SmallGallery → Align Center → Primary*
-   *
-   * - **Field Type**: Boolean
-   * - **Placeholder**: *None*
-   * - **Default Value**: false
-   * - **API ID Path**: small_gallery.center.primary.bottom_margin
-   * - **Documentation**: https://prismic.io/docs/field#boolean
-   */
-  bottom_margin: prismic.BooleanField;
-}
-
-/**
- * Align Center variation for SmallGallery Slice
- *
- * - **API ID**: `center`
- * - **Description**: Default
- * - **Documentation**: https://prismic.io/docs/slice
- */
-export type SmallGallerySliceCenter = prismic.SharedSliceVariation<
-  "center",
-  Simplify<SmallGallerySliceCenterPrimary>,
-  never
->;
-
-/**
- * Primary content in *SmallGallery → Align Right → Primary*
- */
-export interface SmallGallerySliceRightPrimary {
-  /**
-   * Images field in *SmallGallery → Align Right → Primary*
-   *
-   * - **Field Type**: Group
-   * - **Placeholder**: *None*
-   * - **API ID Path**: small_gallery.right.primary.images[]
-   * - **Documentation**: https://prismic.io/docs/field#group
-   */
-  images: prismic.GroupField<Simplify<SmallGallerySliceRightPrimaryImagesItem>>;
-
-  /**
-   * Bottom Margin field in *SmallGallery → Align Right → Primary*
-   *
-   * - **Field Type**: Boolean
-   * - **Placeholder**: *None*
-   * - **Default Value**: false
-   * - **API ID Path**: small_gallery.right.primary.bottom_margin
-   * - **Documentation**: https://prismic.io/docs/field#boolean
-   */
-  bottom_margin: prismic.BooleanField;
-}
-
-/**
- * Align Right variation for SmallGallery Slice
- *
- * - **API ID**: `right`
- * - **Description**: Default
- * - **Documentation**: https://prismic.io/docs/slice
- */
-export type SmallGallerySliceRight = prismic.SharedSliceVariation<
-  "right",
-  Simplify<SmallGallerySliceRightPrimary>,
-  never
->;
-
-/**
  * Slice variation for *SmallGallery*
  */
-type SmallGallerySliceVariation =
-  | SmallGallerySliceDefault
-  | SmallGallerySliceCenter
-  | SmallGallerySliceRight;
+type SmallGallerySliceVariation = SmallGallerySliceDefault;
 
 /**
  * SmallGallery Shared Slice
@@ -1588,7 +1487,45 @@ export type SmallGallerySlice = prismic.SharedSlice<
 >;
 
 /**
- * Align Left variation for SmallMedia Slice
+ * Primary content in *SmallMedia → Image → Primary*
+ */
+export interface SmallMediaSliceDefaultPrimary {
+  /**
+   * Image field in *SmallMedia → Image → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: small_media.default.primary.image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * Align Image field in *SmallMedia → Image → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: small_media.default.primary.align_image
+   * - **Documentation**: https://prismic.io/docs/field#select
+   */
+  align_image: prismic.SelectField<
+    "Align left" | "Align center" | "Align right"
+  >;
+
+  /**
+   * Margin Bottom field in *SmallMedia → Image → Primary*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: small_media.default.primary.margin_bottom
+   * - **Documentation**: https://prismic.io/docs/field#boolean
+   */
+  margin_bottom: prismic.BooleanField;
+}
+
+/**
+ * Image variation for SmallMedia Slice
  *
  * - **API ID**: `default`
  * - **Description**: Default
@@ -1596,14 +1533,83 @@ export type SmallGallerySlice = prismic.SharedSlice<
  */
 export type SmallMediaSliceDefault = prismic.SharedSliceVariation<
   "default",
-  Record<string, never>,
+  Simplify<SmallMediaSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Primary content in *SmallMedia → Video loop → Primary*
+ */
+export interface SmallMediaSliceVideoLoopPrimary {
+  /**
+   * Video Placeholder Image field in *SmallMedia → Video loop → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: small_media.videoLoop.primary.video_placeholder_image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  video_placeholder_image: prismic.ImageField<never>;
+
+  /**
+   * Vimeo Video Link field in *SmallMedia → Video loop → Primary*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: small_media.videoLoop.primary.vimeo_video_link
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  vimeo_video_link: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >;
+
+  /**
+   * Align Video field in *SmallMedia → Video loop → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: small_media.videoLoop.primary.align_image
+   * - **Documentation**: https://prismic.io/docs/field#select
+   */
+  align_image: prismic.SelectField<
+    "Align left" | "Align center" | "Align right"
+  >;
+
+  /**
+   * Margin Bottom field in *SmallMedia → Video loop → Primary*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: small_media.videoLoop.primary.margin_bottom
+   * - **Documentation**: https://prismic.io/docs/field#boolean
+   */
+  margin_bottom: prismic.BooleanField;
+}
+
+/**
+ * Video loop variation for SmallMedia Slice
+ *
+ * - **API ID**: `videoLoop`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type SmallMediaSliceVideoLoop = prismic.SharedSliceVariation<
+  "videoLoop",
+  Simplify<SmallMediaSliceVideoLoopPrimary>,
   never
 >;
 
 /**
  * Slice variation for *SmallMedia*
  */
-type SmallMediaSliceVariation = SmallMediaSliceDefault;
+type SmallMediaSliceVariation =
+  | SmallMediaSliceDefault
+  | SmallMediaSliceVideoLoop;
 
 /**
  * SmallMedia Shared Slice
@@ -1816,17 +1822,14 @@ declare module "@prismicio/client" {
       SmallGallerySlice,
       SmallGallerySliceDefaultPrimaryImagesItem,
       SmallGallerySliceDefaultPrimary,
-      SmallGallerySliceCenterPrimaryImagesItem,
-      SmallGallerySliceCenterPrimary,
-      SmallGallerySliceRightPrimaryImagesItem,
-      SmallGallerySliceRightPrimary,
       SmallGallerySliceVariation,
       SmallGallerySliceDefault,
-      SmallGallerySliceCenter,
-      SmallGallerySliceRight,
       SmallMediaSlice,
+      SmallMediaSliceDefaultPrimary,
+      SmallMediaSliceVideoLoopPrimary,
       SmallMediaSliceVariation,
       SmallMediaSliceDefault,
+      SmallMediaSliceVideoLoop,
       TextSliceSlice,
       TextSliceSliceDefaultPrimary,
       TextSliceSliceVariation,

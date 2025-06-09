@@ -59,12 +59,21 @@ const props = defineProps({
 });
 
 const sectionClasses = computed(() => {
+  let alignClass = "small-gallery--left"; // default
+
+  if (props.slice.primary.align_gallery) {
+    // Convert dropdown value to valid CSS class name (lowercase, remove spaces)
+    const alignValue = props.slice.primary.align_gallery
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/^align-/, ""); // Remove "align-" prefix if it exists
+    alignClass = `small-gallery--${alignValue}`;
+  }
+
   return {
     "small-gallery-slice": true,
     "has-bottom-margin": props.slice.primary.bottom_margin === true,
-    "small-gallery--left": props.slice.variation === "default",
-    "small-gallery--center": props.slice.variation === "center",
-    "small-gallery--right": props.slice.variation === "right",
+    [alignClass]: true,
   };
 });
 
