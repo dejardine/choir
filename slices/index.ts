@@ -4,6 +4,7 @@ import { defineAsyncComponent } from "vue";
 import { defineSliceZoneComponents } from "@prismicio/vue";
 
 export const components = defineSliceZoneComponents({
+  audio_player: defineAsyncComponent(() => import("./AudioPlayer/index.vue")),
   large_media: defineAsyncComponent(() => import("./LargeMedia/index.vue")),
   medium_media: defineAsyncComponent(() => import("./MediumMedia/index.vue")),
   small_gallery: defineAsyncComponent(() => import("./SmallGallery/index.vue")),

@@ -31,15 +31,6 @@
             "repeat": false
           }
         },
-        "bottom_margin": {
-          "type": "Boolean",
-          "config": {
-            "label": "Bottom Margin",
-            "placeholder_false": "false",
-            "placeholder_true": "true",
-            "default_value": false
-          }
-        },
         "caption": {
           "type": "StructuredText",
           "config": {
@@ -47,6 +38,15 @@
             "placeholder": "",
             "allowTargetBlank": true,
             "multi": "paragraph,em"
+          }
+        },
+        "bottom_margin": {
+          "type": "Boolean",
+          "config": {
+            "label": "Bottom Margin",
+            "placeholder_false": "false",
+            "placeholder_true": "true",
+            "default_value": false
           }
         }
       },

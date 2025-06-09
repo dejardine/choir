@@ -1178,6 +1178,61 @@ export type AllDocumentTypes =
   | WorkDocument;
 
 /**
+ * Primary content in *AudioPlayer → Default → Primary*
+ */
+export interface AudioPlayerSliceDefaultPrimary {
+  /**
+   * Audio Title field in *AudioPlayer → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: audio_player.default.primary.audio_title
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  audio_title: prismic.RichTextField;
+
+  /**
+   * Audio File (MP3) field in *AudioPlayer → Default → Primary*
+   *
+   * - **Field Type**: Link to Media
+   * - **Placeholder**: *None*
+   * - **API ID Path**: audio_player.default.primary.audio_file
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  audio_file: prismic.LinkToMediaField<prismic.FieldState, never>;
+}
+
+/**
+ * Default variation for AudioPlayer Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type AudioPlayerSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<AudioPlayerSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *AudioPlayer*
+ */
+type AudioPlayerSliceVariation = AudioPlayerSliceDefault;
+
+/**
+ * AudioPlayer Shared Slice
+ *
+ * - **API ID**: `audio_player`
+ * - **Description**: AudioPlayer
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type AudioPlayerSlice = prismic.SharedSlice<
+  "audio_player",
+  AudioPlayerSliceVariation
+>;
+
+/**
  * Primary content in *LargeMedia → Image → Primary*
  */
 export interface LargeMediaSliceDefaultPrimary {
@@ -1433,17 +1488,6 @@ export interface SmallGallerySliceDefaultPrimary {
   >;
 
   /**
-   * Bottom Margin field in *SmallGallery → Default → Primary*
-   *
-   * - **Field Type**: Boolean
-   * - **Placeholder**: *None*
-   * - **Default Value**: false
-   * - **API ID Path**: small_gallery.default.primary.bottom_margin
-   * - **Documentation**: https://prismic.io/docs/field#boolean
-   */
-  bottom_margin: prismic.BooleanField;
-
-  /**
    * Align Gallery field in *SmallGallery → Default → Primary*
    *
    * - **Field Type**: Select
@@ -1454,6 +1498,17 @@ export interface SmallGallerySliceDefaultPrimary {
   align_gallery: prismic.SelectField<
     "Align left" | "Align center" | "Align right"
   >;
+
+  /**
+   * Bottom Margin field in *SmallGallery → Default → Primary*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: small_gallery.default.primary.bottom_margin
+   * - **Documentation**: https://prismic.io/docs/field#boolean
+   */
+  bottom_margin: prismic.BooleanField;
 }
 
 /**
@@ -1699,6 +1754,16 @@ export interface VideoPlayerSliceDefaultPrimary {
   >;
 
   /**
+   * Caption field in *VideoPlayer → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: video_player.default.primary.caption
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  caption: prismic.RichTextField;
+
+  /**
    * Bottom Margin field in *VideoPlayer → Default → Primary*
    *
    * - **Field Type**: Boolean
@@ -1708,16 +1773,6 @@ export interface VideoPlayerSliceDefaultPrimary {
    * - **Documentation**: https://prismic.io/docs/field#boolean
    */
   bottom_margin: prismic.BooleanField;
-
-  /**
-   * Caption field in *VideoPlayer → Default → Primary*
-   *
-   * - **Field Type**: Rich Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: video_player.default.primary.caption
-   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
-   */
-  caption: prismic.RichTextField;
 }
 
 /**
@@ -1807,6 +1862,10 @@ declare module "@prismicio/client" {
       WorkDocumentData,
       WorkDocumentDataProjectsItem,
       AllDocumentTypes,
+      AudioPlayerSlice,
+      AudioPlayerSliceDefaultPrimary,
+      AudioPlayerSliceVariation,
+      AudioPlayerSliceDefault,
       LargeMediaSlice,
       LargeMediaSliceDefaultPrimary,
       LargeMediaSliceVideoPrimary,

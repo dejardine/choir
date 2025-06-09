@@ -1,0 +1,32 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"audio_title": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "paragraph",
+						"content": {
+							"text": "Dolore nulla nostrud elit tempor veniam cillum tempor exercitation tempor non cupidatat tempor ex. Fugiat anim amet esse veniam ullamco veniam amet esse nostrud duis est consectetur elit aliqua. Sint occaecat laboris commodo dolore proident ullamco anim."
+						}
+					}
+				]
+			},
+			"audio_file": {
+				"__TYPE__": "LinkContent",
+				"key": "a11a47a4-343b-4f57-8606-6c957309b3c8",
+				"value": {
+					"__TYPE__": "FileLink",
+					"id": "mock_Media_link",
+					"kind": "file",
+					"name": "mock_name",
+					"url": "https://source.unsplash.com/daily",
+					"size": "0"
+				}
+			}
+		},
+		"items": []
+	}
+]

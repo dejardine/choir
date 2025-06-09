@@ -29,15 +29,6 @@
             }
           }
         },
-        "bottom_margin": {
-          "type": "Boolean",
-          "config": {
-            "label": "Bottom Margin",
-            "placeholder_false": "false",
-            "placeholder_true": "true",
-            "default_value": false
-          }
-        },
         "align_gallery": {
           "type": "Select",
           "config": {
@@ -48,6 +39,15 @@
               "Align center",
               "Align right"
             ]
+          }
+        },
+        "bottom_margin": {
+          "type": "Boolean",
+          "config": {
+            "label": "Bottom Margin",
+            "placeholder_false": "false",
+            "placeholder_true": "true",
+            "default_value": false
           }
         }
       },

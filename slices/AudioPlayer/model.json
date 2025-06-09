@@ -1,0 +1,37 @@
+{
+  "id": "audio_player",
+  "type": "SharedSlice",
+  "name": "AudioPlayer",
+  "description": "AudioPlayer",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "audio_title": {
+          "type": "StructuredText",
+          "config": {
+            "label": "Audio Title",
+            "placeholder": "",
+            "allowTargetBlank": false,
+            "single": "paragraph"
+          }
+        },
+        "audio_file": {
+          "type": "Link",
+          "config": {
+            "label": "Audio File (MP3)",
+            "placeholder": "",
+            "select": "media",
+            "allowText": false
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}
