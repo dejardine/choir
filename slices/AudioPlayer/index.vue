@@ -131,13 +131,15 @@ const progressPercentage = computed(() => {
     <audio ref="audioRef" :src="audioSrc" preload="metadata" />
 
     <div class="audio-player">
-      <button class="play-button" @click="togglePlay" :disabled="!audioSrc">
-        {{ isPlaying ? "pause" : "play" }}
-      </button>
-
+      <div class="player-left">
+        <button class="play-button" @click="togglePlay" :disabled="!audioSrc">
+          {{ isPlaying ? "Pause" : "Play" }}
+        </button>
+      </div>
       <div class="player-content">
         <div class="audio-title">
           <PrismicRichText :field="audioTitle" />
+          <span class="duration">{{ formatTime(currentTime) }}</span>
         </div>
 
         <div class="progress-container">
@@ -147,11 +149,6 @@ const progressPercentage = computed(() => {
               :style="{ width: `${progressPercentage}%` }"
             />
           </div>
-
-          <div class="time-display">
-            <span class="current-time">{{ formatTime(currentTime) }}</span>
-            <span class="duration">{{ formatTime(duration) }}</span>
-          </div>
         </div>
       </div>
     </div>
@@ -160,26 +157,28 @@ const progressPercentage = computed(() => {
 
 <style scoped lang="scss">
 @use "@/assets/scss/breakpoints.scss" as *;
+@use "@/assets/scss/global.scss" as *;
 
 .audio-player-slice {
   width: 100%;
-  padding: var(--gutter-2) var(--gutterPadding);
-
-  @include breakpoint(mobile) {
-    padding: var(--gutter) var(--gutterPadding);
-  }
+  padding: var(--slide-padding) var(--gutterPadding);
 }
 
 .audio-player {
-  display: flex;
-  align-items: center;
-  gap: var(--gutter-2);
-  max-width: 600px;
-  margin: 0 auto;
-
-  @include breakpoint(mobile) {
-    gap: var(--gutter);
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--gutter);
+  audio {
+    display: none;
   }
+}
+
+.player-left {
+  grid-column: 1 / span 3;
+}
+
+.player-content {
+  grid-column: 4 / span 7;
 }
 
 .play-button {
@@ -187,63 +186,26 @@ const progressPercentage = computed(() => {
   align-items: center;
   justify-content: center;
   padding: var(--gutter) var(--gutter-2);
-  min-width: 60px;
-  height: 48px;
-  border: 1px solid var(--color-border);
-  border-radius: var(--border-radius);
+  @include noButton;
   background: transparent;
   color: var(--color-text);
   cursor: pointer;
   transition: all 0.2s ease;
   flex-shrink: 0;
-  @include smallType;
-  text-transform: lowercase;
-
-  &:hover {
-    background: var(--color-text);
-    color: var(--color-background);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-
-    &:hover {
-      background: transparent;
-      color: var(--color-text);
-    }
-  }
-
-  @include breakpoint(mobile) {
-    min-width: 50px;
-    height: 40px;
-    padding: var(--gutter-half) var(--gutter);
-  }
-}
-
-.player-content {
-  flex: 1;
-  min-width: 0;
+  @include bodyType;
 }
 
 .audio-title {
   margin-bottom: var(--gutter);
-  text-align: center;
+  text-align: left;
 
   :deep(p) {
     @include bodyType;
     margin: 0;
   }
-
-  :deep(h1),
-  :deep(h2),
-  :deep(h3),
-  :deep(h4),
-  :deep(h5),
-  :deep(h6) {
-    @include bodyType;
-    margin: 0;
-  }
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .progress-container {
@@ -254,16 +216,14 @@ const progressPercentage = computed(() => {
 
 .progress-bar {
   position: relative;
-  height: 4px;
-  background: var(--color-border);
-  border-radius: 2px;
+  height: var(--gutter-half);
+  background: transparent;
   cursor: pointer;
 }
 
 .progress-fill {
   height: 100%;
   background: var(--color-text);
-  border-radius: 2px;
   transition: width 0.1s ease;
 }
 
@@ -272,6 +232,6 @@ const progressPercentage = computed(() => {
   justify-content: space-between;
   @include smallType;
   color: var(--color-text);
-  opacity: 0.7;
+  opacity: 1;
 }
 </style>
