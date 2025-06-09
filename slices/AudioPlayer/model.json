@@ -18,7 +18,7 @@
             "label": "Audio Title",
             "placeholder": "",
             "allowTargetBlank": false,
-            "single": "paragraph"
+            "single": "paragraph,em"
           }
         },
         "audio_file": {

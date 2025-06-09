@@ -213,6 +213,7 @@ export interface CaseStudyDocumentDataIndustryItem {
 }
 
 type CaseStudyDocumentDataSlices4Slice =
+  | AudioPlayerSlice
   | TextSliceSlice
   | VideoPlayerSlice
   | SmallMediaSlice
