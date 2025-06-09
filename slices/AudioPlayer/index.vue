@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Content } from "@prismicio/client";
 import { getSliceComponentProps } from "@prismicio/vue";
-import { computed, ref, onMounted, onUnmounted } from "vue";
+import { computed, ref, onMounted, onUnmounted, nextTick, watch } from "vue";
 
 // The array passed to `getSliceComponentProps` is purely optional.
 // Consider it as a visual hint for you when templating your slice.
@@ -46,11 +46,19 @@ const togglePlay = () => {
 
 const handleTimeUpdate = () => {
   if (!audioRef.value || isDragging.value) return;
+  console.log(
+    "AudioPlayer: Time update - currentTime:",
+    audioRef.value.currentTime
+  );
   currentTime.value = audioRef.value.currentTime;
 };
 
 const handleLoadedMetadata = () => {
   if (!audioRef.value) return;
+  console.log(
+    "AudioPlayer: Metadata loaded - duration:",
+    audioRef.value.duration
+  );
   duration.value = audioRef.value.duration;
 };
 
@@ -93,12 +101,23 @@ const stopDrag = () => {
 };
 
 onMounted(() => {
-  if (audioRef.value) {
-    audioRef.value.addEventListener("timeupdate", handleTimeUpdate);
-    audioRef.value.addEventListener("loadedmetadata", handleLoadedMetadata);
-    audioRef.value.addEventListener("play", handlePlayPause);
-    audioRef.value.addEventListener("pause", handlePlayPause);
-  }
+  // Use nextTick to ensure the audio element is properly rendered
+  nextTick(() => {
+    if (audioRef.value) {
+      console.log("AudioPlayer: Adding event listeners to audio element");
+      audioRef.value.addEventListener("timeupdate", handleTimeUpdate);
+      audioRef.value.addEventListener("loadedmetadata", handleLoadedMetadata);
+      audioRef.value.addEventListener("play", handlePlayPause);
+      audioRef.value.addEventListener("pause", handlePlayPause);
+
+      // Force load metadata if audio source is available
+      if (audioSrc.value) {
+        audioRef.value.load();
+      }
+    } else {
+      console.error("AudioPlayer: Audio element not found");
+    }
+  });
 
   document.addEventListener("mouseup", stopDrag);
   document.addEventListener("mousemove", handleProgressDrag);
@@ -116,9 +135,26 @@ onUnmounted(() => {
   document.removeEventListener("mousemove", handleProgressDrag);
 });
 
+// Watch for changes in audio source and reload the audio element
+watch(audioSrc, (newSrc: string) => {
+  if (newSrc && audioRef.value) {
+    console.log("AudioPlayer: Audio source changed, reloading:", newSrc);
+    audioRef.value.load();
+  }
+});
+
 const progressPercentage = computed(() => {
   if (duration.value === 0) return 0;
-  return (currentTime.value / duration.value) * 100;
+  const percentage = (currentTime.value / duration.value) * 100;
+  console.log(
+    "AudioPlayer: Progress percentage:",
+    percentage,
+    "currentTime:",
+    currentTime.value,
+    "duration:",
+    duration.value
+  );
+  return percentage;
 });
 </script>
 
@@ -152,6 +188,7 @@ const progressPercentage = computed(() => {
         </div>
       </div>
     </div>
+    <div class="line"></div>
   </section>
 </template>
 
@@ -161,7 +198,8 @@ const progressPercentage = computed(() => {
 
 .audio-player-slice {
   width: 100%;
-  padding: var(--slide-padding) var(--gutterPadding);
+  margin: var(--slide-padding) var(--gutterPadding);
+  position: relative;
 }
 
 .audio-player {
@@ -171,6 +209,18 @@ const progressPercentage = computed(() => {
   audio {
     display: none;
   }
+}
+
+.line {
+  position: absolute;
+  pointer-events: none;
+  bottom: 2px;
+  left: 0;
+
+  height: 1px;
+  background: var(--color-border);
+  width: 100%;
+  display: block;
 }
 
 .player-left {
