@@ -39,6 +39,15 @@
             "placeholder_true": "true",
             "default_value": false
           }
+        },
+        "caption": {
+          "type": "StructuredText",
+          "config": {
+            "label": "Caption",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,em"
+          }
         }
       },
       "items": {}

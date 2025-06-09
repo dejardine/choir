@@ -37,6 +37,17 @@
 			"bottom_margin": {
 				"__TYPE__": "BooleanContent",
 				"value": false
+			},
+			"caption": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "paragraph",
+						"content": {
+							"text": "Fugiat mollit officia sit nisi adipisicing. Exercitation eu aliqua voluptate. Fugiat tempor pariatur adipisicing velit veniam."
+						}
+					}
+				]
 			}
 		},
 		"items": []

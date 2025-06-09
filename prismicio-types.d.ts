@@ -1702,6 +1702,16 @@ export interface VideoPlayerSliceDefaultPrimary {
    * - **Documentation**: https://prismic.io/docs/field#boolean
    */
   bottom_margin: prismic.BooleanField;
+
+  /**
+   * Caption field in *VideoPlayer → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: video_player.default.primary.caption
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  caption: prismic.RichTextField;
 }
 
 /**

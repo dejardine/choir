@@ -61,6 +61,7 @@ const videoCoverImageUrl = computed(() => {
     <div v-else>
       <!-- VideoPlayer: Video ID or Cover Image URL is missing. -->
     </div>
+    <PrismicRichText :field="slice.primary.caption" />
   </section>
 </template>
 
@@ -82,7 +83,15 @@ const videoCoverImageUrl = computed(() => {
   &.has-bottom-margin {
     padding-bottom: var(--slide-padding);
   }
-
+  :deep(p) {
+    @include smallType;
+    @include heldaneText;
+    em {
+      @include heldaneTextItalic;
+    }
+    color: var(--color-text);
+    margin-top: var(--gutter);
+  }
   @include breakpoint(mobile) {
     padding-left: var(--gutterPadding);
     padding-right: var(--gutterPadding);
