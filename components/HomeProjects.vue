@@ -2,11 +2,18 @@
   <div class="home-projects" ref="introductionContainer">
     <prismic-rich-text :field="props?.home?.data?.introduction" />
     <h3>Selected projects</h3>
+    <div class="home-slices">
+      <SliceZone
+        :slices="props?.home?.data?.slices2 ?? []"
+        :components="components"
+      />
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
+import { components } from "~/slices";
 
 const introductionContainer = ref(null);
 

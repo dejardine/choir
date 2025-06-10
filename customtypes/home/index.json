@@ -87,6 +87,17 @@
           "allowTargetBlank": true,
           "multi": "heading2,em"
         }
+      },
+      "slices2": {
+        "type": "Slices",
+        "fieldset": "Slice Zone",
+        "config": {
+          "choices": {
+            "project": {
+              "type": "SharedSlice"
+            }
+          }
+        }
       }
     },
     "Footer": {
@@ -108,8 +119,7 @@
           "select": null,
           "allowTargetBlank": true,
           "allowText": true,
-          "repeat": false,
-          "labels": ["micro-text"]
+          "repeat": false
         }
       }
     }

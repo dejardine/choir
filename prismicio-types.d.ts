@@ -692,6 +692,8 @@ export interface HomeDocumentDataSlideshowItem {
   link: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
 }
 
+type HomeDocumentDataSlices2Slice = ProjectSlice;
+
 /**
  * Content for Home documents
  */
@@ -734,7 +736,18 @@ interface HomeDocumentData {
    * - **Tab**: Projects
    * - **Documentation**: https://prismic.io/docs/field#rich-text-title
    */;
-  introduction: prismic.RichTextField /**
+  introduction: prismic.RichTextField;
+
+  /**
+   * Slice Zone field in *Home*
+   *
+   * - **Field Type**: Slice Zone
+   * - **Placeholder**: *None*
+   * - **API ID Path**: home.slices2[]
+   * - **Tab**: Projects
+   * - **Documentation**: https://prismic.io/docs/field#slices
+   */
+  slices2: prismic.SliceZone<HomeDocumentDataSlices2Slice> /**
    * Call to action field in *Home*
    *
    * - **Field Type**: Rich Text
@@ -1486,6 +1499,184 @@ export type MediumMediaSlice = prismic.SharedSlice<
 >;
 
 /**
+ * Item in *Project → Default → Primary → Media 1*
+ */
+export interface ProjectSliceDefaultPrimaryMedia1Item {
+  /**
+   * Image / Video Placeholder field in *Project → Default → Primary → Media 1*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project.default.primary.media_1[].image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * Vimeo Video Link field in *Project → Default → Primary → Media 1*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project.default.primary.media_1[].vimeo_video_link
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  vimeo_video_link: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >;
+}
+
+/**
+ * Item in *Project → Default → Primary → Media 2*
+ */
+export interface ProjectSliceDefaultPrimaryMedia2Item {
+  /**
+   * Image / Video Placeholder field in *Project → Default → Primary → Media 2*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project.default.primary.media_2[].image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * Vimeo Video Link field in *Project → Default → Primary → Media 2*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project.default.primary.media_2[].vimeo_video_link
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  vimeo_video_link: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >;
+}
+
+/**
+ * Item in *Project → Default → Primary → Media 3*
+ */
+export interface ProjectSliceDefaultPrimaryMedia3Item {
+  /**
+   * Image / Video Placeholder field in *Project → Default → Primary → Media 3*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project.default.primary.media_3[].image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * Vimeo Video Link field in *Project → Default → Primary → Media 3*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project.default.primary.media_3[].vimeo_video_link
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  vimeo_video_link: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >;
+}
+
+/**
+ * Primary content in *Project → Default → Primary*
+ */
+export interface ProjectSliceDefaultPrimary {
+  /**
+   * Project Link field in *Project → Default → Primary*
+   *
+   * - **Field Type**: Content Relationship
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project.default.primary.project_link
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  project_link: prismic.ContentRelationshipField<"case_study">;
+
+  /**
+   * Project Copy field in *Project → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project.default.primary.project_copy
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  project_copy: prismic.RichTextField;
+
+  /**
+   * Media 1 field in *Project → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project.default.primary.media_1[]
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  media_1: prismic.GroupField<Simplify<ProjectSliceDefaultPrimaryMedia1Item>>;
+
+  /**
+   * Media 2 field in *Project → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project.default.primary.media_2[]
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  media_2: prismic.GroupField<Simplify<ProjectSliceDefaultPrimaryMedia2Item>>;
+
+  /**
+   * Media 3 field in *Project → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: project.default.primary.media_3[]
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  media_3: prismic.GroupField<Simplify<ProjectSliceDefaultPrimaryMedia3Item>>;
+}
+
+/**
+ * Default variation for Project Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type ProjectSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<ProjectSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *Project*
+ */
+type ProjectSliceVariation = ProjectSliceDefault;
+
+/**
+ * Project Shared Slice
+ *
+ * - **API ID**: `project`
+ * - **Description**: Project
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type ProjectSlice = prismic.SharedSlice<
+  "project",
+  ProjectSliceVariation
+>;
+
+/**
  * Item in *SmallGallery → Default → Primary → Images*
  */
 export interface SmallGallerySliceDefaultPrimaryImagesItem {
@@ -1875,6 +2066,7 @@ declare module "@prismicio/client" {
       HomeDocument,
       HomeDocumentData,
       HomeDocumentDataSlideshowItem,
+      HomeDocumentDataSlices2Slice,
       IndustryDocument,
       IndustryDocumentData,
       MainMenuDocument,
@@ -1907,6 +2099,13 @@ declare module "@prismicio/client" {
       MediumMediaSliceVariation,
       MediumMediaSliceDefault,
       MediumMediaSliceVideo,
+      ProjectSlice,
+      ProjectSliceDefaultPrimaryMedia1Item,
+      ProjectSliceDefaultPrimaryMedia2Item,
+      ProjectSliceDefaultPrimaryMedia3Item,
+      ProjectSliceDefaultPrimary,
+      ProjectSliceVariation,
+      ProjectSliceDefault,
       SmallGallerySlice,
       SmallGallerySliceDefaultPrimaryImagesItem,
       SmallGallerySliceDefaultPrimary,

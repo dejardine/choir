@@ -131,7 +131,7 @@ const getVimeoId = (url) => {
   if (!url) return null;
 
   // Clean the URL: remove leading/trailing whitespace and quotes.
-  const cleanedUrl = url.trim().replace(/["“”]/g, "");
+  const cleanedUrl = url.trim().replace(/["""]/g, "");
 
   // Regex to capture Vimeo ID from various URL formats, including /event/
   const vimeoRegex =
@@ -152,6 +152,14 @@ const props = defineProps({
     required: true,
   },
 });
+
+new Promise((resolve) => {
+  const script = document.createElement("script");
+  script.src = "https://player.vimeo.com/api/player.js";
+  script.onload = () => resolve("Vimeo API loaded");
+  script.onerror = () => resolve("Vimeo API failed to load");
+  document.head.appendChild(script);
+}).then(console.log);
 </script>
 
 <style lang="scss" scoped>

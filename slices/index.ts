@@ -7,6 +7,7 @@ export const components = defineSliceZoneComponents({
   audio_player: defineAsyncComponent(() => import("./AudioPlayer/index.vue")),
   large_media: defineAsyncComponent(() => import("./LargeMedia/index.vue")),
   medium_media: defineAsyncComponent(() => import("./MediumMedia/index.vue")),
+  project: defineAsyncComponent(() => import("./Project/index.vue")),
   small_gallery: defineAsyncComponent(() => import("./SmallGallery/index.vue")),
   small_media: defineAsyncComponent(() => import("./SmallMedia/index.vue")),
   text_slice: defineAsyncComponent(() => import("./TextSlice/index.vue")),

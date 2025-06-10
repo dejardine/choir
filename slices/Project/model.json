@@ -1,0 +1,123 @@
+{
+  "id": "project",
+  "type": "SharedSlice",
+  "name": "Project",
+  "description": "Project",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "project_link": {
+          "type": "Link",
+          "config": {
+            "label": "Project Link",
+            "select": "document",
+            "repeat": false,
+            "customtypes": [
+              "case_study"
+            ]
+          }
+        },
+        "project_copy": {
+          "type": "StructuredText",
+          "config": {
+            "label": "Project Copy",
+            "placeholder": "",
+            "allowTargetBlank": false,
+            "single": "paragraph,strong"
+          }
+        },
+        "media_1": {
+          "type": "Group",
+          "config": {
+            "label": "Media 1",
+            "repeat": false,
+            "fields": {
+              "image": {
+                "type": "Image",
+                "config": {
+                  "label": "Image / Video Placeholder",
+                  "constraint": {},
+                  "thumbnails": []
+                }
+              },
+              "vimeo_video_link": {
+                "type": "Link",
+                "config": {
+                  "label": "Vimeo Video Link",
+                  "placeholder": "",
+                  "select": null,
+                  "allowTargetBlank": false,
+                  "allowText": false,
+                  "repeat": false
+                }
+              }
+            }
+          }
+        },
+        "media_2": {
+          "type": "Group",
+          "config": {
+            "label": "Media 2",
+            "repeat": false,
+            "fields": {
+              "image": {
+                "type": "Image",
+                "config": {
+                  "label": "Image / Video Placeholder",
+                  "constraint": {},
+                  "thumbnails": []
+                }
+              },
+              "vimeo_video_link": {
+                "type": "Link",
+                "config": {
+                  "label": "Vimeo Video Link",
+                  "placeholder": "",
+                  "select": null,
+                  "allowTargetBlank": false,
+                  "allowText": false,
+                  "repeat": false
+                }
+              }
+            }
+          }
+        },
+        "media_3": {
+          "type": "Group",
+          "config": {
+            "label": "Media 3",
+            "repeat": false,
+            "fields": {
+              "image": {
+                "type": "Image",
+                "config": {
+                  "label": "Image / Video Placeholder",
+                  "constraint": {},
+                  "thumbnails": []
+                }
+              },
+              "vimeo_video_link": {
+                "type": "Link",
+                "config": {
+                  "label": "Vimeo Video Link",
+                  "placeholder": "",
+                  "select": null,
+                  "allowTargetBlank": false,
+                  "allowText": false,
+                  "repeat": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}
