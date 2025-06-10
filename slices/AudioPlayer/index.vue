@@ -2,6 +2,7 @@
 import type { Content } from "@prismicio/client";
 import { getSliceComponentProps } from "@prismicio/vue";
 import { computed, ref, onMounted, onUnmounted, nextTick, watch } from "vue";
+import { useMediaState } from "@/composables/useMediaState";
 
 // The array passed to `getSliceComponentProps` is purely optional.
 // Consider it as a visual hint for you when templating your slice.
@@ -13,6 +14,9 @@ const props = defineProps(
     "context",
   ])
 );
+
+// Media state management
+const { registerAudioPlayer, onAudioPlay, onAudioPause } = useMediaState();
 
 const audioRef = ref<HTMLAudioElement | null>(null);
 const isPlaying = ref(false);
@@ -62,8 +66,16 @@ const handleLoadedMetadata = () => {
   duration.value = audioRef.value.duration;
 };
 
-const handlePlayPause = () => {
+const handlePlayPause = async () => {
+  const wasPlaying = isPlaying.value;
   isPlaying.value = !audioRef.value?.paused;
+
+  // Notify media state manager
+  if (isPlaying.value && !wasPlaying) {
+    await onAudioPlay();
+  } else if (!isPlaying.value && wasPlaying) {
+    onAudioPause();
+  }
 };
 
 const handleProgressClick = (event: MouseEvent) => {
@@ -109,6 +121,9 @@ onMounted(() => {
       audioRef.value.addEventListener("loadedmetadata", handleLoadedMetadata);
       audioRef.value.addEventListener("play", handlePlayPause);
       audioRef.value.addEventListener("pause", handlePlayPause);
+
+      // Register this audio player instance with the media state manager
+      registerAudioPlayer(audioRef.value);
 
       // Force load metadata if audio source is available
       if (audioSrc.value) {

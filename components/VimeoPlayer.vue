@@ -35,6 +35,7 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, watch } from "vue";
 import Player from "@vimeo/player";
+import { useMediaState } from "@/composables/useMediaState";
 
 const props = defineProps({
   videoId: {
@@ -52,6 +53,9 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["ready", "play", "pause"]);
+
+// Media state management
+const { registerVideoPlayer, onVideoPlay, onVideoPause } = useMediaState();
 
 const playerContainer = ref(null);
 let player = null;
@@ -170,6 +174,72 @@ onMounted(() => {
 
     player.ready().then(() => {
       console.log("VimeoPlayer: Player ready");
+      // Create a state reset function
+      const resetPlayerState = () => {
+        console.log("VimeoPlayer: Resetting player state");
+        isPlaying.value = false;
+        showCoverImage.value = true;
+        showControls.value = true;
+        if (hideControlsTimeout) {
+          clearTimeout(hideControlsTimeout);
+        }
+
+        // Recreate the player to ensure it's in a clean state
+        if (player) {
+          console.log("VimeoPlayer: Recreating player instance");
+          try {
+            player.destroy();
+          } catch (destroyError) {
+            console.warn(
+              "VimeoPlayer: Error destroying old player:",
+              destroyError
+            );
+          }
+
+          // Create new player instance
+          setTimeout(() => {
+            if (playerContainer.value) {
+              player = new Player(playerContainer.value, {
+                id: props.videoId,
+                controls: false,
+                byline: false,
+                portrait: false,
+                title: false,
+                background: false,
+                responsive: true,
+                dnt: true,
+                muted: false,
+                preload: true,
+                autoplay: false,
+                loop: true,
+              });
+
+              // Re-register event listeners
+              player.on("play", () => {
+                isPlaying.value = true;
+                showCoverImage.value = false;
+                onVideoPlay();
+                emit("play");
+              });
+
+              player.on("pause", () => {
+                isPlaying.value = false;
+                onVideoPause();
+                emit("pause");
+              });
+
+              player.on("ended", () => {
+                isPlaying.value = true;
+              });
+
+              console.log("VimeoPlayer: Player recreated successfully");
+            }
+          }, 150);
+        }
+      };
+
+      // Register this video player instance with the media state manager
+      registerVideoPlayer(player, resetPlayerState);
       emit("ready");
     });
 
@@ -177,11 +247,13 @@ onMounted(() => {
     player.on("play", () => {
       isPlaying.value = true;
       showCoverImage.value = false;
+      onVideoPlay(); // Notify media state manager
       emit("play");
     });
 
     player.on("pause", () => {
       isPlaying.value = false;
+      onVideoPause(); // Notify media state manager
       emit("pause");
     });
 
