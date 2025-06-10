@@ -169,7 +169,7 @@ const progressPercentage = computed(() => {
     <div class="audio-player">
       <div class="player-left">
         <button class="play-button" @click="togglePlay" :disabled="!audioSrc">
-          {{ isPlaying ? "Pause" : "Play" }}
+          Press <em>{{ isPlaying ? "Pause" : "Play" }}</em>
         </button>
       </div>
       <div class="player-content">
@@ -243,6 +243,9 @@ const progressPercentage = computed(() => {
   transition: all 0.2s ease;
   flex-shrink: 0;
   @include bodyType;
+  em {
+    @include heldaneTextItalic;
+  }
 }
 
 .audio-title {
