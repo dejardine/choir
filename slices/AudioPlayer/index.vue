@@ -50,19 +50,11 @@ const togglePlay = () => {
 
 const handleTimeUpdate = () => {
   if (!audioRef.value || isDragging.value) return;
-  console.log(
-    "AudioPlayer: Time update - currentTime:",
-    audioRef.value.currentTime
-  );
   currentTime.value = audioRef.value.currentTime;
 };
 
 const handleLoadedMetadata = () => {
   if (!audioRef.value) return;
-  console.log(
-    "AudioPlayer: Metadata loaded - duration:",
-    audioRef.value.duration
-  );
   duration.value = audioRef.value.duration;
 };
 
@@ -116,7 +108,6 @@ onMounted(() => {
   // Use nextTick to ensure the audio element is properly rendered
   nextTick(() => {
     if (audioRef.value) {
-      console.log("AudioPlayer: Adding event listeners to audio element");
       audioRef.value.addEventListener("timeupdate", handleTimeUpdate);
       audioRef.value.addEventListener("loadedmetadata", handleLoadedMetadata);
       audioRef.value.addEventListener("play", handlePlayPause);
@@ -129,8 +120,6 @@ onMounted(() => {
       if (audioSrc.value) {
         audioRef.value.load();
       }
-    } else {
-      console.error("AudioPlayer: Audio element not found");
     }
   });
 
@@ -153,7 +142,6 @@ onUnmounted(() => {
 // Watch for changes in audio source and reload the audio element
 watch(audioSrc, (newSrc: string) => {
   if (newSrc && audioRef.value) {
-    console.log("AudioPlayer: Audio source changed, reloading:", newSrc);
     audioRef.value.load();
   }
 });
@@ -161,14 +149,6 @@ watch(audioSrc, (newSrc: string) => {
 const progressPercentage = computed(() => {
   if (duration.value === 0) return 0;
   const percentage = (currentTime.value / duration.value) * 100;
-  console.log(
-    "AudioPlayer: Progress percentage:",
-    percentage,
-    "currentTime:",
-    currentTime.value,
-    "duration:",
-    duration.value
-  );
   return percentage;
 });
 </script>

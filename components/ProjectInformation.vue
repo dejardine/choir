@@ -1,9 +1,15 @@
 <template>
   <div class="project-information" ref="projectInformationContainerEl">
-    <div class="project-information-header" ref="projectInformationHeaderEl">
+    <div
+      class="project-information-header animate-in"
+      ref="projectInformationHeaderEl"
+    >
       <prismic-rich-text :field="project?.header_paragraph" />
     </div>
-    <div class="project-information-content" ref="projectInformationEl">
+    <div
+      class="project-information-content animate-in"
+      ref="projectInformationEl"
+    >
       <div class="project-information-content-left">
         <div v-for="(item, index) in project.client" :key="index">
           {{ clientNames[item.client.uid] || "" }}

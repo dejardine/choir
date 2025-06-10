@@ -69,17 +69,12 @@ let mouseMoveThrottle = null;
 const HIDE_CONTROLS_DELAY = 3000;
 
 const hideControls = () => {
-  console.log("VimeoPlayer: hideControls called, isPlaying:", isPlaying.value);
   if (isPlaying.value) {
-    console.log("VimeoPlayer: Hiding controls");
     showControls.value = false;
   }
 };
 
 const showControlsTemporarily = () => {
-  console.log(
-    "VimeoPlayer: showControlsTemporarily called, setting showControls to true"
-  );
   showControls.value = true;
 
   // Clear existing timeout
@@ -89,11 +84,6 @@ const showControlsTemporarily = () => {
 
   // Set new timeout to hide controls if playing
   if (isPlaying.value) {
-    console.log(
-      "VimeoPlayer: Setting timeout to hide controls in",
-      HIDE_CONTROLS_DELAY,
-      "ms"
-    );
     hideControlsTimeout = setTimeout(hideControls, HIDE_CONTROLS_DELAY);
   }
 };
@@ -101,13 +91,6 @@ const showControlsTemporarily = () => {
 const onMouseMove = () => {
   // Throttle mouse move events to avoid excessive firing
   if (mouseMoveThrottle) return;
-
-  console.log(
-    "VimeoPlayer: Mouse move detected, isPlaying:",
-    isPlaying.value,
-    "showControls:",
-    showControls.value
-  );
 
   showControlsTemporarily();
 
@@ -132,7 +115,6 @@ const onContainerClick = (event) => {
     return;
   }
 
-  console.log("VimeoPlayer: Container clicked");
   togglePlay(event);
 };
 
@@ -173,10 +155,8 @@ onMounted(() => {
     });
 
     player.ready().then(() => {
-      console.log("VimeoPlayer: Player ready");
       // Create a state reset function
       const resetPlayerState = () => {
-        console.log("VimeoPlayer: Resetting player state");
         isPlaying.value = false;
         showCoverImage.value = true;
         showControls.value = true;
@@ -186,14 +166,10 @@ onMounted(() => {
 
         // Recreate the player to ensure it's in a clean state
         if (player) {
-          console.log("VimeoPlayer: Recreating player instance");
           try {
             player.destroy();
           } catch (destroyError) {
-            console.warn(
-              "VimeoPlayer: Error destroying old player:",
-              destroyError
-            );
+            // Silently handle destroy errors
           }
 
           // Create new player instance
@@ -231,8 +207,6 @@ onMounted(() => {
               player.on("ended", () => {
                 isPlaying.value = true;
               });
-
-              console.log("VimeoPlayer: Player recreated successfully");
             }
           }, 150);
         }
@@ -275,7 +249,6 @@ onBeforeUnmount(() => {
   }
 
   if (player) {
-    console.log("VimeoPlayer: Cleaning up player");
     player.destroy();
     player = null;
   }
@@ -289,8 +262,6 @@ const togglePlay = async (event) => {
 
   if (!player) return;
 
-  console.log("VimeoPlayer: Toggle play clicked, isPlaying:", isPlaying.value);
-
   try {
     if (isPlaying.value) {
       await player.pause();
@@ -298,7 +269,7 @@ const togglePlay = async (event) => {
       await player.play();
     }
   } catch (error) {
-    console.error("VimeoPlayer: Error toggling playback", error);
+    // Silently handle playback errors
   }
 };
 </script>

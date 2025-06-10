@@ -1,5 +1,9 @@
 <template>
-  <div id="preloader" class="hidden" v-if="!isSimulator"></div>
+  <div id="preloader" class="hidden" v-if="!isSimulator">
+    <div class="preloader-loader" ref="preloaderBar">
+      <span ref="preloaderBarInner" class="preloader-bar-inner"> </span>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -23,6 +27,7 @@ onMounted(() => {
     document.documentElement.classList.remove("dark");
     return;
   }
+  $gsap.set(".preloader-bar-inner", { xPercent: -100 });
 
   // Ensure GSAP is available
   if (!$gsap) {
@@ -34,22 +39,33 @@ onMounted(() => {
 
   const tl = $gsap.timeline();
 
-  tl.to("#preloader", {
-    duration: 0.8,
-    delay: 0.8,
-    alpha: 0,
-    ease: "power2.inOut",
-    onComplete: () => {
-      // Remove the preloader from DOM
-      const preloader = document.getElementById("preloader");
-      if (preloader) {
-        preloader.remove();
-      }
-    },
-    onStart: () => {
-      document.body.classList.add("preloader-finished");
-    },
-  });
+  tl.to(".preloader-bar-inner", {
+    xPercent: 0,
+    duration: 1.25,
+    delay: 0.5,
+    ease: "power4.in",
+  })
+    .to(".preloader-loader", {
+      xPercent: 100,
+      duration: 1,
+      ease: "power4.in",
+    })
+    .to("#preloader", {
+      duration: 0.8,
+      delay: 0.8,
+      alpha: 0,
+      ease: "power2.inOut",
+      onComplete: () => {
+        // Remove the preloader from DOM
+        const preloader = document.getElementById("preloader");
+        if (preloader) {
+          preloader.remove();
+        }
+      },
+      onStart: () => {
+        document.body.classList.add("preloader-finished");
+      },
+    });
 });
 </script>
 
@@ -63,5 +79,25 @@ onMounted(() => {
   height: 100%;
   top: 0;
   left: 0;
+}
+
+.preloader-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  z-index: 200;
+  overflow: hidden;
+
+  span {
+    height: 3px;
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: var(--color-text);
+  }
 }
 </style>

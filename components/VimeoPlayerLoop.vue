@@ -60,14 +60,11 @@ onMounted(() => {
       player
         .play()
         .then(() => {
-          console.log(
-            "VimeoPlayer: Playback started, starting fade out, emitting ready event"
-          );
           isFadingOut.value = true; // Start fading the image
           emit("ready"); // Emit the ready event
         })
         .catch((error) => {
-          console.error("VimeoPlayer: Playback failed", error);
+          // Silently handle playback errors
           // Optionally emit ready even on failure, or handle differently
           // emit('ready');
         });
@@ -77,7 +74,6 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   if (player) {
-    console.log("VimeoPlayer: Cleaning up player");
     player.destroy();
     player = null;
   }
