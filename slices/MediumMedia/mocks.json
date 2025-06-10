@@ -29,6 +29,11 @@
 			"bottom_margin": {
 				"__TYPE__": "BooleanContent",
 				"value": true
+			},
+			"align_media": {
+				"__TYPE__": "FieldContent",
+				"value": "Align left",
+				"type": "Select"
 			}
 		},
 		"items": []
@@ -71,6 +76,11 @@
 			"bottom_margin": {
 				"__TYPE__": "BooleanContent",
 				"value": true
+			},
+			"align_media": {
+				"__TYPE__": "FieldContent",
+				"value": "Align center",
+				"type": "Select"
 			}
 		},
 		"items": [

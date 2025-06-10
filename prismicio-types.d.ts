@@ -1368,6 +1368,20 @@ export interface MediumMediaSliceDefaultPrimary {
    * - **Documentation**: https://prismic.io/docs/field#boolean
    */
   bottom_margin: prismic.BooleanField;
+
+  /**
+   * Align Media field in *MediumMedia → Image → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **Default Value**: Align left
+   * - **API ID Path**: medium_media.default.primary.align_media
+   * - **Documentation**: https://prismic.io/docs/field#select
+   */
+  align_media: prismic.SelectField<
+    "Align left" | "Align center" | "Align right",
+    "filled"
+  >;
 }
 
 /**
@@ -1423,6 +1437,20 @@ export interface MediumMediaSliceVideoPrimary {
    * - **Documentation**: https://prismic.io/docs/field#boolean
    */
   bottom_margin: prismic.BooleanField;
+
+  /**
+   * Align media field in *MediumMedia → Video → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **Default Value**: Align left
+   * - **API ID Path**: medium_media.video.primary.align_media
+   * - **Documentation**: https://prismic.io/docs/field#select
+   */
+  align_media: prismic.SelectField<
+    "Align left" | "Align center" | "Align right",
+    "filled"
+  >;
 }
 
 /**

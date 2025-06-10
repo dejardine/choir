@@ -28,6 +28,19 @@
             "placeholder_true": "true",
             "default_value": false
           }
+        },
+        "align_media": {
+          "type": "Select",
+          "config": {
+            "label": "Align Media",
+            "placeholder": "",
+            "options": [
+              "Align left",
+              "Align center",
+              "Align right"
+            ],
+            "default_value": "Align left"
+          }
         }
       },
       "items": {}
@@ -66,6 +79,19 @@
             "placeholder_false": "false",
             "placeholder_true": "true",
             "default_value": false
+          }
+        },
+        "align_media": {
+          "type": "Select",
+          "config": {
+            "label": "Align media",
+            "placeholder": "",
+            "options": [
+              "Align left",
+              "Align center",
+              "Align right"
+            ],
+            "default_value": "Align left"
           }
         }
       },
