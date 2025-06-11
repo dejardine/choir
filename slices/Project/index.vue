@@ -73,13 +73,11 @@ const isImage = (media: any) => {
           :cover-image-url="media1.image.url"
           :cover-image="media1.image"
         />
-        <ClientOnly>
-          <ImageHalf
-            v-if="media1?.image"
-            :imageField="media1.image"
-            sizes="(max-width: 1180px) 400px, (max-width: 1512px) 500px, (max-width: 2200px) 700px, 800px"
-          />
-        </ClientOnly>
+        <ImageHalf
+          v-if="media1?.image"
+          :imageField="media1.image"
+          sizes="(max-width: 1180px) 400px, (max-width: 1512px) 500px, (max-width: 2200px) 700px, 800px"
+        />
       </div>
 
       <!-- Media 2 -->
