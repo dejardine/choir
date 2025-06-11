@@ -6,6 +6,8 @@ when doing responsive work use the breakpoint mixins we already have defined in 
 
 if you are going to run the project, first check that we are not already running the project (chances are we will be!)
 
+we have a javascript responsive.js plugin for detecting mobile
+
 any terminal commands need to be started with nvm use to make sure we are on the correct version of node 
 
 we are using yarn for most things
@@ -13,3 +15,4 @@ we are using yarn for most things
 we import gsap as a plugin
 
 dont worry about scss import rules
+

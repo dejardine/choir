@@ -1,12 +1,18 @@
 <template>
-  <div class="home-projects">
+  <div class="home-projects" ref="homeProjects">
     <div ref="introductionContainer" class="home-projects-introduction">
       <prismic-rich-text :field="props?.home?.data?.introduction" />
     </div>
 
     <h3>Selected projects</h3>
     <div ref="projectTitle" class="home-project-title">
-      <div class="home-project-title-text">{{ currentProjectTitle }}</div>
+      <div class="home-project-title-text">
+        <prismic-rich-text
+          v-if="currentProjectTitle"
+          :field="currentProjectTitle"
+        />
+        <span v-else>Title here</span>
+      </div>
       <div class="home-project-title-link">
         <prismic-link v-if="currentProjectLink" :field="currentProjectLink">
           View Project
@@ -20,6 +26,7 @@
         :components="components"
       />
     </div>
+    <NuxtLink to="/work" class="view-all-projects">View all projects</NuxtLink>
   </div>
 </template>
 
@@ -31,9 +38,10 @@ import { SliceZone } from "@prismicio/vue";
 const introductionContainer = ref(null);
 const projectTitle = ref(null);
 const homeSlices = ref(null);
+const homeProjects = ref(null);
 
 // Reactive data for current project
-const currentProjectTitle = ref("Title here");
+const currentProjectTitle = ref(null);
 const currentProjectLink = ref(null);
 
 // ScrollTrigger instances for cleanup
@@ -64,33 +72,27 @@ const setupScrollTrigger = () => {
   // Refresh ScrollTrigger to recalculate positions
   $ScrollTrigger.refresh();
 
-  // Only enable ScrollTrigger on non-mobile devices
-  const isMobile = window.innerWidth <= 812;
-
-  if (isMobile) {
-    // On mobile, just update the current project without pinning
-    const mobileST = $ScrollTrigger.create({
-      trigger: homeSlices.value,
-      start: "top center",
-      end: "bottom center",
-      onUpdate: (self) => {
-        updateCurrentProject();
-      },
-    });
-    scrollTriggerInstances.push(mobileST);
-    return;
-  }
-
   // Pin the project title when it hits the center, and keep it pinned through all projects
   const pinST = $ScrollTrigger.create({
     trigger: projectTitle.value,
     start: "center center",
-    endTrigger: homeSlices.value,
+    endTrigger: homeProjects.value,
     end: "bottom bottom",
     pin: projectTitle.value,
     pinSpacing: false,
     onUpdate: (self) => {
       updateCurrentProject();
+
+      // Fade out in the last 20% of the scroll
+      const fadeStart = 0.99; // Start fading at 80% progress
+      let opacity = 1;
+
+      if (self.progress > fadeStart) {
+        const fadeProgress = (self.progress - fadeStart) / (1 - fadeStart);
+        opacity = 1 - fadeProgress;
+      }
+
+      $gsap.set(projectTitle.value, { opacity: opacity });
     },
   });
 
@@ -117,8 +119,9 @@ const updateCurrentProject = () => {
   const viewportCenter = window.innerHeight / 2;
   let currentProject = null;
   let closestDistance = Infinity;
+  let projectIndex = -1;
 
-  projectSections.forEach((section) => {
+  projectSections.forEach((section, index) => {
     const rect = section.getBoundingClientRect();
     const sectionCenter = rect.top + rect.height / 2;
     const distance = Math.abs(sectionCenter - viewportCenter);
@@ -126,33 +129,26 @@ const updateCurrentProject = () => {
     if (distance < closestDistance) {
       closestDistance = distance;
       currentProject = section;
+      projectIndex = index;
     }
   });
 
-  if (currentProject) {
-    // Update title and link
-    const title = currentProject.getAttribute("data-title");
-    const linkData = currentProject.getAttribute("data-link");
+  if (currentProject && projectIndex >= 0) {
+    // Get the slice data directly instead of using data attributes
+    const sliceData = props?.home?.data?.slices2?.[projectIndex];
 
-    if (title) {
-      currentProjectTitle.value = title;
-    }
+    if (sliceData?.primary) {
+      // Set the rich text field for the title
+      if (sliceData.primary.project_copy) {
+        currentProjectTitle.value = sliceData.primary.project_copy;
+      }
 
-    // Handle the link data - it's already a Prismic link object, not JSON string
-    if (linkData && linkData !== "null" && linkData !== "[object Object]") {
-      // The data-link attribute might contain serialized link data
-      // We need to get the actual link from the slice data instead
-      // For now, let's try to find the corresponding slice data
-      const sliceIndex = Array.from(projectSections).indexOf(currentProject);
-      const sliceData = props?.home?.data?.slices2?.[sliceIndex];
-
-      if (sliceData?.primary?.project_link) {
+      // Set the link
+      if (sliceData.primary.project_link) {
         currentProjectLink.value = sliceData.primary.project_link;
       } else {
         currentProjectLink.value = null;
       }
-    } else {
-      currentProjectLink.value = null;
     }
   }
 };
@@ -243,7 +239,6 @@ onUnmounted(() => {
   width: 100%;
   border-top: 1px solid var(--color-border);
   padding: var(--gutter) var(--gutterPadding);
-  background-color: var(--color-background);
   z-index: 100;
 
   &.pinned {
@@ -261,22 +256,27 @@ onUnmounted(() => {
 
 .home-project-title-link {
   transition: opacity 0.3s ease;
-
+  @include bodyType;
+  @include foundersMedium;
   a {
-    text-decoration: none;
-    color: inherit;
-
-    &:hover {
-      opacity: 0.7;
-    }
-  }
-
-  @include breakpoint(mobile) {
-    align-self: flex-end;
+    @include linkStyle;
   }
 }
 
 .home-projects-introduction {
   padding: 0 var(--gutterPadding);
+}
+.view-all-projects {
+  @include bodyType;
+  @include foundersMedium;
+
+  color: var(--color-text);
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  text-align: center;
+  padding-top: var(--gutter);
+  @include linkStyle;
 }
 </style>

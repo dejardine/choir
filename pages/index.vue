@@ -32,6 +32,8 @@ import { globalRouteTransition } from "~/utils/GlobalRouteTransition";
 // Get the data
 const prismic = usePrismic();
 
+const { $ScrollTrigger } = useNuxtApp();
+
 const { data: page } = await useAsyncData("homeData", async () => {
   try {
     // Remove menu fetch from here
@@ -76,6 +78,9 @@ watchEffect(async () => {
 // Restore onMounted with updateThemeColor call
 onMounted(async () => {
   await updateThemeColor(); // Initial set on mount
+  setTimeout(() => {
+    $ScrollTrigger.refresh();
+  }, 1000);
 });
 
 // SEO and Theme Color
