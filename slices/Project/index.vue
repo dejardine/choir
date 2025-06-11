@@ -78,6 +78,8 @@ const isImage = (media: any) => {
     :data-slice-type="slice.slice_type"
     :data-slice-variation="slice.variation"
     class="project-section"
+    :data-title="slice.primary.project_copy"
+    :data-link="slice.primary.project_link"
   >
     <div class="project-content">
       <!-- Media 1 -->
