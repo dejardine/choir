@@ -29,29 +29,38 @@ const getVimeoId = (url: string | undefined | null) => {
 };
 
 // Get media data from Group fields
-const media1 = computed(() => {
-  const m1 = props.slice.primary.media_1?.[0] || null;
-  console.log("ProjectSlice media1 computed:", JSON.parse(JSON.stringify(m1)));
-  return m1;
-});
-const media2 = computed(() => {
-  const m2 = props.slice.primary.media_2?.[0] || null;
-  console.log("ProjectSlice media2 computed:", JSON.parse(JSON.stringify(m2)));
-  return m2;
-});
-const media3 = computed(() => {
-  const m3 = props.slice.primary.media_3?.[0] || null;
-  console.log("ProjectSlice media3 computed:", JSON.parse(JSON.stringify(m3)));
-  return m3;
-});
+const media1 = props.slice.primary.media_1?.[0] || null;
+const media2 = props.slice.primary.media_2?.[0] || null;
+const media3 = props.slice.primary.media_3?.[0] || null;
+
+// Computed properties for media item 1
+const videoId1 = computed(() =>
+  media1 ? getVimeoId(media1.vimeo_video_link?.url) : null
+);
+const coverImageUrl1 = computed(() => media1?.image?.url || null);
+const coverImage1 = computed(() => media1?.image || null);
+
+// Computed properties for media item 2
+const videoId2 = computed(() =>
+  media2 ? getVimeoId(media2.vimeo_video_link?.url) : null
+);
+const coverImageUrl2 = computed(() => media2?.image?.url || null);
+const coverImage2 = computed(() => media2?.image || null);
+
+// Computed properties for media item 3
+const videoId3 = computed(() =>
+  media3 ? getVimeoId(media3.vimeo_video_link?.url) : null
+);
+const coverImageUrl3 = computed(() => media3?.image?.url || null);
+const coverImage3 = computed(() => media3?.image || null);
 
 // Helper functions to check media type
 const isVideo = (media: any) => {
-  return (
-    media?.vimeo_video_link?.url &&
-    media?.image?.url && // Crucially, ensures cover image URL exists
-    getVimeoId(media.vimeo_video_link.url)
-  );
+  if (!media) return false;
+  const hasVimeoLink = !!media.vimeo_video_link?.url;
+  const hasCoverImage = !!media.image?.url;
+  const vimeoId = hasVimeoLink ? getVimeoId(media.vimeo_video_link.url) : null;
+  return hasVimeoLink && hasCoverImage && !!vimeoId;
 };
 
 const isImage = (media: any) => {
@@ -84,34 +93,89 @@ const isImage = (media: any) => {
 
       <!-- Media 1 -->
       <div v-if="media1" class="media-item">
-        <VimeoPlayerLoop
-          v-if="isVideo(media1)"
-          :video-id="getVimeoId(media1.vimeo_video_link.url)"
-          :cover-image-url="media1.image.url"
-          :cover-image="media1.image"
-        />
+        <template v-if="isVideo(media1) && videoId1">
+          <div
+            style="
+              padding: 56.25% 0 0 0;
+              position: relative;
+              background-color: #111;
+            "
+          >
+            <iframe
+              :src="`https://player.vimeo.com/video/${videoId1}?muted=1&autoplay=1&loop=1&background=1&dnt=1`"
+              style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+              "
+              frameborder="0"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen
+              title="Vimeo Video Player (Manual Embed)"
+            ></iframe>
+          </div>
+        </template>
         <ImageHalf v-else-if="isImage(media1)" :imageField="media1.image" />
       </div>
 
       <!-- Media 2 -->
       <div v-if="media2" class="media-item">
-        <VimeoPlayerLoop
-          v-if="isVideo(media2)"
-          :video-id="getVimeoId(media2.vimeo_video_link.url)"
-          :cover-image-url="media2.image.url"
-          :cover-image="media2.image"
-        />
+        <template v-if="isVideo(media2) && videoId2">
+          <div
+            style="
+              padding: 56.25% 0 0 0;
+              position: relative;
+              background-color: #111;
+            "
+          >
+            <!-- Basic responsive wrapper & visible background -->
+            <iframe
+              :src="`https://player.vimeo.com/video/${videoId2}?muted=1&autoplay=1&loop=1&background=1&dnt=1`"
+              style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+              "
+              frameborder="0"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen
+              title="Vimeo Video Player (Manual Embed)"
+            ></iframe>
+          </div>
+        </template>
         <ImageHalf v-else-if="isImage(media2)" :imageField="media2.image" />
       </div>
 
       <!-- Media 3 -->
       <div v-if="media3" class="media-item">
-        <VimeoPlayerLoop
-          v-if="isVideo(media3)"
-          :video-id="getVimeoId(media3.vimeo_video_link.url)"
-          :cover-image-url="media3.image.url"
-          :cover-image="media3.image"
-        />
+        <template v-if="isVideo(media3) && videoId3">
+          <div
+            style="
+              padding: 56.25% 0 0 0;
+              position: relative;
+              background-color: #111;
+            "
+          >
+            <iframe
+              :src="`https://player.vimeo.com/video/${videoId3}?muted=1&autoplay=1&loop=1&background=1&dnt=1`"
+              style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+              "
+              frameborder="0"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowfullscreen
+              title="Vimeo Video Player (Manual Embed)"
+            ></iframe>
+          </div>
+        </template>
         <ImageHalf v-else-if="isImage(media3)" :imageField="media3.image" />
       </div>
     </div>

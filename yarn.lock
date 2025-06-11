@@ -916,21 +916,21 @@
     which "^5.0.0"
     ws "^8.18.1"
 
-"@nuxt/image@^~1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@nuxt/image/-/image-1.7.0.tgz#2df37d83d16083eafc2207dd4064e1d4553e1af0"
-  integrity sha512-zSj32bLgbV9AvLkLX0pF52J5KBfSyj0eSIdpXCtTJATSZlqgcJigoCvmabC1nbcMIp0SZ29Bu9+acQpGTQKz+g==
+"@nuxt/image@^1.10.0":
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/@nuxt/image/-/image-1.10.0.tgz#dda5fbc0420b9b6f64e2d67d4b74942c3d2c1323"
+  integrity sha512-/B58GeEmme7bkmQUrXzEw8P9sJb9BkMaYZqLDtq8ZdDLEddE3P4nVya8RQPB+p4b7EdqWajpPqdy1A2ZPLev/A==
   dependencies:
-    "@nuxt/kit" "^3.11.2"
-    consola "^3.2.3"
+    "@nuxt/kit" "^3.16.0"
+    consola "^3.4.2"
     defu "^6.1.4"
-    h3 "^1.11.1"
-    image-meta "^0.2.0"
-    node-fetch-native "^1.6.4"
-    ohash "^1.1.3"
-    pathe "^1.1.2"
-    std-env "^3.7.0"
-    ufo "^1.5.3"
+    h3 "^1.15.1"
+    image-meta "^0.2.1"
+    knitwork "^1.2.0"
+    ohash "^2.0.11"
+    pathe "^2.0.3"
+    std-env "^3.8.1"
+    ufo "^1.5.4"
   optionalDependencies:
     ipx "^2.1.0"
 
@@ -962,7 +962,7 @@
     unimport "^5.0.1"
     untyped "^2.0.0"
 
-"@nuxt/kit@^3.11.2":
+"@nuxt/kit@^3.16.0":
   version "3.17.5"
   resolved "https://registry.yarnpkg.com/@nuxt/kit/-/kit-3.17.5.tgz#88583f68db604a55c54cfd30924d1a98c339aa5b"
   integrity sha512-NdCepmA+S/SzgcaL3oYUeSlXGYO6BXGr9K/m1D0t0O9rApF8CSq/QQ+ja5KYaYMO1kZAEWH4s2XVcE3uPrrAVg==
@@ -4027,7 +4027,7 @@ gzip-size@^7.0.0:
   dependencies:
     duplexer "^0.1.2"
 
-h3@^1.10.0, h3@^1.11.1, h3@^1.12.0, h3@^1.15.1, h3@^1.15.2, h3@^1.15.3, h3@^1.6.0:
+h3@^1.10.0, h3@^1.12.0, h3@^1.15.1, h3@^1.15.2, h3@^1.15.3, h3@^1.6.0:
   version "1.15.3"
   resolved "https://registry.yarnpkg.com/h3/-/h3-1.15.3.tgz#e242ec6a7692a45caed3e4a73710cede4fb8d863"
   integrity sha512-z6GknHqyX0h9aQaTx22VZDf6QyZn+0Nh+Ym8O/u0SGSkyF5cuTJYKlc8MkzW3Nzf9LE1ivcpmYC3FUGpywhuUQ==
@@ -5499,11 +5499,6 @@ ofetch@^1.3.3, ofetch@^1.4.1:
     destr "^2.0.3"
     node-fetch-native "^1.6.4"
     ufo "^1.5.4"
-
-ohash@^1.1.3:
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/ohash/-/ohash-1.1.6.tgz#9ff7b0271d7076290794537d68ec2b40a60d133e"
-  integrity sha512-TBu7PtV8YkAZn0tSxobKY2n2aAQva936lhRrj6957aDaCf9IEtqsKbgMzXE/F/sjqYOwmrukeORHNLe5glk7Cg==
 
 ohash@^2.0.11:
   version "2.0.11"
@@ -7241,7 +7236,7 @@ typescript@^5.4.4:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.8.3.tgz#92f8a3e5e3cf497356f4178c34cd65a7f5e8440e"
   integrity sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==
 
-ufo@^1.1.2, ufo@^1.3.2, ufo@^1.5.3, ufo@^1.5.4, ufo@^1.6.1:
+ufo@^1.1.2, ufo@^1.3.2, ufo@^1.5.4, ufo@^1.6.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/ufo/-/ufo-1.6.1.tgz#ac2db1d54614d1b22c1d603e3aef44a85d8f146b"
   integrity sha512-9a4/uxlTWJ4+a5i0ooc1rU7C7YOw3wT+UGqdeNNHWnOF9qcMBgLRS+4IYUqbczewFx4mLEig6gawh7X6mFlEkA==
