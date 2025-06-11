@@ -77,6 +77,7 @@ const isImage = (media: any) => {
   <section
     :data-slice-type="slice.slice_type"
     :data-slice-variation="slice.variation"
+    class="project-section"
   >
     <div class="project-content">
       <!-- Media 1 -->
@@ -84,6 +85,7 @@ const isImage = (media: any) => {
         <prismic-link
           v-if="slice.primary.project_link"
           :field="slice.primary.project_link"
+          class="media-item-link"
         >
           <template v-if="isVideo(media1) && videoId1">
             <VimeoPlayerLoop
@@ -95,14 +97,16 @@ const isImage = (media: any) => {
           <ImageHalf v-else-if="isImage(media1)" :imageField="media1.image" />
         </prismic-link>
         <template v-else>
-          <template v-if="isVideo(media1) && videoId1">
-            <VimeoPlayerLoop
-              :video-id="getVimeoId(media1.vimeo_video_link.url)"
-              :cover-image-url="media1.image.url"
-              :cover-image="media1.image"
-            />
-          </template>
-          <ImageHalf v-else-if="isImage(media1)" :imageField="media1.image" />
+          <div class="media-item-link">
+            <template v-if="isVideo(media1) && videoId1">
+              <VimeoPlayerLoop
+                :video-id="getVimeoId(media1.vimeo_video_link.url)"
+                :cover-image-url="media1.image.url"
+                :cover-image="media1.image"
+              />
+            </template>
+            <ImageHalf v-else-if="isImage(media1)" :imageField="media1.image" />
+          </div>
         </template>
       </div>
 
@@ -111,6 +115,7 @@ const isImage = (media: any) => {
         <prismic-link
           v-if="slice.primary.project_link"
           :field="slice.primary.project_link"
+          class="media-item-link"
         >
           <template v-if="isVideo(media2) && videoId2">
             <VimeoPlayerLoop
@@ -122,14 +127,16 @@ const isImage = (media: any) => {
           <ImageHalf v-else-if="isImage(media2)" :imageField="media2.image" />
         </prismic-link>
         <template v-else>
-          <template v-if="isVideo(media2) && videoId2">
-            <VimeoPlayerLoop
-              :video-id="getVimeoId(media2.vimeo_video_link.url)"
-              :cover-image-url="media2.image.url"
-              :cover-image="media2.image"
-            />
-          </template>
-          <ImageHalf v-else-if="isImage(media2)" :imageField="media2.image" />
+          <div class="media-item-link">
+            <template v-if="isVideo(media2) && videoId2">
+              <VimeoPlayerLoop
+                :video-id="getVimeoId(media2.vimeo_video_link.url)"
+                :cover-image-url="media2.image.url"
+                :cover-image="media2.image"
+              />
+            </template>
+            <ImageHalf v-else-if="isImage(media2)" :imageField="media2.image" />
+          </div>
         </template>
       </div>
 
@@ -138,6 +145,7 @@ const isImage = (media: any) => {
         <prismic-link
           v-if="slice.primary.project_link"
           :field="slice.primary.project_link"
+          class="media-item-link"
         >
           <template v-if="isVideo(media3) && videoId3">
             <VimeoPlayerLoop
@@ -149,30 +157,97 @@ const isImage = (media: any) => {
           <ImageHalf v-else-if="isImage(media3)" :imageField="media3.image" />
         </prismic-link>
         <template v-else>
-          <template v-if="isVideo(media3) && videoId3">
-            <VimeoPlayerLoop
-              :video-id="getVimeoId(media3.vimeo_video_link.url)"
-              :cover-image-url="media3.image.url"
-              :cover-image="media3.image"
-            />
-          </template>
-          <ImageHalf v-else-if="isImage(media3)" :imageField="media3.image" />
+          <div class="media-item-link">
+            <template v-if="isVideo(media3) && videoId3">
+              <VimeoPlayerLoop
+                :video-id="getVimeoId(media3.vimeo_video_link.url)"
+                :cover-image-url="media3.image.url"
+                :cover-image="media3.image"
+              />
+            </template>
+            <ImageHalf v-else-if="isImage(media3)" :imageField="media3.image" />
+          </div>
         </template>
       </div>
     </div>
   </section>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .project-content {
-  padding: var(--gutterPadding);
 }
 
 .media-item {
-  margin: var(--gutter) 0;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--gutter);
 }
 
 .project-copy {
   margin-bottom: 20px;
+}
+
+.project-section {
+  &:nth-of-type(3n + 1) {
+    .media-item {
+      &:nth-of-type(1) {
+        .media-item-link {
+          grid-column: 3 / span 8;
+        }
+      }
+      &:nth-of-type(2) {
+        padding-top: 25vh;
+        .media-item-link {
+          grid-column: 5 / span 2;
+        }
+      }
+      &:nth-of-type(3) {
+        .media-item-link {
+          grid-column: 8 / span 4;
+        }
+      }
+    }
+  }
+  &:nth-of-type(3n + 2) {
+    .media-item {
+      &:nth-of-type(1) {
+        padding-top: 25vh;
+        .media-item-link {
+          grid-column: 1 / span 3;
+        }
+      }
+      &:nth-of-type(2) {
+        .media-item-link {
+          grid-column: 5 / span 8;
+        }
+      }
+      &:nth-of-type(3) {
+        .media-item-link {
+          grid-column: 2 / span 8;
+        }
+      }
+    }
+  }
+  &:nth-of-type(3n + 3) {
+    .media-item {
+      &:nth-of-type(1) {
+        padding-top: 25vh;
+        .media-item-link {
+          grid-column: 3 / span 4;
+        }
+      }
+      &:nth-of-type(2) {
+        .media-item-link {
+          grid-column: 10 / span 3;
+        }
+      }
+      &:nth-of-type(3) {
+        padding-top: 25vh;
+        .media-item-link {
+          grid-column: 2 / span 8;
+        }
+      }
+    }
+  }
 }
 </style>
