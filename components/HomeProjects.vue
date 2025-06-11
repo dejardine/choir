@@ -1,7 +1,10 @@
 <template>
-  <div class="home-projects" ref="introductionContainer">
-    <prismic-rich-text :field="props?.home?.data?.introduction" />
+  <div class="home-projects">
+    <div ref="introductionContainer">
+      <prismic-rich-text :field="props?.home?.data?.introduction" />
+    </div>
     <h3>Selected projects</h3>
+
     <div class="home-slices">
       <SliceZone
         :slices="props?.home?.data?.slices2 ?? []"

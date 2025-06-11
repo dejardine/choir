@@ -94,28 +94,11 @@ const isImage = (media: any) => {
       <!-- Media 1 -->
       <div v-if="media1" class="media-item">
         <template v-if="isVideo(media1) && videoId1">
-          <div
-            style="
-              padding: 56.25% 0 0 0;
-              position: relative;
-              background-color: #111;
-            "
-          >
-            <iframe
-              :src="`https://player.vimeo.com/video/${videoId1}?muted=1&autoplay=1&loop=1&background=1&dnt=1`"
-              style="
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-              "
-              frameborder="0"
-              allow="autoplay; fullscreen; picture-in-picture"
-              allowfullscreen
-              title="Vimeo Video Player (Manual Embed)"
-            ></iframe>
-          </div>
+          <VimeoPlayerLoop
+            :video-id="getVimeoId(media1.vimeo_video_link.url)"
+            :cover-image-url="media1.image.url"
+            :cover-image="media1.image"
+          />
         </template>
         <ImageHalf v-else-if="isImage(media1)" :imageField="media1.image" />
       </div>
@@ -123,29 +106,11 @@ const isImage = (media: any) => {
       <!-- Media 2 -->
       <div v-if="media2" class="media-item">
         <template v-if="isVideo(media2) && videoId2">
-          <div
-            style="
-              padding: 56.25% 0 0 0;
-              position: relative;
-              background-color: #111;
-            "
-          >
-            <!-- Basic responsive wrapper & visible background -->
-            <iframe
-              :src="`https://player.vimeo.com/video/${videoId2}?muted=1&autoplay=1&loop=1&background=1&dnt=1`"
-              style="
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-              "
-              frameborder="0"
-              allow="autoplay; fullscreen; picture-in-picture"
-              allowfullscreen
-              title="Vimeo Video Player (Manual Embed)"
-            ></iframe>
-          </div>
+          <VimeoPlayerLoop
+            :video-id="getVimeoId(media2.vimeo_video_link.url)"
+            :cover-image-url="media2.image.url"
+            :cover-image="media2.image"
+          />
         </template>
         <ImageHalf v-else-if="isImage(media2)" :imageField="media2.image" />
       </div>
@@ -153,28 +118,11 @@ const isImage = (media: any) => {
       <!-- Media 3 -->
       <div v-if="media3" class="media-item">
         <template v-if="isVideo(media3) && videoId3">
-          <div
-            style="
-              padding: 56.25% 0 0 0;
-              position: relative;
-              background-color: #111;
-            "
-          >
-            <iframe
-              :src="`https://player.vimeo.com/video/${videoId3}?muted=1&autoplay=1&loop=1&background=1&dnt=1`"
-              style="
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-              "
-              frameborder="0"
-              allow="autoplay; fullscreen; picture-in-picture"
-              allowfullscreen
-              title="Vimeo Video Player (Manual Embed)"
-            ></iframe>
-          </div>
+          <VimeoPlayerLoop
+            :video-id="getVimeoId(media3.vimeo_video_link.url)"
+            :cover-image-url="media3.image.url"
+            :cover-image="media3.image"
+          />
         </template>
         <ImageHalf v-else-if="isImage(media3)" :imageField="media3.image" />
       </div>

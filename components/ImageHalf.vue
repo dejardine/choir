@@ -10,13 +10,12 @@
       sizes="sm:50vw md:50vw lg:50vw xl:50vw"
       loading="lazy"
       class="full-width-image"
+      placeholder
     />
   </div>
 </template>
 
 <script setup lang="ts">
-// import { computed } from "vue"; // No longer needed if cleanImageUrl is removed
-
 const props = defineProps({
   imageField: Object,
 });
