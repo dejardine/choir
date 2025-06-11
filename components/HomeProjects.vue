@@ -14,6 +14,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { components } from "~/slices";
+import { SliceZone } from "@prismicio/vue";
 
 const introductionContainer = ref(null);
 

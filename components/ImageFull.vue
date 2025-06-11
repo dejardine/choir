@@ -10,15 +10,23 @@
       sizes="sm:100vw md:100vw lg:100vw xl:100vw"
       loading="lazy"
       class="full-width-image"
-      placeholder
     />
   </div>
 </template>
 
 <script setup lang="ts">
+// import { computed } from "vue"; // No longer needed
+
 const props = defineProps({
   imageField: Object,
 });
+
+// const cleanImageUrl = computed(() => { // Removed
+//   if (props.imageField?.url) {
+//     return props.imageField.url.split("?")[0];
+//   }
+//   return undefined;
+// });
 </script>
 
 <style scoped lang="scss">

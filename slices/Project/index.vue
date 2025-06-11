@@ -15,7 +15,7 @@ const props = defineProps(
 );
 
 // Helper function to extract Vimeo ID
-const getVimeoId = (url: string) => {
+const getVimeoId = (url: string | undefined | null) => {
   if (!url) return null;
   const cleanedUrl = url.trim().replace(/["""]/g, "");
   const vimeoRegex =
@@ -28,22 +28,39 @@ const getVimeoId = (url: string) => {
   return null;
 };
 
-// Get media data
-const media1 = computed(() => props.slice.primary.media_1?.[0] || null);
-const media2 = computed(() => props.slice.primary.media_2?.[0] || null);
-const media3 = computed(() => props.slice.primary.media_3?.[0] || null);
+// Get media data from Group fields
+const media1 = computed(() => {
+  const m1 = props.slice.primary.media_1?.[0] || null;
+  console.log("ProjectSlice media1 computed:", JSON.parse(JSON.stringify(m1)));
+  return m1;
+});
+const media2 = computed(() => {
+  const m2 = props.slice.primary.media_2?.[0] || null;
+  console.log("ProjectSlice media2 computed:", JSON.parse(JSON.stringify(m2)));
+  return m2;
+});
+const media3 = computed(() => {
+  const m3 = props.slice.primary.media_3?.[0] || null;
+  console.log("ProjectSlice media3 computed:", JSON.parse(JSON.stringify(m3)));
+  return m3;
+});
 
-// Helper functions
+// Helper functions to check media type
 const isVideo = (media: any) => {
   return (
     media?.vimeo_video_link?.url &&
-    media?.image?.url &&
+    media?.image?.url && // Crucially, ensures cover image URL exists
     getVimeoId(media.vimeo_video_link.url)
   );
 };
 
 const isImage = (media: any) => {
-  return media?.image?.url && !media?.vimeo_video_link?.url;
+  return (
+    media?.image?.url &&
+    media?.image?.dimensions?.width &&
+    media?.image?.dimensions?.height &&
+    !media?.vimeo_video_link?.url
+  );
 };
 </script>
 
@@ -68,38 +85,34 @@ const isImage = (media: any) => {
       <!-- Media 1 -->
       <div v-if="media1" class="media-item">
         <VimeoPlayerLoop
-          v-if="media1?.vimeo_video_link?.url"
+          v-if="isVideo(media1)"
           :video-id="getVimeoId(media1.vimeo_video_link.url)"
           :cover-image-url="media1.image.url"
           :cover-image="media1.image"
         />
-        <ImageHalf
-          v-if="media1?.image"
-          :imageField="media1.image"
-          sizes="(max-width: 1180px) 400px, (max-width: 1512px) 500px, (max-width: 2200px) 700px, 800px"
-        />
+        <ImageHalf v-else-if="isImage(media1)" :imageField="media1.image" />
       </div>
 
       <!-- Media 2 -->
       <div v-if="media2" class="media-item">
         <VimeoPlayerLoop
-          v-if="media2?.vimeo_video_link?.url"
+          v-if="isVideo(media2)"
           :video-id="getVimeoId(media2.vimeo_video_link.url)"
           :cover-image-url="media2.image.url"
           :cover-image="media2.image"
         />
-        <ImageHalf v-else-if="media2?.image" :imageField="media2.image" />
+        <ImageHalf v-else-if="isImage(media2)" :imageField="media2.image" />
       </div>
 
       <!-- Media 3 -->
       <div v-if="media3" class="media-item">
         <VimeoPlayerLoop
-          v-if="media3?.vimeo_video_link?.url"
+          v-if="isVideo(media3)"
           :video-id="getVimeoId(media3.vimeo_video_link.url)"
           :cover-image-url="media3.image.url"
           :cover-image="media3.image"
         />
-        <ImageHalf v-else-if="media3?.image" :imageField="media3.image" />
+        <ImageHalf v-else-if="isImage(media3)" :imageField="media3.image" />
       </div>
     </div>
   </section>
