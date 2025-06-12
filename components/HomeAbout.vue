@@ -126,11 +126,12 @@ const swiperAutoplayOptions = ref({
     @include mediumType;
     text-align: center;
   }
-  padding-bottom: 33.333vh;
+  padding-bottom: 20vh;
+  padding-top: 20vh;
   .about-slideshow {
     grid-row: 2 / span 1;
     grid-column: 5 / span 4;
-    margin-top: 25vh;
+    margin-top: 20vh;
     aspect-ratio: 1/1;
     display: block;
   }

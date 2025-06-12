@@ -205,12 +205,11 @@ onUnmounted(() => {
 .home-projects {
   margin-top: 100vh;
   padding: var(--gutterPadding) 0;
-  padding-bottom: 33.333vh;
-
+  padding-bottom: 20vh;
+  border-bottom: 1px solid var(--color-border);
   position: relative;
-  z-index: 10;
+  z-index: 11;
   background-color: var(--color-background);
-  min-height: 150vh;
   :deep(h2) {
     @include heldaneHeading;
     em {
