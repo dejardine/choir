@@ -196,5 +196,11 @@ new Promise((resolve) => {
       }
     }
   }
+
+  &:nth-last-child(-n + 2) {
+    .thumbnail-title {
+      margin-bottom: 0;
+    }
+  }
 }
 </style>

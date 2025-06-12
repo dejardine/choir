@@ -50,7 +50,8 @@
           "label": "Paragraph",
           "placeholder": "",
           "allowTargetBlank": true,
-          "multi": "paragraph,hyperlink,em"
+          "multi": "paragraph,hyperlink,em",
+          "labels": ["micro-text"]
         }
       }
     },

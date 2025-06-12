@@ -52,6 +52,7 @@ defineProps({
     @include bodyType;
     vertical-align: top;
     display: inline;
+    margin-left: var(--gutter-half);
   }
   border-top: 1px solid var(--color-border);
 }
