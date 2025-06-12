@@ -60,17 +60,14 @@
 				"__TYPE__": "ImageContent",
 				"thumbnails": {}
 			},
-			"vimeo_video_link": {
-				"key": "a82cf99f-bf6a-482d-ab45-222ee6e06479",
-				"__TYPE__": "LinkContent",
-				"value": {
-					"__TYPE__": "ExternalLink",
-					"url": "http://google.com"
-				}
-			},
 			"bottom_margin": {
 				"__TYPE__": "BooleanContent",
 				"value": true
+			},
+			"vimeo_video_link_new": {
+				"__TYPE__": "FieldContent",
+				"value": "situation",
+				"type": "Text"
 			}
 		},
 		"items": [

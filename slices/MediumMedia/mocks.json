@@ -65,14 +65,6 @@
 				"__TYPE__": "ImageContent",
 				"thumbnails": {}
 			},
-			"vimeo_video_link": {
-				"key": "98f3ab11-f96a-467d-b161-a84dd844f014",
-				"__TYPE__": "LinkContent",
-				"value": {
-					"__TYPE__": "ExternalLink",
-					"url": "https://prismic.io"
-				}
-			},
 			"bottom_margin": {
 				"__TYPE__": "BooleanContent",
 				"value": true
@@ -81,6 +73,11 @@
 				"__TYPE__": "FieldContent",
 				"value": "Align center",
 				"type": "Select"
+			},
+			"vimeo_video_link_new": {
+				"__TYPE__": "FieldContent",
+				"value": "announced",
+				"type": "Text"
 			}
 		},
 		"items": [

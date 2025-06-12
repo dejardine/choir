@@ -26,14 +26,6 @@
 				"__TYPE__": "ImageContent",
 				"thumbnails": {}
 			},
-			"vimeo_video_link": {
-				"key": "a752957e-0093-4aa0-9224-3520cbc31377",
-				"__TYPE__": "LinkContent",
-				"value": {
-					"__TYPE__": "ExternalLink",
-					"url": "https://slicemachine.dev"
-				}
-			},
 			"bottom_margin": {
 				"__TYPE__": "BooleanContent",
 				"value": false
@@ -48,6 +40,11 @@
 						}
 					}
 				]
+			},
+			"vimeo_video_link_new": {
+				"__TYPE__": "FieldContent",
+				"value": "angry",
+				"type": "Text"
 			}
 		},
 		"items": []

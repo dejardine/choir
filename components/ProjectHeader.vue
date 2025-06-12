@@ -45,12 +45,8 @@ const getVimeoId = (url) => {
 };
 
 const vimeoVideoId = computed(() => {
-  if (
-    props.project?.header_video &&
-    "url" in props.project.header_video &&
-    props.project.header_video.url
-  ) {
-    return getVimeoId(props.project.header_video.url);
+  if (props.project?.header_vimeo_video_link) {
+    return getVimeoId(props.project.header_vimeo_video_link);
   }
   return null;
 });

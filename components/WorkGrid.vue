@@ -25,14 +25,11 @@
               <!-- Vimeo Player with Cover -->
               <VimeoPlayerLoop
                 v-if="
-                  projectGroup.case_study.data.video_thumbnail &&
-                  projectGroup.case_study.data.video_thumbnail.url &&
+                  projectGroup.case_study.data.vimeo_loop_thumbnail &&
                   projectGroup.case_study.data.image_thumbnail &&
                   projectGroup.case_study.data.image_thumbnail.url
                 "
-                :video-id="
-                  getVimeoId(projectGroup.case_study.data.video_thumbnail.url)
-                "
+                :video-id="projectGroup.case_study.data.vimeo_loop_thumbnail"
                 :cover-image-url="
                   projectGroup.case_study.data.image_thumbnail.url
                 "
@@ -50,20 +47,6 @@
                 class="thumbnail-image"
               />
 
-              <!-- Video Thumbnail (fallback if no cover image for VimeoPlayerLoop) -->
-              <video
-                v-else-if="
-                  projectGroup.case_study.data.video_thumbnail &&
-                  projectGroup.case_study.data.video_thumbnail.url
-                "
-                :src="projectGroup.case_study.data.video_thumbnail.url"
-                autoplay
-                loop
-                muted
-                playsinline
-                class="thumbnail-video"
-              ></video>
-
               <!-- Gallery Thumbnail (using ThumbnailGallery component) -->
               <ThumbnailGallery
                 v-else-if="
@@ -76,7 +59,7 @@
                       url: item.image.url,
                       alt: item.image.alt,
                       dimensions: item.image.dimensions,
-                    }) // Pass dimensions
+                    })
                   )
                 "
               />
@@ -122,29 +105,9 @@
 
 <script setup>
 import { defineProps } from "vue";
-import ImageHalf from "./ImageHalf.vue"; // Added ImageHalf import
-import ThumbnailGallery from "./ThumbnailGallery.vue"; // Re-added ThumbnailGallery import
+import ImageHalf from "./ImageHalf.vue";
+import ThumbnailGallery from "./ThumbnailGallery.vue";
 import VimeoPlayerLoop from "./VimeoPlayerLoop.vue";
-
-// Helper function to extract Vimeo ID
-const getVimeoId = (url) => {
-  if (!url) return null;
-
-  // Clean the URL: remove leading/trailing whitespace and quotes.
-  const cleanedUrl = url.trim().replace(/["""]/g, "");
-
-  // Regex to capture Vimeo ID from various URL formats, including /event/
-  const vimeoRegex =
-    /(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/(?:[^/]*)\/videos\/|album\/(?:\d+)\/video\/|video\/|event\/)?(\d+)/i;
-  const match = cleanedUrl.match(vimeoRegex);
-
-  if (match && match[1]) {
-    // Ensure the extracted ID is purely numeric and parse it
-    const numericId = match[1].replace(/\D/g, ""); // Remove any non-digit characters just in case
-    return numericId ? parseInt(numericId, 10) : null;
-  }
-  return null;
-};
 
 const props = defineProps({
   page: {

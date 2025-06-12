@@ -24,11 +24,9 @@ const sectionClasses = computed(() => {
 const vimeoVideoId = computed(() => {
   if (
     props.slice.variation === "video" &&
-    props.slice.primary.vimeo_video_link &&
-    "url" in props.slice.primary.vimeo_video_link &&
-    props.slice.primary.vimeo_video_link.url
+    props.slice.primary.vimeo_video_link_new
   ) {
-    const url = props.slice.primary.vimeo_video_link.url;
+    const url = props.slice.primary.vimeo_video_link_new;
     const parts = url.split("/");
     let id = parts.pop(); // Get last part
     if (!id && parts.length > 0) {

@@ -59,7 +59,29 @@ interface AboutDocumentData {
    * - **Tab**: Introduction
    * - **Documentation**: https://prismic.io/docs/field#rich-text-title
    */
-  paragraph: prismic.RichTextField /**
+  paragraph: prismic.RichTextField;
+
+  /**
+   * Header Image field in *About Landing*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about.header_image
+   * - **Tab**: Introduction
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  header_image: prismic.ImageField<never>;
+
+  /**
+   * Header Vimeo Video Link field in *About Landing*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about.header_vimeo_video_link
+   * - **Tab**: Introduction
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  header_vimeo_video_link: prismic.KeyTextField /**
    * Call to action field in *About Landing*
    *
    * - **Field Type**: Rich Text
@@ -259,19 +281,13 @@ interface CaseStudyDocumentData {
   /**
    * Vimeo Loop Thumbnail field in *Case Study*
    *
-   * - **Field Type**: Link
+   * - **Field Type**: Text
    * - **Placeholder**: *None*
-   * - **API ID Path**: case_study.video_thumbnail
+   * - **API ID Path**: case_study.vimeo_loop_thumbnail
    * - **Tab**: Thumbnail
-   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   * - **Documentation**: https://prismic.io/docs/field#key-text
    */
-  video_thumbnail: prismic.LinkField<
-    string,
-    string,
-    unknown,
-    prismic.FieldState,
-    never
-  >;
+  vimeo_loop_thumbnail: prismic.KeyTextField;
 
   /**
    * Gallery Thumbnail field in *Case Study*
@@ -307,21 +323,15 @@ interface CaseStudyDocumentData {
   header_image: prismic.ImageField<never>;
 
   /**
-   * Vimeo Video Link field in *Case Study*
+   * Header Vimeo Video Link field in *Case Study*
    *
-   * - **Field Type**: Link
+   * - **Field Type**: Text
    * - **Placeholder**: *None*
-   * - **API ID Path**: case_study.header_video
+   * - **API ID Path**: case_study.header_vimeo_video_link
    * - **Tab**: Header
-   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   * - **Documentation**: https://prismic.io/docs/field#key-text
    */
-  header_video: prismic.LinkField<
-    string,
-    string,
-    unknown,
-    prismic.FieldState,
-    never
-  >;
+  header_vimeo_video_link: prismic.KeyTextField;
 
   /**
    * Header Paragraph field in *Case Study*
@@ -1373,18 +1383,12 @@ export interface LargeMediaSliceVideoPrimary {
   /**
    * Vimeo Video Link field in *LargeMedia → Video Loop → Primary*
    *
-   * - **Field Type**: Link
+   * - **Field Type**: Text
    * - **Placeholder**: *None*
-   * - **API ID Path**: large_media.video.primary.vimeo_video_link
-   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   * - **API ID Path**: large_media.video.primary.vimeo_video_link_new
+   * - **Documentation**: https://prismic.io/docs/field#key-text
    */
-  vimeo_video_link: prismic.LinkField<
-    string,
-    string,
-    unknown,
-    prismic.FieldState,
-    never
-  >;
+  vimeo_video_link_new: prismic.KeyTextField;
 
   /**
    * Bottom Margin field in *LargeMedia → Video Loop → Primary*
@@ -1482,11 +1486,11 @@ export type MediumMediaSliceDefault = prismic.SharedSliceVariation<
 >;
 
 /**
- * Primary content in *MediumMedia → Video → Primary*
+ * Primary content in *MediumMedia → Video Loop → Primary*
  */
 export interface MediumMediaSliceVideoPrimary {
   /**
-   * Image field in *MediumMedia → Video → Primary*
+   * Image field in *MediumMedia → Video Loop → Primary*
    *
    * - **Field Type**: Image
    * - **Placeholder**: *None*
@@ -1496,23 +1500,17 @@ export interface MediumMediaSliceVideoPrimary {
   image: prismic.ImageField<never>;
 
   /**
-   * Vimeo Video Link field in *MediumMedia → Video → Primary*
+   * Vimeo Video Link field in *MediumMedia → Video Loop → Primary*
    *
-   * - **Field Type**: Link
+   * - **Field Type**: Text
    * - **Placeholder**: *None*
-   * - **API ID Path**: medium_media.video.primary.vimeo_video_link
-   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   * - **API ID Path**: medium_media.video.primary.vimeo_video_link_new
+   * - **Documentation**: https://prismic.io/docs/field#key-text
    */
-  vimeo_video_link: prismic.LinkField<
-    string,
-    string,
-    unknown,
-    prismic.FieldState,
-    never
-  >;
+  vimeo_video_link_new: prismic.KeyTextField;
 
   /**
-   * Bottom Margin field in *MediumMedia → Video → Primary*
+   * Bottom Margin field in *MediumMedia → Video Loop → Primary*
    *
    * - **Field Type**: Boolean
    * - **Placeholder**: *None*
@@ -1523,7 +1521,7 @@ export interface MediumMediaSliceVideoPrimary {
   bottom_margin: prismic.BooleanField;
 
   /**
-   * Align media field in *MediumMedia → Video → Primary*
+   * Align media field in *MediumMedia → Video Loop → Primary*
    *
    * - **Field Type**: Select
    * - **Placeholder**: *None*
@@ -1538,7 +1536,7 @@ export interface MediumMediaSliceVideoPrimary {
 }
 
 /**
- * Video variation for MediumMedia Slice
+ * Video Loop variation for MediumMedia Slice
  *
  * - **API ID**: `video`
  * - **Description**: Default
@@ -1598,6 +1596,17 @@ export interface ProjectSliceDefaultPrimaryMedia1Item {
     prismic.FieldState,
     never
   >;
+
+  /**
+   * Enable Parallax field in *Project → Default → Primary → Media 1*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: project.default.primary.media_1[].parallax_enabled
+   * - **Documentation**: https://prismic.io/docs/field#boolean
+   */
+  parallax_enabled: prismic.BooleanField;
 }
 
 /**
@@ -1629,6 +1638,17 @@ export interface ProjectSliceDefaultPrimaryMedia2Item {
     prismic.FieldState,
     never
   >;
+
+  /**
+   * Enable Parallax field in *Project → Default → Primary → Media 2*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: project.default.primary.media_2[].parallax_enabled
+   * - **Documentation**: https://prismic.io/docs/field#boolean
+   */
+  parallax_enabled: prismic.BooleanField;
 }
 
 /**
@@ -1660,6 +1680,17 @@ export interface ProjectSliceDefaultPrimaryMedia3Item {
     prismic.FieldState,
     never
   >;
+
+  /**
+   * Enable Parallax field in *Project → Default → Primary → Media 3*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: project.default.primary.media_3[].parallax_enabled
+   * - **Documentation**: https://prismic.io/docs/field#boolean
+   */
+  parallax_enabled: prismic.BooleanField;
 }
 
 /**
@@ -1892,10 +1923,10 @@ export interface SmallMediaSliceVideoLoopPrimary {
    *
    * - **Field Type**: Image
    * - **Placeholder**: *None*
-   * - **API ID Path**: small_media.videoLoop.primary.video_placeholder_image
+   * - **API ID Path**: small_media.videoLoop.primary.image
    * - **Documentation**: https://prismic.io/docs/field#image
    */
-  video_placeholder_image: prismic.ImageField<never>;
+  image: prismic.ImageField<never>;
 
   /**
    * Vimeo Video Link field in *SmallMedia → Video loop → Primary*
@@ -1912,6 +1943,16 @@ export interface SmallMediaSliceVideoLoopPrimary {
     prismic.FieldState,
     never
   >;
+
+  /**
+   * Vimeo Video Link field in *SmallMedia → Video loop → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: small_media.videoLoop.primary.vimeo_video_link_new
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  vimeo_video_link_new: prismic.KeyTextField;
 
   /**
    * Align Video field in *SmallMedia → Video loop → Primary*
@@ -2031,18 +2072,12 @@ export interface VideoPlayerSliceDefaultPrimary {
   /**
    * Vimeo Video Link field in *VideoPlayer → Default → Primary*
    *
-   * - **Field Type**: Link
+   * - **Field Type**: Text
    * - **Placeholder**: *None*
-   * - **API ID Path**: video_player.default.primary.vimeo_video_link
-   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   * - **API ID Path**: video_player.default.primary.vimeo_video_link_new
+   * - **Documentation**: https://prismic.io/docs/field#key-text
    */
-  vimeo_video_link: prismic.LinkField<
-    string,
-    string,
-    unknown,
-    prismic.FieldState,
-    never
-  >;
+  vimeo_video_link_new: prismic.KeyTextField;
 
   /**
    * Caption field in *VideoPlayer → Default → Primary*

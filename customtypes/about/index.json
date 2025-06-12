@@ -1,6 +1,9 @@
 {
   "format": "page",
   "id": "about",
+  "label": "About Landing",
+  "repeatable": false,
+  "status": true,
   "json": {
     "SEO": {
       "uid": {
@@ -53,6 +56,21 @@
           "multi": "paragraph,hyperlink,em",
           "labels": ["micro-text"]
         }
+      },
+      "header_image": {
+        "type": "Image",
+        "config": {
+          "label": "Header Image",
+          "constraint": {},
+          "thumbnails": []
+        }
+      },
+      "header_vimeo_video_link": {
+        "type": "Text",
+        "config": {
+          "label": "Header Vimeo Video Link",
+          "placeholder": ""
+        }
       }
     },
     "Footer": {
@@ -74,13 +92,9 @@
           "select": null,
           "allowTargetBlank": true,
           "allowText": true,
-          "repeat": false,
-          "labels": ["micro-text"]
+          "repeat": false
         }
       }
     }
-  },
-  "label": "About Landing",
-  "repeatable": false,
-  "status": true
+  }
 }

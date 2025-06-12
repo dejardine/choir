@@ -52,7 +52,7 @@
       "description": "Default",
       "imageUrl": "",
       "primary": {
-        "video_placeholder_image": {
+        "image": {
           "type": "Image",
           "config": {
             "label": "Video Placeholder Image",
@@ -69,6 +69,13 @@
             "allowTargetBlank": false,
             "allowText": false,
             "repeat": false
+          }
+        },
+        "vimeo_video_link_new": {
+          "type": "Text",
+          "config": {
+            "label": "Vimeo Video Link",
+            "placeholder": ""
           }
         },
         "align_image": {

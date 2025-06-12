@@ -36,28 +36,17 @@ const sectionClasses = computed(() => {
 const vimeoVideoId = computed(() => {
   if (
     props.slice.variation === "videoLoop" &&
-    props.slice.primary.vimeo_video_link &&
-    "url" in props.slice.primary.vimeo_video_link &&
-    props.slice.primary.vimeo_video_link.url
+    props.slice.primary.vimeo_video_link_new
   ) {
-    const url = props.slice.primary.vimeo_video_link.url;
-    const parts = url.split("/");
-    let id = parts.pop(); // Get last part
-    if (!id && parts.length > 0) {
-      // If last part was empty (e.g. trailing slash)
-      id = parts.pop();
-    }
-    if (id) {
-      return id.split("?")[0]; // Remove query parameters
-    }
+    return props.slice.primary.vimeo_video_link_new;
   }
   return null;
 });
 
 const videoCoverImageUrl = computed(() => {
   if (props.slice.variation === "videoLoop") {
-    // Ensure video_placeholder_image exists and has a url
-    return props.slice.primary.video_placeholder_image?.url;
+    // Use the image field for the video placeholder
+    return props.slice.primary.image?.url;
   }
   return null;
 });

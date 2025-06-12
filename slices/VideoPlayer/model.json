@@ -20,15 +20,11 @@
             "thumbnails": []
           }
         },
-        "vimeo_video_link": {
-          "type": "Link",
+        "vimeo_video_link_new": {
+          "type": "Text",
           "config": {
             "label": "Vimeo Video Link",
-            "placeholder": "",
-            "select": null,
-            "allowTargetBlank": false,
-            "allowText": false,
-            "repeat": false
+            "placeholder": ""
           }
         },
         "caption": {

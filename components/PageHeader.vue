@@ -35,7 +35,7 @@ defineProps({
 .page-header {
   padding: var(--gutterPadding);
   margin-top: 50vh;
-  margin-bottom: 25vh;
+  margin-bottom: 20vh;
   :deep(h1) {
     @include visually-hidden;
   }
@@ -47,8 +47,11 @@ defineProps({
   :deep(p) {
     @include mediumType;
     display: inline;
+    em {
+      @include heldaneTextItalic;
+    }
   }
-  .micro-text {
+  :deep(.micro-text) {
     @include bodyType;
     vertical-align: top;
     display: inline;

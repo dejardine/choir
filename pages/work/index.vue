@@ -41,7 +41,7 @@ const graphQuery = `{
         ...on case_study {
           image_thumbnail
           thumbnail_title
-          video_thumbnail
+          vimeo_loop_thumbnail
           gallery_thumbnail {
             image
           }

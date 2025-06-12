@@ -43,15 +43,11 @@
           ]
         }
       },
-      "video_thumbnail": {
-        "type": "Link",
+      "vimeo_loop_thumbnail": {
+        "type": "Text",
         "config": {
           "label": "Vimeo Loop Thumbnail",
-          "placeholder": "",
-          "select": null,
-          "allowTargetBlank": false,
-          "allowText": false,
-          "repeat": false
+          "placeholder": ""
         }
       },
       "gallery_thumbnail": {
@@ -90,15 +86,11 @@
           "thumbnails": []
         }
       },
-      "header_video": {
-        "type": "Link",
+      "header_vimeo_video_link": {
+        "type": "Text",
         "config": {
-          "label": "Vimeo Video Link",
-          "placeholder": "",
-          "select": null,
-          "allowTargetBlank": false,
-          "allowText": false,
-          "repeat": false
+          "label": "Header Vimeo Video Link",
+          "placeholder": ""
         }
       },
       "header_paragraph": {
