@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Content } from "@prismicio/client";
 import { getSliceComponentProps } from "@prismicio/vue";
-import { computed } from "vue";
+import { computed, onMounted, onUnmounted, nextTick, ref } from "vue";
 
 // The array passed to `getSliceComponentProps` is purely optional.
 // Consider it as a visual hint for you when templating your slice.
@@ -71,10 +71,86 @@ const isImage = (media: any) => {
     !media?.vimeo_video_link?.url
   );
 };
+
+// Parallax setup
+const projectSection = ref(null);
+let scrollTriggerInstances: any[] = [];
+
+const setupParallax = async () => {
+  await nextTick();
+
+  const { $gsap, $ScrollTrigger } = useNuxtApp();
+  if (!$gsap || !$ScrollTrigger || !projectSection.value) return;
+
+  // Kill existing instances
+  scrollTriggerInstances.forEach((st) => st.kill());
+  scrollTriggerInstances = [];
+
+  // Find all media items with parallax enabled
+  const mediaItems = projectSection.value.querySelectorAll(
+    ".media-item.has-parallax"
+  );
+
+  mediaItems.forEach((mediaItem: any) => {
+    const speed = parseFloat(mediaItem.dataset.parallaxSpeed) || 0.7;
+
+    const st = ($ScrollTrigger as any).create({
+      trigger: mediaItem,
+      start: "top bottom",
+      end: "bottom top",
+      scrub: true,
+      onUpdate: (self: any) => {
+        // Get element's position relative to viewport
+        const rect = mediaItem.getBoundingClientRect();
+        const elementCenter = rect.top + rect.height / 2;
+        const viewportCenter = window.innerHeight / 2;
+
+        // Calculate distance from viewport center (-1 to 1)
+        const distanceFromCenter =
+          (elementCenter - viewportCenter) / (window.innerHeight / 2);
+
+        // Only apply parallax when element is near or in viewport
+        if (Math.abs(distanceFromCenter) <= 1.5) {
+          const maxParallaxDistance = window.innerHeight * 0.3;
+          // Positive multiplier with speed > 1 makes it move UP when scrolling down
+          const parallaxY =
+            distanceFromCenter * maxParallaxDistance * (speed - 1);
+
+          ($gsap as any).set(mediaItem, {
+            y: parallaxY,
+            ease: "none",
+          });
+        } else {
+          // Reset transform when far from viewport
+          ($gsap as any).set(mediaItem, {
+            y: 0,
+            ease: "none",
+          });
+        }
+      },
+    });
+
+    scrollTriggerInstances.push(st);
+  });
+};
+
+onMounted(() => {
+  if (process.client) {
+    setTimeout(() => {
+      setupParallax();
+    }, 100);
+  }
+});
+
+onUnmounted(() => {
+  scrollTriggerInstances.forEach((st) => st.kill());
+  scrollTriggerInstances = [];
+});
 </script>
 
 <template>
   <section
+    ref="projectSection"
     :data-slice-type="slice.slice_type"
     :data-slice-variation="slice.variation"
     class="project-section"
@@ -83,7 +159,12 @@ const isImage = (media: any) => {
   >
     <div class="project-content">
       <!-- Media 1 -->
-      <div v-if="media1" class="media-item">
+      <div
+        v-if="media1"
+        class="media-item"
+        :class="{ 'has-parallax': media1.parallax_enabled }"
+        :data-parallax-speed="media1.parallax_enabled ? 1.3 : null"
+      >
         <prismic-link
           v-if="slice.primary.project_link"
           :field="slice.primary.project_link"
@@ -113,7 +194,12 @@ const isImage = (media: any) => {
       </div>
 
       <!-- Media 2 -->
-      <div v-if="media2" class="media-item">
+      <div
+        v-if="media2"
+        class="media-item"
+        :class="{ 'has-parallax': media2.parallax_enabled }"
+        :data-parallax-speed="media2.parallax_enabled ? 1.3 : null"
+      >
         <prismic-link
           v-if="slice.primary.project_link"
           :field="slice.primary.project_link"
@@ -143,7 +229,12 @@ const isImage = (media: any) => {
       </div>
 
       <!-- Media 3 -->
-      <div v-if="media3" class="media-item">
+      <div
+        v-if="media3"
+        class="media-item"
+        :class="{ 'has-parallax': media3.parallax_enabled }"
+        :data-parallax-speed="media3.parallax_enabled ? 1.3 : null"
+      >
         <prismic-link
           v-if="slice.primary.project_link"
           :field="slice.primary.project_link"
@@ -189,6 +280,10 @@ const isImage = (media: any) => {
   margin-bottom: 20px;
 }
 
+.media-item.has-parallax {
+  will-change: transform;
+}
+
 .project-section {
   &:nth-of-type(3n + 1) {
     .media-item {
@@ -213,7 +308,6 @@ const isImage = (media: any) => {
   &:nth-of-type(3n + 2) {
     .media-item {
       &:nth-of-type(1) {
-        padding-top: 25vh;
         .media-item-link {
           grid-column: 1 / span 3;
         }
@@ -224,6 +318,8 @@ const isImage = (media: any) => {
         }
       }
       &:nth-of-type(3) {
+        padding-top: 10vh;
+
         .media-item-link {
           grid-column: 2 / span 8;
         }
@@ -244,7 +340,7 @@ const isImage = (media: any) => {
         }
       }
       &:nth-of-type(3) {
-        padding-top: 25vh;
+        padding-top: 10vh;
         .media-item-link {
           grid-column: 2 / span 8;
         }

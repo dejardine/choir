@@ -42,7 +42,7 @@ onMounted(() => {
   tl.to(".preloader-bar-inner", {
     xPercent: 0,
     duration: 1.25,
-    delay: 0.5,
+    delay: 0,
     ease: "power4.in",
   })
     .to(".preloader-loader", {

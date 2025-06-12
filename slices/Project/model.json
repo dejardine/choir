@@ -18,9 +18,7 @@
             "label": "Project Link",
             "select": "document",
             "repeat": false,
-            "customtypes": [
-              "case_study"
-            ]
+            "customtypes": ["case_study"]
           }
         },
         "project_copy": {
@@ -56,6 +54,15 @@
                   "allowText": false,
                   "repeat": false
                 }
+              },
+              "parallax_enabled": {
+                "type": "Boolean",
+                "config": {
+                  "label": "Enable Parallax",
+                  "placeholder_false": "false",
+                  "placeholder_true": "true",
+                  "default_value": false
+                }
               }
             }
           }
@@ -84,6 +91,15 @@
                   "allowText": false,
                   "repeat": false
                 }
+              },
+              "parallax_enabled": {
+                "type": "Boolean",
+                "config": {
+                  "label": "Enable Parallax",
+                  "placeholder_false": "false",
+                  "placeholder_true": "true",
+                  "default_value": false
+                }
               }
             }
           }
@@ -111,6 +127,15 @@
                   "allowTargetBlank": false,
                   "allowText": false,
                   "repeat": false
+                }
+              },
+              "parallax_enabled": {
+                "type": "Boolean",
+                "config": {
+                  "label": "Enable Parallax",
+                  "placeholder_false": "false",
+                  "placeholder_true": "true",
+                  "default_value": false
                 }
               }
             }
