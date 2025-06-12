@@ -695,11 +695,11 @@ export interface HomeDocumentDataSlideshowItem {
 type HomeDocumentDataSlices2Slice = ProjectSlice;
 
 /**
- * Item in *Home → About slideshow*
+ * Item in *Home → News slideshow*
  */
 export interface HomeDocumentDataAboutSlideshowItem {
   /**
-   * Image field in *Home → About slideshow*
+   * Image field in *Home → News slideshow*
    *
    * - **Field Type**: Image
    * - **Placeholder**: *None*
@@ -763,6 +763,62 @@ interface HomeDocumentData {
    * - **Documentation**: https://prismic.io/docs/field#slices
    */
   slices2: prismic.SliceZone<HomeDocumentDataSlices2Slice> /**
+   * About Copy field in *Home*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: home.about_copy
+   * - **Tab**: About
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */;
+  about_copy: prismic.RichTextField;
+
+  /**
+   * About Link field in *Home*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: home.about_link
+   * - **Tab**: About
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  about_link: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  >;
+
+  /**
+   * News slideshow field in *Home*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: home.about_slideshow[]
+   * - **Tab**: About
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  about_slideshow: prismic.GroupField<
+    Simplify<HomeDocumentDataAboutSlideshowItem>
+  >;
+
+  /**
+   * News Link field in *Home*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: home.news_link
+   * - **Tab**: About
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  news_link: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  > /**
    * Call to action field in *Home*
    *
    * - **Field Type**: Rich Text
@@ -783,45 +839,6 @@ interface HomeDocumentData {
    * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
    */
   call_to_action_link: prismic.LinkField<
-    string,
-    string,
-    unknown,
-    prismic.FieldState,
-    never
-  > /**
-   * About Copy field in *Home*
-   *
-   * - **Field Type**: Rich Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: home.about_copy
-   * - **Tab**: About
-   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
-   */;
-  about_copy: prismic.RichTextField;
-
-  /**
-   * About slideshow field in *Home*
-   *
-   * - **Field Type**: Group
-   * - **Placeholder**: *None*
-   * - **API ID Path**: home.about_slideshow[]
-   * - **Tab**: About
-   * - **Documentation**: https://prismic.io/docs/field#group
-   */
-  about_slideshow: prismic.GroupField<
-    Simplify<HomeDocumentDataAboutSlideshowItem>
-  >;
-
-  /**
-   * About Link field in *Home*
-   *
-   * - **Field Type**: Link
-   * - **Placeholder**: *None*
-   * - **API ID Path**: home.about_link
-   * - **Tab**: About
-   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
-   */
-  about_link: prismic.LinkField<
     string,
     string,
     unknown,

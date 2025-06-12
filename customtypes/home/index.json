@@ -100,7 +100,6 @@
         }
       }
     },
-
     "About": {
       "about_copy": {
         "type": "StructuredText",
@@ -111,10 +110,21 @@
           "multi": "paragraph"
         }
       },
+      "about_link": {
+        "type": "Link",
+        "config": {
+          "label": "About Link",
+          "placeholder": "",
+          "select": null,
+          "allowTargetBlank": true,
+          "allowText": true,
+          "repeat": false
+        }
+      },
       "about_slideshow": {
         "type": "Group",
         "config": {
-          "label": "About slideshow",
+          "label": "News slideshow",
           "repeat": true,
           "fields": {
             "image": {
@@ -128,10 +138,10 @@
           }
         }
       },
-      "about_link": {
+      "news_link": {
         "type": "Link",
         "config": {
-          "label": "About Link",
+          "label": "News Link",
           "placeholder": "",
           "select": null,
           "allowTargetBlank": true,

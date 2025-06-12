@@ -10,7 +10,10 @@
         {{ props?.home?.data?.about_link?.text || "Read More" }}
       </prismic-link>
     </div>
-    <div class="about-slideshow">
+    <div
+      class="about-slideshow"
+      v-if="props?.home?.data?.about_slideshow?.length"
+    >
       <client-only>
         <swiper-container
           ref="swiperRef"
@@ -23,13 +26,27 @@
           class="about-slideshow-swiper"
         >
           <swiper-slide
-            v-for="(image, index) in props?.home?.data?.about_slideshow"
+            v-for="(item, index) in props?.home?.data?.about_slideshow"
             :key="index"
+            class="about-slideshow-slide"
           >
-            <ImageHalf :imageField="image" class="slideshow-image" />
+            <ImageSquare :imageField="item.image" class="slideshow-image" />
           </swiper-slide>
         </swiper-container>
       </client-only>
+      <prismic-link
+        v-if="props?.home?.data?.news_link"
+        :field="props?.home?.data?.news_link"
+        class="home-news-link"
+      >
+        {{ props?.home?.data?.news_link?.text || "Read More" }}
+      </prismic-link>
+    </div>
+    <div v-else class="about-slideshow-debug">
+      <p>
+        No slideshow data available. about_slideshow length:
+        {{ props?.home?.data?.about_slideshow?.length || 0 }}
+      </p>
     </div>
   </div>
 </template>
@@ -52,6 +69,16 @@ let swiperInstance = null;
 onMounted(() => {
   // Register Swiper custom elements only on the client side
   register();
+
+  // Debug: Log the about_slideshow data
+  console.log("HomeAbout props:", props.home?.data);
+  console.log("HomeAbout about_slideshow:", props.home?.data?.about_slideshow);
+
+  if (props.home?.data?.about_slideshow) {
+    props.home.data.about_slideshow.forEach((item, index) => {
+      console.log(`HomeAbout slide ${index}:`, item);
+    });
+  }
 
   if (swiperRef.value) {
     const swiperEl = swiperRef.value;
@@ -81,7 +108,6 @@ const swiperAutoplayOptions = ref({
 <style lang="scss" scoped>
 @use "@/assets/scss/breakpoints.scss" as *;
 @use "@/assets/scss/global.scss" as *;
-// No styling as requested
 
 .home-about {
   position: relative;
@@ -103,10 +129,63 @@ const swiperAutoplayOptions = ref({
   padding-bottom: 33.333vh;
   .about-slideshow {
     grid-row: 2 / span 1;
-    grid-column: 1 / span 12;
+    grid-column: 5 / span 4;
+    margin-top: 25vh;
+    aspect-ratio: 1/1;
+    display: block;
   }
 }
+
+.about-slideshow-swiper {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1/1;
+  display: block;
+}
+
+.about-slideshow-slide {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1/1;
+  display: block;
+}
+
+.swiper-slide-next {
+  aspect-ratio: 1/1;
+  display: block;
+}
+
+.slideshow-image {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1/1;
+
+  :deep(.image-square-container) {
+    height: 100%;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      aspect-ratio: 1/1;
+    }
+  }
+}
+
 .home-about-link {
   @include linkStyle;
+  @include bodyType;
+  @include foundersMedium;
+  color: var(--color-text);
+  display: block;
+  text-align: center;
+  margin-top: var(--gutter);
+}
+
+.home-news-link {
+  @include bodyType;
+  color: var(--color-text);
+  display: block;
+  text-align: left;
+  margin-top: var(--gutter);
 }
 </style>
