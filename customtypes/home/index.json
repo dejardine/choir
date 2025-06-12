@@ -100,6 +100,46 @@
         }
       }
     },
+
+    "About": {
+      "about_copy": {
+        "type": "StructuredText",
+        "config": {
+          "label": "About Copy",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "paragraph"
+        }
+      },
+      "about_slideshow": {
+        "type": "Group",
+        "config": {
+          "label": "About slideshow",
+          "repeat": true,
+          "fields": {
+            "image": {
+              "type": "Image",
+              "config": {
+                "label": "Image",
+                "constraint": {},
+                "thumbnails": []
+              }
+            }
+          }
+        }
+      },
+      "about_link": {
+        "type": "Link",
+        "config": {
+          "label": "About Link",
+          "placeholder": "",
+          "select": null,
+          "allowTargetBlank": true,
+          "allowText": true,
+          "repeat": false
+        }
+      }
+    },
     "Footer": {
       "call_to_action": {
         "type": "StructuredText",

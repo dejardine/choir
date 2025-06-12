@@ -4,6 +4,7 @@
     <div id="content">
       <HomeHero :home="page?.home" />
       <HomeProjects :home="page?.home" />
+      <HomeAbout :home="page?.home" />
     </div>
     <div class="footer-wrap">
       <CTA

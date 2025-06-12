@@ -289,7 +289,6 @@ watchEffect(async () => {
   grid-gap: var(--gutter);
   padding: var(--gutterPadding);
   padding-bottom: 25vh;
-  display: grid;
 }
 
 .project-information-content-left {

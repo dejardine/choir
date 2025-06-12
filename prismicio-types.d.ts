@@ -695,6 +695,21 @@ export interface HomeDocumentDataSlideshowItem {
 type HomeDocumentDataSlices2Slice = ProjectSlice;
 
 /**
+ * Item in *Home → About slideshow*
+ */
+export interface HomeDocumentDataAboutSlideshowItem {
+  /**
+   * Image field in *Home → About slideshow*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: home.about_slideshow[].image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image: prismic.ImageField<never>;
+}
+
+/**
  * Content for Home documents
  */
 interface HomeDocumentData {
@@ -768,6 +783,45 @@ interface HomeDocumentData {
    * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
    */
   call_to_action_link: prismic.LinkField<
+    string,
+    string,
+    unknown,
+    prismic.FieldState,
+    never
+  > /**
+   * About Copy field in *Home*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: home.about_copy
+   * - **Tab**: About
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */;
+  about_copy: prismic.RichTextField;
+
+  /**
+   * About slideshow field in *Home*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: home.about_slideshow[]
+   * - **Tab**: About
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  about_slideshow: prismic.GroupField<
+    Simplify<HomeDocumentDataAboutSlideshowItem>
+  >;
+
+  /**
+   * About Link field in *Home*
+   *
+   * - **Field Type**: Link
+   * - **Placeholder**: *None*
+   * - **API ID Path**: home.about_link
+   * - **Tab**: About
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  about_link: prismic.LinkField<
     string,
     string,
     unknown,
@@ -2067,6 +2121,7 @@ declare module "@prismicio/client" {
       HomeDocumentData,
       HomeDocumentDataSlideshowItem,
       HomeDocumentDataSlices2Slice,
+      HomeDocumentDataAboutSlideshowItem,
       IndustryDocument,
       IndustryDocumentData,
       MainMenuDocument,
