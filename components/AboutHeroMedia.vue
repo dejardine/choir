@@ -94,10 +94,6 @@ let swiperInstance = null;
 
 onMounted(() => {
   // Debug logging
-  console.log("AboutHeroMedia props:", props);
-  console.log("AboutHeroMedia slideshow:", props.slideshow);
-  console.log("AboutHeroMedia computed slides:", slides.value);
-  console.log("AboutHeroMedia hasSlides:", hasSlides.value);
 
   if (swiperRef.value) {
     swiperInstance = swiperRef.value.swiper;
@@ -132,6 +128,7 @@ const swiperAutoplayOptions = ref({
   :deep(.vimeo-player-wrapper) {
     width: 100%;
     height: auto;
+    filter: grayscale(100%);
   }
 }
 </style>
