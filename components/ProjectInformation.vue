@@ -11,7 +11,11 @@
       ref="projectInformationEl"
     >
       <div class="project-information-content-left">
-        <div v-for="(item, index) in project.client" :key="index">
+        <div
+          v-for="(item, index) in project.client"
+          :key="index"
+          class="client-name"
+        >
           {{ clientNames[item.client.uid] || "" }}
         </div>
       </div>
@@ -293,8 +297,18 @@ watchEffect(async () => {
 
 .project-information-content-left {
   grid-column: 1 / span 4;
-  :deep(div) {
+  :deep(.client-name) {
     @include foundersMedium;
+    display: inline-block;
+    &:after {
+      content: ", ";
+      white-space: pre;
+    }
+    &:last-child {
+      &:after {
+        content: "";
+      }
+    }
   }
 }
 

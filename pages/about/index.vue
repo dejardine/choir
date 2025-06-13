@@ -7,6 +7,7 @@
       :subheading="page?.about?.data?.sub_heading"
       :paragraph="page?.about?.data?.paragraph"
     />
+    <AboutHeroMedia :slideshow="page?.about?.data?.slideshow" />
 
     <div class="footer-wrap">
       <CTA

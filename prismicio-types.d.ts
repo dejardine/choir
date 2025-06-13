@@ -5,6 +5,31 @@ import type * as prismic from "@prismicio/client";
 type Simplify<T> = { [KeyType in keyof T]: T[KeyType] };
 
 /**
+ * Item in *About Landing → Slideshow*
+ */
+export interface AboutDocumentDataSlideshowItem {
+  /**
+   * Image field in *About Landing → Slideshow*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about.slideshow[].image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * Vimeo Video Loop field in *About Landing → Slideshow*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about.slideshow[].vimeo_video_loop
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  vimeo_video_loop: prismic.KeyTextField;
+}
+
+/**
  * Content for About Landing documents
  */
 interface AboutDocumentData {
@@ -62,26 +87,15 @@ interface AboutDocumentData {
   paragraph: prismic.RichTextField;
 
   /**
-   * Header Image field in *About Landing*
+   * Slideshow field in *About Landing*
    *
-   * - **Field Type**: Image
+   * - **Field Type**: Group
    * - **Placeholder**: *None*
-   * - **API ID Path**: about.header_image
+   * - **API ID Path**: about.slideshow[]
    * - **Tab**: Introduction
-   * - **Documentation**: https://prismic.io/docs/field#image
+   * - **Documentation**: https://prismic.io/docs/field#group
    */
-  header_image: prismic.ImageField<never>;
-
-  /**
-   * Header Vimeo Video Link field in *About Landing*
-   *
-   * - **Field Type**: Text
-   * - **Placeholder**: *None*
-   * - **API ID Path**: about.header_vimeo_video_link
-   * - **Tab**: Introduction
-   * - **Documentation**: https://prismic.io/docs/field#key-text
-   */
-  header_vimeo_video_link: prismic.KeyTextField /**
+  slideshow: prismic.GroupField<Simplify<AboutDocumentDataSlideshowItem>> /**
    * Call to action field in *About Landing*
    *
    * - **Field Type**: Rich Text
@@ -2154,6 +2168,7 @@ declare module "@prismicio/client" {
     export type {
       AboutDocument,
       AboutDocumentData,
+      AboutDocumentDataSlideshowItem,
       ArchiveDocument,
       ArchiveDocumentData,
       ArchiveDocumentDataProjectsItem,

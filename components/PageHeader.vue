@@ -34,6 +34,7 @@ defineProps({
 @import "@/assets/scss/global.scss";
 .page-header {
   padding: var(--gutterPadding);
+  padding-bottom: 0;
   margin-top: 50vh;
   margin-bottom: 20vh;
   :deep(h1) {

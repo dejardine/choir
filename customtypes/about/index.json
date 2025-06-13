@@ -57,19 +57,28 @@
           "labels": ["micro-text"]
         }
       },
-      "header_image": {
-        "type": "Image",
+      "slideshow": {
+        "type": "Group",
         "config": {
-          "label": "Header Image",
-          "constraint": {},
-          "thumbnails": []
-        }
-      },
-      "header_vimeo_video_link": {
-        "type": "Text",
-        "config": {
-          "label": "Header Vimeo Video Link",
-          "placeholder": ""
+          "label": "Slideshow",
+          "repeat": true,
+          "fields": {
+            "image": {
+              "type": "Image",
+              "config": {
+                "label": "Image",
+                "constraint": {},
+                "thumbnails": []
+              }
+            },
+            "vimeo_video_loop": {
+              "type": "Text",
+              "config": {
+                "label": "Vimeo Video Loop",
+                "placeholder": ""
+              }
+            }
+          }
         }
       }
     },
