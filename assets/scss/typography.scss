@@ -55,13 +55,13 @@
 @font-face {
   font-family: "Heldane Text Italic";
   src: url("@/assets/fonts/heldane-text-web-regular-italic.woff2") format("woff2");
-  font-style: italic;
+  font-style: normal;
   font-weight: normal;    
 }
 
 @mixin heldaneTextItalic {
   font-family: "Heldane Text Italic", sans-serif;
-  font-style: italic;
+  font-style: normal;
   font-weight:normal;    
 }
 
@@ -80,6 +80,8 @@
   --heading-l: 1.087;
   --subheading: 2.375rem;
   --subheading-l: 1.087;
+  --smallHeading: 1.313rem;
+  --smallHeading-l: 1.2;
   --medium: 1.938rem;
   --medium-l: 1.2;
   --cta: 3.375rem;
@@ -160,6 +162,14 @@
   line-height: var(--medium-l);  
   @include heldaneText;
 
+}
+
+@mixin smallHeading {
+  font-size: var(--smallHeading);
+  line-height: var(--smallHeading-l);
+  @include heldaneText;
+  letter-spacing: -0.014em;
+  font-feature-settings: "dlig", "ss03", "liga", "calt";
 }
 
 

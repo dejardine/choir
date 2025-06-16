@@ -8,7 +8,9 @@
       :paragraph="page?.about?.data?.paragraph"
     />
     <AboutHeroMedia :slideshow="page?.about?.data?.slideshow" />
-
+    <AboutWhy :about="page?.about?.data" />
+    <AboutWhat :about="page?.about?.data" />
+    <AboutTeam :about="page?.about?.data" />
     <div class="footer-wrap">
       <CTA
         :cta="page.about.data.call_to_action"

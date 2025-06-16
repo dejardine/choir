@@ -30,6 +30,76 @@ export interface AboutDocumentDataSlideshowItem {
 }
 
 /**
+ * Item in *About Landing → What We Do*
+ */
+export interface AboutDocumentDataWhatWeDoItem {
+  /**
+   * Heading field in *About Landing → What We Do*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about.what_we_do[].heading
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  heading: prismic.RichTextField;
+
+  /**
+   * Paragraph field in *About Landing → What We Do*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about.what_we_do[].paragraph
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  paragraph: prismic.RichTextField;
+}
+
+/**
+ * Item in *About Landing → Team List*
+ */
+export interface AboutDocumentDataTeamListItem {
+  /**
+   * Image field in *About Landing → Team List*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about.team_list[].image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image: prismic.ImageField<never>;
+
+  /**
+   * Name field in *About Landing → Team List*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about.team_list[].name
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  name: prismic.KeyTextField;
+
+  /**
+   * Job Title field in *About Landing → Team List*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about.team_list[].job_title
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  job_title: prismic.KeyTextField;
+
+  /**
+   * Alternative Title field in *About Landing → Team List*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about.team_list[].alternative_title
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  alternative_title: prismic.KeyTextField;
+}
+
+/**
  * Content for About Landing documents
  */
 interface AboutDocumentData {
@@ -96,6 +166,77 @@ interface AboutDocumentData {
    * - **Documentation**: https://prismic.io/docs/field#group
    */
   slideshow: prismic.GroupField<Simplify<AboutDocumentDataSlideshowItem>> /**
+   * Why Heading field in *About Landing*
+   *
+   * - **Field Type**: Title
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about.why_heading
+   * - **Tab**: Why
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */;
+  why_heading: prismic.TitleField;
+
+  /**
+   * Why Paragraph field in *About Landing*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about.why_paragraph
+   * - **Tab**: Why
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  why_paragraph: prismic.RichTextField /**
+   * What Heading field in *About Landing*
+   *
+   * - **Field Type**: Title
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about.what_heading
+   * - **Tab**: What
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */;
+  what_heading: prismic.TitleField;
+
+  /**
+   * What We Do field in *About Landing*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about.what_we_do[]
+   * - **Tab**: What
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  what_we_do: prismic.GroupField<Simplify<AboutDocumentDataWhatWeDoItem>> /**
+   * Team Heading field in *About Landing*
+   *
+   * - **Field Type**: Title
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about.team_heading
+   * - **Tab**: Team
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */;
+  team_heading: prismic.TitleField;
+
+  /**
+   * Team Paragraph field in *About Landing*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about.team_paragraph
+   * - **Tab**: Team
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  team_paragraph: prismic.RichTextField;
+
+  /**
+   * Team List field in *About Landing*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about.team_list[]
+   * - **Tab**: Team
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  team_list: prismic.GroupField<Simplify<AboutDocumentDataTeamListItem>> /**
    * Call to action field in *About Landing*
    *
    * - **Field Type**: Rich Text
@@ -2169,6 +2310,8 @@ declare module "@prismicio/client" {
       AboutDocument,
       AboutDocumentData,
       AboutDocumentDataSlideshowItem,
+      AboutDocumentDataWhatWeDoItem,
+      AboutDocumentDataTeamListItem,
       ArchiveDocument,
       ArchiveDocumentData,
       ArchiveDocumentDataProjectsItem,
