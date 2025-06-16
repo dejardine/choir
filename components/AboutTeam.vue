@@ -7,6 +7,12 @@
     <div class="about-team-content">
       <prismic-rich-text :field="about?.team_paragraph" />
     </div>
+    <div ref="teamTitle" class="about-team-title">
+      <div class="about-team-title-text">
+        <span>Title here</span>
+      </div>
+      <div class="about-team-title-alt"></div>
+    </div>
     <div class="about-team-people">
       <div
         class="about-team-people-item"
@@ -43,8 +49,19 @@ const tripledTeamList = computed(() => {
 </script>
 
 <style lang="scss" scoped>
+.about-team-number {
+  text-transform: uppercase;
+  @include smallType;
+
+  @include foundersMedium;
+  letter-spacing: 0.05rem;
+  text-align: left;
+  position: absolute;
+  top: var(--gutter);
+  left: var(--gutterPadding);
+}
 .about-team {
-  padding: var(--gutter) var(--gutterPadding);
+  padding: var(--gutter) 0;
   border-top: 1px solid var(--color-border);
   position: relative;
   :deep(h3) {
@@ -116,5 +133,17 @@ const tripledTeamList = computed(() => {
       }
     }
   }
+}
+
+.about-team-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border-top: 1px solid var(--color-border);
+  padding: var(--gutter) var(--gutterPadding);
+  z-index: 100;
+  @include bodyType;
+  @include foundersMedium;
 }
 </style>
