@@ -13,7 +13,7 @@
       </div>
       <div class="about-team-title-alt"></div>
     </div>
-    <div class="about-team-people">
+    <div ref="teamPeople" class="about-team-people">
       <div
         class="about-team-people-item"
         v-for="item in tripledTeamList"
@@ -26,7 +26,9 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, ref, onMounted, onUnmounted } from "vue";
+
+const { $gsap, $ScrollTrigger } = useNuxtApp();
 
 const props = defineProps({
   about: {
@@ -34,6 +36,12 @@ const props = defineProps({
     required: true,
   },
 });
+
+const teamTitle = ref(null);
+const teamPeople = ref(null);
+
+// ScrollTrigger instances for cleanup
+let scrollTriggerInstances = [];
 
 const tripledTeamList = computed(() => {
   if (!props.about?.team_list) return [];
@@ -45,6 +53,66 @@ const tripledTeamList = computed(() => {
     ...props.about.team_list,
     ...props.about.team_list,
   ];
+});
+
+const setupScrollTrigger = () => {
+  if (!$gsap || !$ScrollTrigger || !teamTitle.value || !teamPeople.value) {
+    return;
+  }
+
+  // Kill existing ScrollTrigger instances
+  if (scrollTriggerInstances.length > 0) {
+    scrollTriggerInstances.forEach((st) => st.kill());
+    scrollTriggerInstances = [];
+  }
+
+  // Refresh ScrollTrigger to recalculate positions
+  $ScrollTrigger.refresh();
+
+  // Pin the team title when it hits the center, and keep it pinned through the team section
+  const pinST = $ScrollTrigger.create({
+    trigger: teamTitle.value,
+    start: "center center",
+    endTrigger: teamPeople.value,
+    end: "bottom bottom",
+    pin: teamTitle.value,
+    pinSpacing: false,
+    onUpdate: (self) => {
+      // Fade out in the last 20% of the scroll
+      const fadeStart = 1;
+      let opacity = 1;
+
+      if (self.progress > fadeStart) {
+        const fadeProgress = (self.progress - fadeStart) / (1 - fadeStart);
+        opacity = 1 - fadeProgress;
+      }
+
+      $gsap.set(teamTitle.value, { opacity: opacity });
+    },
+  });
+
+  scrollTriggerInstances.push(pinST);
+};
+
+onMounted(() => {
+  // Small delay to ensure DOM is ready
+  setTimeout(() => {
+    setupScrollTrigger();
+  }, 100);
+
+  // Add resize handler
+  window.addEventListener("resize", setupScrollTrigger);
+});
+
+onUnmounted(() => {
+  // Clean up ScrollTrigger instances
+  if (scrollTriggerInstances.length > 0) {
+    scrollTriggerInstances.forEach((st) => st.kill());
+    scrollTriggerInstances = [];
+  }
+
+  // Clean up resize handler
+  window.removeEventListener("resize", setupScrollTrigger);
 });
 </script>
 
