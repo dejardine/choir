@@ -12,6 +12,8 @@
         :loop="true"
         :autoplay="swiperAutoplayOptions"
         class="about-hero-swiper"
+        @slideChange="handleSlideChange"
+        @swiper="onSwiperInit"
       >
         <swiper-slide v-for="(slide, index) in slides" :key="index">
           <VimeoPlayerLoop
@@ -19,6 +21,13 @@
             :video-id="getVimeoId(slide.vimeo_video_loop)"
             :cover-image-url="slide.image?.url"
             :cover-image="slide.image"
+            :ref="
+              (el) => {
+                if (el) videoPlayers[index] = el;
+              }
+            "
+            :autoplay="false"
+            @ready="onVideoReady(index)"
           />
           <ImageFull v-else-if="slide.image?.url" :image-field="slide.image" />
         </swiper-slide>
@@ -49,6 +58,12 @@ const props = defineProps({
     required: false,
   },
 });
+
+// Store references to video players
+const videoPlayers = ref({});
+const readyVideos = ref({});
+const swiperRef = ref(null);
+let swiperInstance = null;
 
 // Helper function to extract Vimeo ID
 const getVimeoId = (url) => {
@@ -89,12 +104,61 @@ const slides = computed(() => {
 
 const hasSlides = computed(() => slides.value.length > 0);
 
-const swiperRef = ref(null);
-let swiperInstance = null;
+// Handle video ready event
+const onVideoReady = (index) => {
+  console.log("Video ready:", index);
+  readyVideos.value[index] = true;
+
+  // If this is the first video and swiper is initialized, play it
+  if (swiperInstance && swiperInstance.activeIndex === index) {
+    const player = videoPlayers.value[index];
+    if (player?.play) {
+      player.play();
+    }
+  }
+};
+
+// Handle swiper initialization
+const onSwiperInit = (swiper) => {
+  console.log("Swiper initialized");
+  swiperInstance = swiper;
+
+  // Play the first video if it's ready
+  const firstIndex = swiper.activeIndex;
+  if (readyVideos.value[firstIndex]) {
+    const player = videoPlayers.value[firstIndex];
+    if (player?.play) {
+      player.play();
+    }
+  }
+};
+
+// Handle slide changes
+const handleSlideChange = async (swiper) => {
+  console.log("Slide changed to:", swiper.activeIndex);
+  const currentIndex = swiper.activeIndex;
+
+  // Pause all videos
+  Object.entries(videoPlayers.value).forEach(([index, player]) => {
+    if (player?.pause && index !== currentIndex.toString()) {
+      player.pause();
+    }
+  });
+
+  // Play the current video if it's ready
+  if (readyVideos.value[currentIndex]) {
+    const currentPlayer = videoPlayers.value[currentIndex];
+    if (currentPlayer?.play) {
+      try {
+        await currentPlayer.play();
+      } catch (error) {
+        console.error("Error playing video:", error);
+      }
+    }
+  }
+};
 
 onMounted(() => {
-  // Debug logging
-
   if (swiperRef.value) {
     swiperInstance = swiperRef.value.swiper;
     // Start autoplay immediately

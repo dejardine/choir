@@ -11,7 +11,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, defineEmits } from "vue";
+import {
+  ref,
+  onMounted,
+  onBeforeUnmount,
+  defineEmits,
+  defineExpose,
+} from "vue";
 import Player from "@vimeo/player";
 
 const props = defineProps({
@@ -27,6 +33,10 @@ const props = defineProps({
     // This prop is passed from ProjectSlice, keep it for consistency
     type: Object,
     default: null,
+  },
+  autoplay: {
+    type: Boolean,
+    default: true,
   },
 });
 
@@ -80,6 +90,7 @@ onMounted(() => {
       dnt: true,
       muted: true,
       preload: true, // Usually good for background loops
+      autoplay: props.autoplay,
     });
 
     player.on("error", (error) => {
@@ -98,26 +109,30 @@ onMounted(() => {
           "VimeoPlayerLoop: Player is ready for videoId:",
           props.videoId
         );
-        player
-          .play()
-          .then(() => {
-            console.log(
-              "VimeoPlayerLoop: Playback started for videoId:",
-              props.videoId
-            );
-            if (props.coverImageUrl) {
-              // Only fade if there was a cover image
-              isFadingOut.value = true;
-            }
-            emit("ready");
-          })
-          .catch((error) => {
-            console.error(
-              "VimeoPlayerLoop: Error starting playback for videoId:",
-              props.videoId,
-              error
-            );
-          });
+        if (props.autoplay) {
+          player
+            .play()
+            .then(() => {
+              console.log(
+                "VimeoPlayerLoop: Playback started for videoId:",
+                props.videoId
+              );
+              if (props.coverImageUrl) {
+                // Only fade if there was a cover image
+                isFadingOut.value = true;
+              }
+              emit("ready");
+            })
+            .catch((error) => {
+              console.error(
+                "VimeoPlayerLoop: Error starting playback for videoId:",
+                props.videoId,
+                error
+              );
+            });
+        } else {
+          emit("ready");
+        }
       })
       .catch((error) => {
         console.error(
@@ -133,6 +148,32 @@ onMounted(() => {
       error
     );
   }
+});
+
+// Expose the player instance and methods
+defineExpose({
+  player,
+  play: async () => {
+    if (player) {
+      try {
+        await player.play();
+        if (props.coverImageUrl) {
+          isFadingOut.value = true;
+        }
+      } catch (error) {
+        console.error("Error playing video:", error);
+      }
+    }
+  },
+  pause: async () => {
+    if (player) {
+      try {
+        await player.pause();
+      } catch (error) {
+        console.error("Error pausing video:", error);
+      }
+    }
+  },
 });
 
 onBeforeUnmount(() => {
