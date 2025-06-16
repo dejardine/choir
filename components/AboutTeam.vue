@@ -9,9 +9,14 @@
     </div>
     <div ref="teamTitle" class="about-team-title">
       <div class="about-team-title-text">
-        <span>Title here</span>
+        <strong>{{ currentTeamMember.name }} </strong>
+        <span v-if="currentTeamMember.job_title">{{
+          currentTeamMember.job_title
+        }}</span>
       </div>
-      <div class="about-team-title-alt"></div>
+      <div class="about-team-title-alt">
+        {{ currentTeamMember.alternative_title }}
+      </div>
     </div>
     <div ref="teamPeople" class="about-team-people">
       <div
@@ -26,7 +31,7 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted, onUnmounted } from "vue";
+import { computed, ref, onMounted, onUnmounted, nextTick } from "vue";
 
 const { $gsap, $ScrollTrigger } = useNuxtApp();
 
@@ -55,6 +60,45 @@ const tripledTeamList = computed(() => {
   ];
 });
 
+// Track the current team member in view
+const currentTeamMember = ref({
+  name: "",
+  job_title: "",
+  alternative_title: "",
+});
+
+const updateCurrentTeamMember = () => {
+  // Find all team people items
+  const peopleItems = teamPeople.value?.querySelectorAll(
+    ".about-team-people-item"
+  );
+  if (!peopleItems || peopleItems.length === 0) return;
+
+  // Find which item is currently in the center of the viewport
+  const viewportCenter = window.innerHeight / 2;
+  let closestDistance = Infinity;
+  let currentIndex = -1;
+
+  peopleItems.forEach((item, index) => {
+    const rect = item.getBoundingClientRect();
+    const itemCenter = rect.top + rect.height / 2;
+    const distance = Math.abs(itemCenter - viewportCenter);
+    if (distance < closestDistance) {
+      closestDistance = distance;
+      currentIndex = index;
+    }
+  });
+
+  if (currentIndex >= 0 && tripledTeamList.value[currentIndex]) {
+    currentTeamMember.value = {
+      name: tripledTeamList.value[currentIndex].name || "",
+      job_title: tripledTeamList.value[currentIndex].job_title || "",
+      alternative_title:
+        tripledTeamList.value[currentIndex].alternative_title || "",
+    };
+  }
+};
+
 const setupScrollTrigger = () => {
   if (!$gsap || !$ScrollTrigger || !teamTitle.value || !teamPeople.value) {
     return;
@@ -78,15 +122,15 @@ const setupScrollTrigger = () => {
     pin: teamTitle.value,
     pinSpacing: false,
     onUpdate: (self) => {
+      // Update the current team member in view
+      updateCurrentTeamMember();
       // Fade out in the last 20% of the scroll
-      const fadeStart = 1;
+      const fadeStart = 0.99;
       let opacity = 1;
-
       if (self.progress > fadeStart) {
         const fadeProgress = (self.progress - fadeStart) / (1 - fadeStart);
         opacity = 1 - fadeProgress;
       }
-
       $gsap.set(teamTitle.value, { opacity: opacity });
     },
   });
@@ -98,20 +142,16 @@ onMounted(() => {
   // Small delay to ensure DOM is ready
   setTimeout(() => {
     setupScrollTrigger();
+    updateCurrentTeamMember();
   }, 100);
-
-  // Add resize handler
   window.addEventListener("resize", setupScrollTrigger);
 });
 
 onUnmounted(() => {
-  // Clean up ScrollTrigger instances
   if (scrollTriggerInstances.length > 0) {
     scrollTriggerInstances.forEach((st) => st.kill());
     scrollTriggerInstances = [];
   }
-
-  // Clean up resize handler
   window.removeEventListener("resize", setupScrollTrigger);
 });
 </script>
@@ -212,6 +252,8 @@ onUnmounted(() => {
   padding: var(--gutter) var(--gutterPadding);
   z-index: 100;
   @include bodyType;
-  @include foundersMedium;
+  strong {
+    margin-right: var(--gutter);
+  }
 }
 </style>
