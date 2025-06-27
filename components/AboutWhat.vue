@@ -14,15 +14,75 @@
         <prismic-rich-text :field="item.paragraph" />
       </div>
     </div>
+    <div class="about-what-slider">
+      <div class="about-what-slider-inner">
+        <client-only>
+          <swiper
+            v-if="hasSlides"
+            ref="swiperRef"
+            :modules="[EffectFade, Autoplay]"
+            :slides-per-view="1"
+            :space-between="0"
+            effect="fade"
+            :fade-effect="{ crossFade: true }"
+            :loop="true"
+            :autoplay="swiperAutoplayOptions"
+            class="about-what-swiper"
+          >
+            <swiper-slide
+              v-for="(slide, index) in about?.what_slideshow"
+              :key="index"
+            >
+              <ImageHalf :imageField="slide.image" class="slideshow-image" />
+            </swiper-slide>
+          </swiper>
+        </client-only>
+        <prismic-rich-text
+          v-if="about?.what_slideshow_text"
+          :field="about?.what_slideshow_text"
+          class="about-what-slider-text"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
+import { ref, onMounted, computed } from "vue";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { EffectFade, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-fade";
+import ImageHalf from "./ImageHalf.vue";
+
 const props = defineProps({
   about: {
     type: Object,
     required: true,
   },
+});
+
+const swiperRef = ref(null);
+let swiperInstance = null;
+
+const hasSlides = computed(() => {
+  return props.about?.what_slideshow && props.about.what_slideshow.length > 0;
+});
+
+onMounted(() => {
+  if (swiperRef.value) {
+    swiperInstance = swiperRef.value.swiper;
+    // Start autoplay immediately
+    if (swiperInstance?.autoplay) {
+      swiperInstance.autoplay.start();
+    }
+  }
+});
+
+const swiperAutoplayOptions = ref({
+  delay: 3000,
+  disableOnInteraction: false,
+  enabled: true, // Start immediately
 });
 </script>
 
@@ -88,6 +148,44 @@ const props = defineProps({
   margin-bottom: 10vh;
   &:last-child {
     margin-bottom: 0;
+  }
+}
+
+.about-what-slider {
+  margin-bottom: 20vh;
+  text-align: center;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--gutter);
+  padding: var(--gutterPadding) 0;
+  :deep(p) {
+    @include bodyType;
+    text-align: center;
+    margin-top: var(--gutter);
+  }
+}
+
+.about-what-slider-inner {
+  grid-column: 6 / span 2;
+}
+.about-what-swiper {
+  width: 100%;
+  margin: 0 auto;
+  display: block;
+}
+
+.slideshow-image {
+  width: 100%;
+  height: 100%;
+}
+
+.about-what-slider-text {
+  margin-top: var(--gutter);
+  :deep(p) {
+    @include smallType;
+    text-align: center;
+    max-width: 400px;
+    margin: 0 auto;
   }
 }
 </style>

@@ -42,6 +42,10 @@ export default defineNuxtConfig({
           type: "contact",
           path: "/contact",
         },
+        {
+          type: "archive",
+          path: "/archive",
+        },
       ],
     },
   },

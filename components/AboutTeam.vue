@@ -50,14 +50,7 @@ let scrollTriggerInstances = [];
 
 const tripledTeamList = computed(() => {
   if (!props.about?.team_list) return [];
-  return [
-    ...props.about.team_list,
-    ...props.about.team_list,
-    ...props.about.team_list,
-    ...props.about.team_list,
-    ...props.about.team_list,
-    ...props.about.team_list,
-  ];
+  return [...props.about.team_list, ...props.about.team_list];
 });
 
 // Track the current team member in view

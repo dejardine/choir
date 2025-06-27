@@ -54,7 +54,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { register } from "swiper/element/bundle";
-import ImageHalf from "./ImageHalf.vue";
+import ImageSquare from "./ImageSquare.vue";
 
 const props = defineProps({
   home: {

@@ -138,6 +138,32 @@
             }
           }
         }
+      },
+      "what_slideshow": {
+        "type": "Group",
+        "config": {
+          "label": "What Slideshow",
+          "repeat": true,
+          "fields": {
+            "image": {
+              "type": "Image",
+              "config": {
+                "label": "Image",
+                "constraint": {},
+                "thumbnails": []
+              }
+            }
+          }
+        }
+      },
+      "what_slideshow_text": {
+        "type": "StructuredText",
+        "config": {
+          "label": "What Slideshow Text",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "paragraph,hyperlink"
+        }
       }
     },
     "Team": {

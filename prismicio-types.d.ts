@@ -55,6 +55,21 @@ export interface AboutDocumentDataWhatWeDoItem {
 }
 
 /**
+ * Item in *About Landing → What Slideshow*
+ */
+export interface AboutDocumentDataWhatSlideshowItem {
+  /**
+   * Image field in *About Landing → What Slideshow*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about.what_slideshow[].image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image: prismic.ImageField<never>;
+}
+
+/**
  * Item in *About Landing → Team List*
  */
 export interface AboutDocumentDataTeamListItem {
@@ -205,7 +220,31 @@ interface AboutDocumentData {
    * - **Tab**: What
    * - **Documentation**: https://prismic.io/docs/field#group
    */
-  what_we_do: prismic.GroupField<Simplify<AboutDocumentDataWhatWeDoItem>> /**
+  what_we_do: prismic.GroupField<Simplify<AboutDocumentDataWhatWeDoItem>>;
+
+  /**
+   * What Slideshow field in *About Landing*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about.what_slideshow[]
+   * - **Tab**: What
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  what_slideshow: prismic.GroupField<
+    Simplify<AboutDocumentDataWhatSlideshowItem>
+  >;
+
+  /**
+   * What Slideshow Text field in *About Landing*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: about.what_slideshow_text
+   * - **Tab**: What
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  what_slideshow_text: prismic.RichTextField /**
    * Team Heading field in *About Landing*
    *
    * - **Field Type**: Title
@@ -2311,6 +2350,7 @@ declare module "@prismicio/client" {
       AboutDocumentData,
       AboutDocumentDataSlideshowItem,
       AboutDocumentDataWhatWeDoItem,
+      AboutDocumentDataWhatSlideshowItem,
       AboutDocumentDataTeamListItem,
       ArchiveDocument,
       ArchiveDocumentData,

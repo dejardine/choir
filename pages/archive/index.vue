@@ -1,15 +1,8 @@
 <template>
-  <div class="page page-work" ref="pageRoot">
+  <div class="page page-archive" ref="pageRoot">
     <GlobalMainMenu />
-    <PageHeader
-      :heading="page?.work?.data?.heading"
-      :subheading="page?.work?.data?.sub_heading"
-      :paragraph="page?.work?.data?.paragraph"
-    />
-
-    <WorkGrid v-if="page?.work?.data?.projects" :page="page" />
+    <ArchiveGrid :page="page" />
     <div class="footer-wrap">
-      <CTATop :cta="page?.work?.data?.call_to_action" />
       <GlobalFooter />
     </div>
   </div>
@@ -17,7 +10,6 @@
 
 <script setup>
 import { ref, onMounted, nextTick, watchEffect } from "vue";
-import WorkGrid from "~/components/WorkGrid.vue";
 
 import {
   useColorMode,
@@ -34,40 +26,43 @@ import { globalRouteTransition } from "~/utils/GlobalRouteTransition";
 const prismic = usePrismic();
 
 const graphQuery = `{
-  work {
+  archive {
     projects {
       case_study {
         ...on case_study {
-          image_thumbnail
-          thumbnail_title
-          vimeo_loop_thumbnail
-          gallery_thumbnail {
-            image
+          client {
+            client {
+              ...on client {
+                client_name
+              }
+            }
+          }
+          industry {
+            industry {
+              ...on industry {
+                industry_name
+              }
+            }
           }
         }
       }
-
     }
-      heading
-      sub_heading
-      paragraph
-      call_to_action
-      page_title
-      meta_description
+    page_title
+    meta_description
   }
 }`;
 
-const { data: page } = await useAsyncData("workData", async () => {
+const { data: page } = await useAsyncData("archiveData", async () => {
   try {
-    const [work] = await Promise.all([
-      prismic.client.getSingle("work", { graphQuery }),
+    const [archive] = await Promise.all([
+      prismic.client.getSingle("archive", { graphQuery }),
     ]);
 
     return {
-      work,
+      archive,
     };
   } catch (error) {
-    console.error("Error fetching work page data:", error);
+    console.error("Error fetching archive page data:", error);
     // You might want to handle the error appropriately here
     // For example, redirect to an error page or show a notification
     throw error; // This will propagate the error to Nuxt's error handling
@@ -103,11 +98,11 @@ onMounted(async () => {
 
 // SEO and Theme Color
 useHead({
-  title: `Choir — ${page?.value?.work?.data?.page_title || ""}`,
+  title: `Choir — ${page?.value?.archive?.data?.page_title || ""}`,
   meta: [
     {
       name: "description",
-      content: page?.value?.work?.data?.meta_description,
+      content: page?.value?.archive?.data?.meta_description,
     },
     // Add the dynamic theme-color meta tag
     {
@@ -124,7 +119,7 @@ definePageMeta({
 </script>
 
 <style lang="scss" scoped>
-.page-work {
+.page-archive {
   .footer-wrap {
     border-top: 0;
   }
