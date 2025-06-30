@@ -1,5 +1,7 @@
 <template>
   <div class="archive-grid">
+    <!-- Debug rulers -->
+
     <div class="archive-grid-header">
       <div class="label">Client</div>
       <div class="label">Industry</div>
@@ -101,7 +103,7 @@
 </template>
 
 <script setup>
-import { defineProps, onMounted, onUnmounted, ref } from "vue";
+import { defineProps, onMounted, onUnmounted, ref, nextTick } from "vue";
 
 const props = defineProps({
   page: {
@@ -115,6 +117,12 @@ const openItemId = ref(null);
 
 // State to track current thumbnail
 const currentThumbnail = ref(null);
+
+// State to track current scroll position for debug
+const currentScrollPosition = ref(0);
+
+// ScrollTrigger instances for cleanup
+let scrollTriggerInstances = [];
 
 // Method to toggle accordion items
 const toggleItem = (itemId) => {
@@ -141,8 +149,8 @@ const processScopeText = (scopeField) => {
     .replace(/,\s*$/, ""); // Remove trailing comma
 };
 
-// Method to handle scroll and update thumbnail
-const handleScroll = () => {
+// Method to update current thumbnail based on scroll position
+const updateCurrentThumbnail = () => {
   if (!process.client) return;
 
   const items = document.querySelectorAll(".archive-grid-item");
@@ -152,6 +160,9 @@ const handleScroll = () => {
 
   const imageRect = imageElement.getBoundingClientRect();
   const imageCenterY = imageRect.top + imageRect.height / 2;
+
+  // Update debug position
+  currentScrollPosition.value = imageCenterY;
 
   // Find which item is closest to the image center
   let closestItem = null;
@@ -178,8 +189,39 @@ const handleScroll = () => {
   }
 };
 
+// Setup ScrollTrigger for thumbnail updates
+const setupScrollTrigger = () => {
+  const { $gsap, $ScrollTrigger } = useNuxtApp();
+
+  if (!$gsap || !$ScrollTrigger) {
+    console.warn("GSAP or ScrollTrigger not available");
+    return;
+  }
+
+  // Kill existing ScrollTrigger instances
+  if (scrollTriggerInstances.length > 0) {
+    scrollTriggerInstances.forEach((st) => st.kill());
+    scrollTriggerInstances = [];
+  }
+
+  // Refresh ScrollTrigger to recalculate positions
+  $ScrollTrigger.refresh();
+
+  // Create ScrollTrigger for updating thumbnails
+  const thumbnailST = $ScrollTrigger.create({
+    trigger: ".archive-grid",
+    start: "top center",
+    end: "bottom center",
+    onUpdate: (self) => {
+      updateCurrentThumbnail();
+    },
+  });
+
+  scrollTriggerInstances.push(thumbnailST);
+};
+
 // Debug logging to understand the data structure
-onMounted(() => {
+onMounted(async () => {
   if (process.client) {
     console.log("Archive Grid Data:", props.page?.archive?.data?.projects);
     console.log(
@@ -195,20 +237,34 @@ onMounted(() => {
       }
     }
 
-    // Add scroll event listener
-    window.addEventListener("scroll", handleScroll);
-    window.addEventListener("resize", handleScroll);
+    // Wait for DOM to be ready
+    await nextTick();
 
-    // Initial call to set thumbnail
-    handleScroll();
+    // Small delay to ensure all elements are rendered
+    setTimeout(() => {
+      setupScrollTrigger();
+    }, 100);
+
+    // Add resize handler
+    const resizeHandler = () => {
+      // Debounce resize events
+      clearTimeout(resizeHandler.timeout);
+      resizeHandler.timeout = setTimeout(() => {
+        setupScrollTrigger();
+      }, 250);
+    };
+
+    window.addEventListener("resize", resizeHandler);
   }
 });
 
 onUnmounted(() => {
   if (process.client) {
-    // Remove scroll event listener
-    window.removeEventListener("scroll", handleScroll);
-    window.removeEventListener("resize", handleScroll);
+    // Clean up ScrollTrigger instances
+    if (scrollTriggerInstances.length > 0) {
+      scrollTriggerInstances.forEach((st) => st.kill());
+      scrollTriggerInstances = [];
+    }
   }
 });
 </script>
@@ -222,6 +278,53 @@ onUnmounted(() => {
   padding-top: calc(50vh + var(--gutter));
   position: relative;
   z-index: 20;
+}
+
+// Debug rulers
+.debug-rulers {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+
+  .ruler {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: rgba(255, 0, 0, 0.8);
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+
+    &.ruler-top {
+      top: 0;
+      background: rgba(255, 0, 0, 0.8);
+    }
+
+    &.ruler-center {
+      top: 50vh;
+      background: rgba(0, 255, 0, 0.8);
+    }
+
+    &.ruler-bottom {
+      top: 100vh;
+      background: rgba(0, 0, 255, 0.8);
+    }
+
+    &.ruler-current {
+      background: rgba(255, 255, 0, 0.8);
+      height: 4px;
+      font-size: 14px;
+    }
+  }
 }
 
 .archive-grid-image {
@@ -241,7 +344,7 @@ onUnmounted(() => {
     aspect-ratio: 1/1;
     object-fit: cover;
     position: absolute;
-    top: 0;
+    top: 50%;
     left: calc((7 / 12 * 100vw) + var(--gutterPadding) + (7 * var(--gutter)));
     transform: translateY(-50%);
     width: calc((2.5 / 12 * 100vw) + (1.5 * var(--gutter)));
@@ -254,7 +357,7 @@ onUnmounted(() => {
     height: 1px;
     background: var(--color-border);
     position: absolute;
-    top: 0;
+    top: 50%;
     left: 0;
     transform: translateY(-50%);
   }
