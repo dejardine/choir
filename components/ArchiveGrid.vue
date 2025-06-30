@@ -149,49 +149,6 @@ const processScopeText = (scopeField) => {
     .replace(/,\s*$/, ""); // Remove trailing comma
 };
 
-// Method to update current thumbnail based on scroll position
-const updateCurrentThumbnail = () => {
-  if (!process.client) return;
-
-  const items = document.querySelectorAll(".archive-grid-item");
-  const imageElement = document.querySelector(".archive-grid-image");
-
-  if (!items.length || !imageElement) return;
-
-  const imageRect = imageElement.getBoundingClientRect();
-
-  // Find which item is currently overlapping with the image area
-  let overlappingItem = null;
-
-  items.forEach((item) => {
-    const itemRect = item.getBoundingClientRect();
-
-    // Check if the image area overlaps with this item
-    const isOverlapping = !(
-      imageRect.right < itemRect.left ||
-      imageRect.left > itemRect.right ||
-      imageRect.bottom < itemRect.top ||
-      imageRect.top > itemRect.bottom
-    );
-
-    if (isOverlapping) {
-      overlappingItem = item;
-    }
-  });
-
-  // Update thumbnail if we found an overlapping item
-  if (overlappingItem) {
-    const itemIndex = Array.from(items).indexOf(overlappingItem);
-    const projectGroup = props.page?.archive?.data?.projects[itemIndex];
-    if (projectGroup?.case_study?.data?.image_thumbnail) {
-      currentThumbnail.value = projectGroup.case_study.data.image_thumbnail;
-    }
-  } else {
-    // Clear the image if no item is overlapping
-    currentThumbnail.value = null;
-  }
-};
-
 // Setup ScrollTrigger for thumbnail updates
 const setupScrollTrigger = () => {
   const { $gsap, $ScrollTrigger } = useNuxtApp();
@@ -210,17 +167,87 @@ const setupScrollTrigger = () => {
   // Refresh ScrollTrigger to recalculate positions
   $ScrollTrigger.refresh();
 
-  // Create ScrollTrigger for updating thumbnails
-  const thumbnailST = $ScrollTrigger.create({
-    trigger: ".archive-grid",
-    start: "top center",
-    end: "bottom center",
-    onUpdate: (self) => {
-      updateCurrentThumbnail();
-    },
-  });
+  // Create individual ScrollTriggers for each archive item
+  const items = document.querySelectorAll(".archive-grid-item");
 
-  scrollTriggerInstances.push(thumbnailST);
+  items.forEach((item, index) => {
+    const projectGroup = props.page?.archive?.data?.projects[index];
+    if (!projectGroup?.case_study?.data?.image_thumbnail) return;
+
+    const st = $ScrollTrigger.create({
+      trigger: item,
+      start: "top center",
+      end: "bottom center",
+      onEnter: () => {
+        console.log(`Entering item ${index}`);
+        currentThumbnail.value = projectGroup.case_study.data.image_thumbnail;
+      },
+      onLeave: () => {
+        console.log(`Leaving item ${index}`);
+        // Only clear if we're not entering another item
+        setTimeout(() => {
+          const isAnyItemActive = Array.from(items).some(
+            (otherItem, otherIndex) => {
+              if (otherIndex === index) return false;
+              const otherRect = otherItem.getBoundingClientRect();
+              const imageElement = document.querySelector(
+                ".archive-grid-image"
+              );
+              if (!imageElement) return false;
+              const imageRect = imageElement.getBoundingClientRect();
+
+              return !(
+                imageRect.right < otherRect.left ||
+                imageRect.left > otherRect.right ||
+                imageRect.bottom < otherRect.top ||
+                imageRect.top > otherRect.bottom
+              );
+            }
+          );
+
+          if (!isAnyItemActive) {
+            currentThumbnail.value = null;
+            console.log("No items active, clearing image");
+          }
+        }, 50);
+      },
+      onEnterBack: () => {
+        console.log(`Entering back item ${index}`);
+        currentThumbnail.value = projectGroup.case_study.data.image_thumbnail;
+      },
+      onLeaveBack: () => {
+        console.log(`Leaving back item ${index}`);
+        // Only clear if we're not entering another item
+        setTimeout(() => {
+          const isAnyItemActive = Array.from(items).some(
+            (otherItem, otherIndex) => {
+              if (otherIndex === index) return false;
+              const otherRect = otherItem.getBoundingClientRect();
+              const imageElement = document.querySelector(
+                ".archive-grid-image"
+              );
+              if (!imageElement) return false;
+              const imageRect = imageElement.getBoundingClientRect();
+
+              return !(
+                imageRect.right < otherRect.left ||
+                imageRect.left > otherRect.right ||
+                imageRect.bottom < otherRect.top ||
+                imageRect.top > otherRect.bottom
+              );
+            }
+          );
+
+          if (!isAnyItemActive) {
+            currentThumbnail.value = null;
+            console.log("No items active, clearing image");
+          }
+        }, 50);
+      },
+    });
+
+    scrollTriggerInstances.push(st);
+  });
 };
 
 // Debug logging to understand the data structure
