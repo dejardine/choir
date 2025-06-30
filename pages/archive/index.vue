@@ -44,6 +44,10 @@ const graphQuery = `{
               }
             }
           }
+          header_paragraph
+          scope
+          year
+          image_thumbnail
         }
       }
     }
