@@ -3,6 +3,7 @@
     <GlobalMainMenu />
     <ArchiveGrid :page="page" />
     <div class="footer-wrap">
+      <CTATop :cta="page?.archive?.data?.call_to_action" />
       <GlobalFooter />
     </div>
   </div>
@@ -53,6 +54,7 @@ const graphQuery = `{
     }
     page_title
     meta_description
+    call_to_action
   }
 }`;
 
@@ -123,9 +125,23 @@ definePageMeta({
 </script>
 
 <style lang="scss" scoped>
+@import "~/assets/scss/global.scss";
+
 .page-archive {
   .footer-wrap {
     border-top: 0;
+  }
+  :deep(.call-to-action-top) {
+    .call-to-action-inner {
+      text-align: left;
+      justify-content: flex-start;
+    }
+    p {
+      text-align: left;
+      a {
+        @include linkStyle;
+      }
+    }
   }
 }
 </style>

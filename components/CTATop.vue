@@ -59,6 +59,9 @@ const scrollToTop = () => {
   border-top: 1px solid var(--color-border);
   width: 100%;
   padding: var(--gutter);
+  :deep(a) {
+    @include linkStyle;
+  }
 }
 
 .back-to-top-button {
