@@ -124,6 +124,9 @@ const currentScrollPosition = ref(0);
 // ScrollTrigger instances for cleanup
 let scrollTriggerInstances = [];
 
+// Get GSAP and ScrollTrigger from Nuxt app
+const { $gsap, $ScrollTrigger } = useNuxtApp();
+
 // Method to toggle accordion items
 const toggleItem = (itemId) => {
   if (openItemId.value === itemId) {
@@ -151,12 +154,7 @@ const processScopeText = (scopeField) => {
 
 // Setup ScrollTrigger for thumbnail updates
 const setupScrollTrigger = () => {
-  const { $gsap, $ScrollTrigger } = useNuxtApp();
-
-  if (!$gsap || !$ScrollTrigger) {
-    console.warn("GSAP or ScrollTrigger not available");
-    return;
-  }
+  console.log("Setting up ScrollTrigger...");
 
   // Kill existing ScrollTrigger instances
   if (scrollTriggerInstances.length > 0) {
@@ -164,10 +162,31 @@ const setupScrollTrigger = () => {
     scrollTriggerInstances = [];
   }
 
-  // Refresh ScrollTrigger to recalculate positions
-  $ScrollTrigger.refresh();
+  // Create ScrollTrigger for fade out effect when archive-grid reaches top
+  const archiveGrid = document.querySelector(".archive-grid");
+  const archiveHeader = document.querySelector(".archive-grid-header");
+  const imageElement = document.querySelector(".archive-grid-image");
 
-  // Create individual ScrollTriggers for each archive item
+  if (archiveHeader && imageElement) {
+    // First ScrollTrigger: Fade out archive-grid-image
+    const imageTl = $gsap.timeline().to(imageElement, {
+      opacity: 0,
+      duration: 1,
+      scrollTrigger: {
+        trigger: archiveHeader,
+        start: "top top",
+        end: "top top+=100",
+        markers: true,
+        scrub: true,
+      },
+    });
+
+    scrollTriggerInstances.push(imageTl.scrollTrigger);
+  } else {
+    console.warn("Archive header or image element not found for fade effect");
+  }
+
+  // Second ScrollTrigger: Image swapping functionality
   const items = document.querySelectorAll(".archive-grid-item");
 
   items.forEach((item, index) => {
@@ -253,6 +272,7 @@ const setupScrollTrigger = () => {
 // Debug logging to understand the data structure
 onMounted(async () => {
   if (process.client) {
+    console.log("Archive Grid mounted");
     console.log("Archive Grid Data:", props.page?.archive?.data?.projects);
     console.log(
       "Number of projects:",
@@ -261,17 +281,32 @@ onMounted(async () => {
 
     // Wait for DOM to be ready
     await nextTick();
+    console.log("After nextTick");
 
-    // Small delay to ensure all elements are rendered
+    // Longer delay to ensure all elements are rendered
     setTimeout(() => {
+      console.log("Setting up ScrollTrigger after delay");
+      console.log(
+        "Archive grid element exists:",
+        !!document.querySelector(".archive-grid")
+      );
+      console.log(
+        "Archive header element exists:",
+        !!document.querySelector(".archive-grid-header")
+      );
+      console.log(
+        "Image element exists:",
+        !!document.querySelector(".archive-grid-image")
+      );
       setupScrollTrigger();
-    }, 100);
+    }, 500); // Increased from 100ms to 500ms
 
     // Add resize handler
     const resizeHandler = () => {
       // Debounce resize events
       clearTimeout(resizeHandler.timeout);
       resizeHandler.timeout = setTimeout(() => {
+        console.log("Resize detected, re-setting up ScrollTrigger");
         setupScrollTrigger();
       }, 250);
     };

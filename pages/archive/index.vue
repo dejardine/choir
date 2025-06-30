@@ -23,6 +23,8 @@ import {
 // Page Transition
 import { globalRouteTransition } from "~/utils/GlobalRouteTransition";
 
+const { $ScrollTrigger } = useNuxtApp();
+
 // Get the data
 const prismic = usePrismic();
 
@@ -100,6 +102,9 @@ watchEffect(async () => {
 
 onMounted(async () => {
   await updateThemeColor(); // Initial set on mount
+  setTimeout(() => {
+    $ScrollTrigger.refresh();
+  }, 1000);
 });
 
 // SEO and Theme Color
