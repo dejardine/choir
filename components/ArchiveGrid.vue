@@ -175,8 +175,8 @@ const setupScrollTrigger = () => {
       scrollTrigger: {
         trigger: archiveHeader,
         start: "top top",
-        end: "top top+=100",
-        markers: true,
+        end: "+=100",
+        markers: false,
         scrub: true,
       },
     });
