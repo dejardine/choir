@@ -47,6 +47,17 @@
           }
         }
       }
+    },
+    "Footer": {
+      "call_to_action": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Call to action",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "paragraph,hyperlink"
+        }
+      }
     }
   }
 }
