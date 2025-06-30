@@ -159,33 +159,36 @@ const updateCurrentThumbnail = () => {
   if (!items.length || !imageElement) return;
 
   const imageRect = imageElement.getBoundingClientRect();
-  const imageCenterY = imageRect.top + imageRect.height / 2;
 
-  // Update debug position
-  currentScrollPosition.value = imageCenterY;
-
-  // Find which item is closest to the image center
-  let closestItem = null;
-  let closestDistance = Infinity;
+  // Find which item is currently overlapping with the image area
+  let overlappingItem = null;
 
   items.forEach((item) => {
     const itemRect = item.getBoundingClientRect();
-    const itemCenterY = itemRect.top + itemRect.height / 2;
-    const distance = Math.abs(imageCenterY - itemCenterY);
 
-    if (distance < closestDistance) {
-      closestDistance = distance;
-      closestItem = item;
+    // Check if the image area overlaps with this item
+    const isOverlapping = !(
+      imageRect.right < itemRect.left ||
+      imageRect.left > itemRect.right ||
+      imageRect.bottom < itemRect.top ||
+      imageRect.top > itemRect.bottom
+    );
+
+    if (isOverlapping) {
+      overlappingItem = item;
     }
   });
 
-  // Update thumbnail if we found a close item
-  if (closestItem) {
-    const itemIndex = Array.from(items).indexOf(closestItem);
+  // Update thumbnail if we found an overlapping item
+  if (overlappingItem) {
+    const itemIndex = Array.from(items).indexOf(overlappingItem);
     const projectGroup = props.page?.archive?.data?.projects[itemIndex];
     if (projectGroup?.case_study?.data?.image_thumbnail) {
       currentThumbnail.value = projectGroup.case_study.data.image_thumbnail;
     }
+  } else {
+    // Clear the image if no item is overlapping
+    currentThumbnail.value = null;
   }
 };
 
@@ -228,14 +231,6 @@ onMounted(async () => {
       "Number of projects:",
       props.page?.archive?.data?.projects?.length
     );
-
-    // Set initial thumbnail
-    if (props.page?.archive?.data?.projects?.length > 0) {
-      const firstProject = props.page.archive.data.projects[0];
-      if (firstProject?.case_study?.data?.image_thumbnail) {
-        currentThumbnail.value = firstProject.case_study.data.image_thumbnail;
-      }
-    }
 
     // Wait for DOM to be ready
     await nextTick();
@@ -332,7 +327,7 @@ onUnmounted(() => {
   top: 50vh;
   transform: translateY(-50%);
   left: 0;
-  height: var(--gutter-2);
+  height: calc(var(--gutter) + var(--gutter-half));
   display: flex;
   align-items: center;
   justify-content: center;
