@@ -70,22 +70,23 @@
    ========================================================================== */
 :root {
  
-  --body:0.875rem;
+  --body: clamp(0.875rem, calc(0.875rem + 0.125 * (100vw - 62rem) / 32.5), 1rem);
   --body-l: 1.4;
-  --largeBody:1.06rem;
+  --largeBody:1.063rem;
   --largeBody-l:1.4;
-  --small: 0.75rem;
+  --small: clamp(0.75rem, calc(0.75rem + 0.125 * (100vw - 62rem) / 32.5), 0.875rem);
   --small-l:1.4;
-  --heading: 2.875rem;
+  --heading: clamp(2.875rem, calc(2.875rem + 0.875 * (100vw - 62rem) / 32.5), 3.75rem);
   --heading-l: 1.087;
   --subheading: 2.375rem;
   --subheading-l: 1.087;
   --smallHeading: 1.313rem;
   --smallHeading-l: 1.2;
-  --medium: 1.938rem;
+  --medium: clamp(1.938rem, calc(1.938rem + 0.812 * (100vw - 62rem) / 32.5), 2.75rem);
   --medium-l: 1.2;
-  --cta: 3.375rem;
+  --cta: clamp(3.375rem, calc(3.375rem + 1.125 * (100vw - 62rem) / 32.5), 4.5rem);
   --cta-l: 1;
+
 }
 
 
