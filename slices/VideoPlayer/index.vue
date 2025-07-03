@@ -41,6 +41,10 @@ const videoCoverImageUrl = computed(() => {
   // Ensure video_placeholder_image exists and has a url
   return props.slice.primary.video_placeholder_image?.url;
 });
+
+const isFullscreenVariation = computed(() => {
+  return props.slice.variation === "fullscreen";
+});
 </script>
 
 <template>
@@ -49,15 +53,31 @@ const videoCoverImageUrl = computed(() => {
     :data-slice-variation="slice.variation"
     :class="sectionClasses"
   >
-    <VimeoPlayer
-      v-if="vimeoVideoId && videoCoverImageUrl"
+    <!-- Fullscreen variation -->
+    <FullscreenVideoPlayer
+      v-if="isFullscreenVariation && vimeoVideoId && videoCoverImageUrl"
       :video-id="vimeoVideoId"
       :cover-image-url="videoCoverImageUrl"
+      :caption="slice.primary.caption"
     />
+
+    <!-- Default variation -->
+    <template v-else-if="!isFullscreenVariation">
+      <VimeoPlayer
+        v-if="vimeoVideoId && videoCoverImageUrl"
+        :video-id="vimeoVideoId"
+        :cover-image-url="videoCoverImageUrl"
+      />
+      <div v-else>
+        <!-- VideoPlayer: Video ID or Cover Image URL is missing. -->
+      </div>
+      <PrismicRichText :field="slice.primary.caption" />
+    </template>
+
+    <!-- Fallback for fullscreen variation without required data -->
     <div v-else>
-      <!-- VideoPlayer: Video ID or Cover Image URL is missing. -->
+      <!-- VideoPlayer: Video ID or Cover Image URL is missing for fullscreen variation. -->
     </div>
-    <PrismicRichText :field="slice.primary.caption" />
   </section>
 </template>
 
