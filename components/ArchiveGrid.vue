@@ -323,10 +323,18 @@ onMounted(async () => {
 
 onUnmounted(() => {
   if (process.client) {
-    // Clean up ScrollTrigger instances
-    if (scrollTriggerInstances.length > 0) {
-      scrollTriggerInstances.forEach((st) => st.kill());
-      scrollTriggerInstances = [];
+    try {
+      // Clean up ScrollTrigger instances
+      if (scrollTriggerInstances.length > 0) {
+        scrollTriggerInstances.forEach((st) => {
+          if (st && typeof st.kill === "function") {
+            st.kill();
+          }
+        });
+        scrollTriggerInstances = [];
+      }
+    } catch (error) {
+      console.warn("Error during ScrollTrigger cleanup:", error);
     }
   }
 });
