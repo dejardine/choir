@@ -9,6 +9,7 @@
       <div class="swiper-container-wrapper">
         <swiper
           ref="swiperRef"
+          :modules="[EffectFade, Autoplay, Navigation, Pagination]"
           :slides-per-view="1"
           :space-between="10"
           effect="fade"
@@ -28,8 +29,8 @@
           >
             <prismic-image :field="item.image" class="gallery-image" />
           </swiper-slide>
+          <div class="swiper-pagination-custom"></div>
         </swiper>
-        <div class="swiper-pagination-custom"></div>
       </div>
     </client-only>
   </section>
@@ -37,17 +38,15 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import { register } from "swiper/element/bundle";
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from "swiper/vue";
 // Import Swiper modules
-import { EffectFade, Autoplay, Navigation } from "swiper/modules"; // <-- Added Navigation
+import { EffectFade, Autoplay, Navigation, Pagination } from "swiper/modules";
 
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/effect-fade";
-// Optionally import basic navigation styles (can be overridden)
-// import 'swiper/css/navigation';
+import "swiper/css/pagination";
 
 // Define props using defineProps
 const props = defineProps({
@@ -81,31 +80,24 @@ const swiperRef = ref(null);
 let swiperInstance = null;
 
 onMounted(() => {
-  register(); // Register Swiper custom elements
-
   if (swiperRef.value) {
-    const swiperEl = swiperRef.value;
-    const assignSwiperInstance = () => {
-      if (swiperEl && swiperEl.swiper) {
-        swiperInstance = swiperEl.swiper;
-        // Manually update pagination if swiper is already initialized
-        if (swiperInstance.pagination) {
-          swiperInstance.pagination.init();
-          swiperInstance.pagination.render();
-          swiperInstance.pagination.update();
-        }
-      } else if (swiperEl) {
-        swiperEl.addEventListener("init", assignSwiperInstance, { once: true });
-      }
-    };
-    assignSwiperInstance();
+    swiperInstance = swiperRef.value.swiper;
+    console.log("SmallGallery swiper instance:", swiperInstance);
+    console.log("SmallGallery pagination options:", paginationOptions.value);
+
+    // Manually update pagination if swiper is already initialized
+    if (swiperInstance?.pagination) {
+      swiperInstance.pagination.init();
+      swiperInstance.pagination.render();
+      swiperInstance.pagination.update();
+    }
   }
 });
 
 const paginationOptions = computed(() => ({
   el: ".swiper-pagination-custom",
   type: "fraction",
-  clickable: true, // Keep clickable if you want to allow clicking on the fraction (though it's less common for fraction)
+  clickable: true,
   renderFraction: function (currentClass, totalClass) {
     return (
       '<span class="' +
@@ -196,6 +188,16 @@ const images = computed(() => {
 .small-gallery-swiper {
   width: 100%;
   /* Remove direct grid positioning from swiper, now handled by wrapper */
+
+  // Ensure fade effect works properly
+  .swiper-slide {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+
+    &.swiper-slide-active {
+      opacity: 1;
+    }
+  }
 }
 
 .swiper-pagination-custom {
@@ -203,11 +205,21 @@ const images = computed(() => {
   padding-top: var(--gutter);
   @include smallType;
   @include heldaneTextItalic;
-  color: var(--text);
-  position: relative; // Or static, depending on layout needs
-  bottom: auto; // Reset any inherited bottom positioning
+  color: var(--color-text);
+  position: relative;
+  bottom: auto;
   left: 0;
   width: 100%;
+
+  .swiper-pagination-bullet {
+    display: none; // Hide default bullets since we're using fraction
+  }
+
+  .swiper-pagination-fraction {
+    @include smallType;
+    @include heldaneTextItalic;
+    color: var(--color-text);
+  }
 }
 
 .gallery-image {

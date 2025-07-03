@@ -37,11 +37,9 @@
             </swiper-slide>
           </swiper>
         </client-only>
-        <prismic-rich-text
-          v-if="about?.what_slideshow_text"
-          :field="about?.what_slideshow_text"
-          class="about-what-slider-text"
-        />
+        <div v-if="about?.what_slideshow_text" class="about-what-slider-text">
+          <prismic-rich-text :field="about?.what_slideshow_text" />
+        </div>
       </div>
     </div>
   </div>

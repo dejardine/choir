@@ -15,8 +15,9 @@
       v-if="props?.home?.data?.about_slideshow?.length"
     >
       <client-only>
-        <swiper-container
+        <swiper
           ref="swiperRef"
+          :modules="[EffectFade, Autoplay]"
           :slides-per-view="1"
           :space-between="0"
           effect="fade"
@@ -32,7 +33,7 @@
           >
             <ImageSquare :imageField="item.image" class="slideshow-image" />
           </swiper-slide>
-        </swiper-container>
+        </swiper>
       </client-only>
       <prismic-link
         v-if="props?.home?.data?.news_link"
@@ -53,7 +54,10 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { register } from "swiper/element/bundle";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { EffectFade, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-fade";
 import ImageSquare from "./ImageSquare.vue";
 
 const props = defineProps({
@@ -67,9 +71,6 @@ const swiperRef = ref(null);
 let swiperInstance = null;
 
 onMounted(() => {
-  // Register Swiper custom elements only on the client side
-  register();
-
   // Debug: Log the about_slideshow data
   console.log("HomeAbout props:", props.home?.data);
   console.log("HomeAbout about_slideshow:", props.home?.data?.about_slideshow);
@@ -81,19 +82,11 @@ onMounted(() => {
   }
 
   if (swiperRef.value) {
-    const swiperEl = swiperRef.value;
-    const assignSwiperInstance = () => {
-      if (swiperEl && swiperEl.swiper) {
-        swiperInstance = swiperEl.swiper;
-        // Start autoplay immediately
-        if (swiperInstance.autoplay) {
-          swiperInstance.autoplay.start();
-        }
-      } else if (swiperEl) {
-        swiperEl.addEventListener("init", assignSwiperInstance, { once: true });
-      }
-    };
-    assignSwiperInstance();
+    swiperInstance = swiperRef.value.swiper;
+    // Start autoplay immediately
+    if (swiperInstance?.autoplay) {
+      swiperInstance.autoplay.start();
+    }
   }
 });
 
