@@ -364,7 +364,16 @@ interface ArchiveDocumentData {
    * - **Tab**: Projects
    * - **Documentation**: https://prismic.io/docs/field#group
    */;
-  projects: prismic.GroupField<Simplify<ArchiveDocumentDataProjectsItem>>;
+  projects: prismic.GroupField<Simplify<ArchiveDocumentDataProjectsItem>> /**
+   * Call to action field in *Archive Landing*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: archive.call_to_action
+   * - **Tab**: Footer
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */;
+  call_to_action: prismic.RichTextField;
 }
 
 /**
@@ -2309,9 +2318,70 @@ export type VideoPlayerSliceDefault = prismic.SharedSliceVariation<
 >;
 
 /**
+ * Primary content in *VideoPlayer → Fullscreen → Primary*
+ */
+export interface VideoPlayerSliceFullscreenPrimary {
+  /**
+   * Video Placeholder Image field in *VideoPlayer → Fullscreen → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: video_player.fullscreen.primary.video_placeholder_image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  video_placeholder_image: prismic.ImageField<never>;
+
+  /**
+   * Vimeo Video Link field in *VideoPlayer → Fullscreen → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: video_player.fullscreen.primary.vimeo_video_link_new
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  vimeo_video_link_new: prismic.KeyTextField;
+
+  /**
+   * Caption field in *VideoPlayer → Fullscreen → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: video_player.fullscreen.primary.caption
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  caption: prismic.RichTextField;
+
+  /**
+   * Bottom Margin field in *VideoPlayer → Fullscreen → Primary*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: video_player.fullscreen.primary.bottom_margin
+   * - **Documentation**: https://prismic.io/docs/field#boolean
+   */
+  bottom_margin: prismic.BooleanField;
+}
+
+/**
+ * Fullscreen variation for VideoPlayer Slice
+ *
+ * - **API ID**: `fullscreen`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type VideoPlayerSliceFullscreen = prismic.SharedSliceVariation<
+  "fullscreen",
+  Simplify<VideoPlayerSliceFullscreenPrimary>,
+  never
+>;
+
+/**
  * Slice variation for *VideoPlayer*
  */
-type VideoPlayerSliceVariation = VideoPlayerSliceDefault;
+type VideoPlayerSliceVariation =
+  | VideoPlayerSliceDefault
+  | VideoPlayerSliceFullscreen;
 
 /**
  * VideoPlayer Shared Slice
@@ -2428,8 +2498,10 @@ declare module "@prismicio/client" {
       TextSliceSliceDefault,
       VideoPlayerSlice,
       VideoPlayerSliceDefaultPrimary,
+      VideoPlayerSliceFullscreenPrimary,
       VideoPlayerSliceVariation,
       VideoPlayerSliceDefault,
+      VideoPlayerSliceFullscreen,
     };
   }
 }

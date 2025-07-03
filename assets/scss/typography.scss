@@ -78,9 +78,9 @@
   --small-l:1.4;
   --heading: clamp(2.875rem, calc(2.875rem + 0.875 * (100vw - 62rem) / 32.5), 3.75rem);
   --heading-l: 1.087;
-  --subheading: 2.375rem;
+  --subheading: clamp(2.375rem, calc(2.375rem + 1.063 * (100vw - 62rem) / 32.5), 3.438rem);
   --subheading-l: 1.087;
-  --smallHeading: 1.313rem;
+  --smallHeading: clamp(1.313rem, calc(1.313rem + 0.562 * (100vw - 62rem) / 32.5), 1.875rem);
   --smallHeading-l: 1.2;
   --medium: clamp(1.938rem, calc(1.938rem + 0.812 * (100vw - 62rem) / 32.5), 2.75rem);
   --medium-l: 1.2;

@@ -187,7 +187,8 @@ onUnmounted(() => {
       em {
         @include heldaneTextItalic;
       }
-      max-width: 720px;
+      max-width: 885px;
+      width: 65vw;
       margin: 0 auto;
       margin-bottom: var(--gutter-2);
     }

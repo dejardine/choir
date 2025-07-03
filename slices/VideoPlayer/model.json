@@ -47,6 +47,50 @@
         }
       },
       "items": {}
+    },
+    {
+      "id": "fullscreen",
+      "name": "Fullscreen",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "video_placeholder_image": {
+          "type": "Image",
+          "config": {
+            "label": "Video Placeholder Image",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "vimeo_video_link_new": {
+          "type": "Text",
+          "config": {
+            "label": "Vimeo Video Link",
+            "placeholder": ""
+          }
+        },
+        "caption": {
+          "type": "StructuredText",
+          "config": {
+            "label": "Caption",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,em"
+          }
+        },
+        "bottom_margin": {
+          "type": "Boolean",
+          "config": {
+            "label": "Bottom Margin",
+            "placeholder_false": "false",
+            "placeholder_true": "true",
+            "default_value": false
+          }
+        }
+      },
+      "items": {}
     }
   ]
 }

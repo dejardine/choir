@@ -58,7 +58,8 @@ const props = defineProps({
     strong {
       margin: 0 3px;
     }
-    max-width: 720px;
+    max-width: 885px;
+    width: 65vw;
     margin: 0 auto;
   }
 }

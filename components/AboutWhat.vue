@@ -140,7 +140,8 @@ const swiperAutoplayOptions = ref({
     strong {
       margin: 0 3px;
     }
-    max-width: 620px;
+    max-width: 885px;
+    width: 65vw;
     margin: 0 auto;
   }
   margin-bottom: 10vh;
