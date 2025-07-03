@@ -94,6 +94,12 @@
               <p v-if="projectGroup.case_study.data.year" class="project-year">
                 {{ projectGroup.case_study.data.year }}
               </p>
+
+              <p class="view-project-link">
+                <prismic-link :field="projectGroup.case_study">
+                  View project
+                </prismic-link>
+              </p>
             </div>
           </div>
         </div>
@@ -327,6 +333,7 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
+@use "@/assets/scss/global" as *;
 .archive-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -335,53 +342,6 @@ onUnmounted(() => {
   padding-top: calc(50vh + var(--gutter));
   position: relative;
   z-index: 20;
-}
-
-// Debug rulers
-.debug-rulers {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 9999;
-
-  .ruler {
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: rgba(255, 0, 0, 0.8);
-    color: white;
-    font-size: 12px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    padding-left: 20px;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-
-    &.ruler-top {
-      top: 0;
-      background: rgba(255, 0, 0, 0.8);
-    }
-
-    &.ruler-center {
-      top: 50vh;
-      background: rgba(0, 255, 0, 0.8);
-    }
-
-    &.ruler-bottom {
-      top: 100vh;
-      background: rgba(0, 0, 255, 0.8);
-    }
-
-    &.ruler-current {
-      background: rgba(255, 255, 0, 0.8);
-      height: 4px;
-      font-size: 14px;
-    }
-  }
 }
 
 .archive-grid-image {
@@ -459,7 +419,16 @@ onUnmounted(() => {
     @include bodyType;
     color: var(--color-text-secondary);
     display: block;
-    padding-bottom: var(--gutter-4);
+    margin-bottom: var(--gutter);
+  }
+  .view-project-link {
+    @include bodyType;
+    color: var(--color-text-secondary);
+    padding-bottom: var(--gutter-3);
+
+    a {
+      @include linkStyle;
+    }
   }
 
   .scope {
@@ -500,6 +469,7 @@ onUnmounted(() => {
       max-height: 500px; // Adjust this value based on your content
     }
     border-bottom: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-border);
   }
 
   // Add cursor pointer to indicate clickable
