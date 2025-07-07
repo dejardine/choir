@@ -87,9 +87,9 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch } from "vue";
+import { ref, onMounted, onBeforeUnmount, watch, nextTick } from "vue";
 import Player from "@vimeo/player";
-import { gsap } from "gsap";
+import { CustomEase } from "gsap/dist/CustomEase";
 
 const props = defineProps({
   videoId: {
@@ -107,6 +107,12 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["ready", "play", "pause"]);
+
+// GSAP
+const { $gsap } = useNuxtApp();
+
+// Create custom ease
+const customEase = CustomEase.create("custom", "1,0,0,1");
 
 // Refs
 const thumbnailContainer = ref(null);
@@ -137,24 +143,24 @@ const openFullscreen = () => {
   // Add class to body
   document.body.classList.add("fullscreen-video-open");
 
-  // Fade in overlay
-  gsap.fromTo(
-    fullscreenOverlay.value,
-    { opacity: 0 },
-    { opacity: 1, duration: 0.3, ease: "power2.out" }
-  );
+  // Wait for Vue to render the overlay before animating
+  nextTick(() => {
+    // Fade in overlay
+    $gsap.fromTo(
+      fullscreenOverlay.value,
+      { y: "100%" },
+      {
+        y: "0%",
+        duration: 0.6,
+        ease: customEase,
+      }
+    );
 
-  // Scale in content
-  gsap.fromTo(
-    fullscreenContent.value,
-    { scale: 0.9, opacity: 0 },
-    { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.7)" }
-  );
-
-  // Initialize player after animation
-  setTimeout(() => {
-    initializePlayer();
-  }, 400);
+    // Initialize player after animation
+    setTimeout(() => {
+      initializePlayer();
+    }, 400);
+  });
 };
 
 const closeFullscreen = () => {
@@ -162,14 +168,14 @@ const closeFullscreen = () => {
   document.body.classList.remove("fullscreen-video-open");
 
   // Fade out animations
-  gsap.to(fullscreenContent.value, {
+  $gsap.to(fullscreenContent.value, {
     scale: 0.9,
     opacity: 0,
     duration: 0.3,
     ease: "power2.in",
   });
 
-  gsap.to(fullscreenOverlay.value, {
+  $gsap.to(fullscreenOverlay.value, {
     opacity: 0,
     duration: 0.3,
     ease: "power2.in",
@@ -421,8 +427,8 @@ onBeforeUnmount(() => {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
+  width: 100vw;
+  height: 100vh;
   background: var(--palette-black);
   z-index: 9999;
   display: flex;
