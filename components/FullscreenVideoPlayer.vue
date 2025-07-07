@@ -38,12 +38,7 @@
           @click="closeFullscreen"
           aria-label="Close video"
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-              fill="currentColor"
-            />
-          </svg>
+          Close
         </button>
 
         <!-- Video player -->
@@ -58,26 +53,6 @@
           class="video-controls"
           @click.stop
         >
-          <!-- Play/Pause button -->
-          <button
-            class="control-button play-pause-btn"
-            @click="togglePlay"
-            :aria-label="isPlaying ? 'Pause video' : 'Play video'"
-          >
-            <svg
-              v-if="!isPlaying"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-            >
-              <path d="M8 5v14l11-7z" fill="currentColor" />
-            </svg>
-            <svg v-else width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="currentColor" />
-            </svg>
-          </button>
-
           <!-- Progress bar -->
           <div class="progress-container">
             <div ref="progressBar" class="progress-bar" @click="seekTo">
@@ -89,15 +64,22 @@
           </div>
 
           <!-- Time display -->
-          <div class="time-display">
-            <span class="current-time">{{ formatTime(currentTime) }}</span>
-            <span class="duration">{{ formatTime(duration) }}</span>
-          </div>
         </div>
 
         <!-- Caption -->
-        <div v-if="caption" class="video-caption">
-          <PrismicRichText :field="caption" />
+        <div class="video-caption-container">
+          <!-- Play/Pause button -->
+          <button
+            class="control-button play-pause-btn"
+            @click="togglePlay"
+            :aria-label="isPlaying ? 'Pause video' : 'Play video'"
+          >
+            <span v-if="!isPlaying" class="play-text">Press <i>Play</i></span>
+            <span v-else class="pause-text">Press <i>Pause</i></span>
+          </button>
+          <div v-if="caption" class="video-caption">
+            <PrismicRichText :field="caption" />
+          </div>
         </div>
       </div>
     </div>
@@ -437,9 +419,6 @@ onBeforeUnmount(() => {
     }
   }
 
-  &:hover {
-  }
-
   .video-caption-thumbnail {
     :deep(p) {
       @include smallType;
@@ -464,7 +443,7 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-
+  padding: var(--gutterPadding);
   .fullscreen-content {
     position: relative;
     width: 100vw;
@@ -476,31 +455,26 @@ onBeforeUnmount(() => {
       @include noButton;
       position: absolute;
       top: var(--gutter);
-      right: var(--gutter);
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.1);
+      right: var(--gutterPadding);
+
       color: var(--palette-white);
       display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-      transition: background 0.3s ease;
 
-      &:hover {
-        background: rgba(255, 255, 255, 0.2);
-      }
+      z-index: 10;
+      @include bodyType;
+      @include foundersMedium;
+      @include linkStyle;
     }
 
     .video-container {
       position: relative;
       width: 100%;
       height: 100%;
+      padding-top: var(--gutter-5);
 
       .vimeo-player {
         width: 100%;
-        height: 100%;
+        height: auto;
 
         :deep(iframe) {
           width: 100%;
@@ -512,48 +486,42 @@ onBeforeUnmount(() => {
 
     .video-controls {
       position: absolute;
-      bottom: 0;
+      bottom: var(--gutter-7);
       left: 0;
       right: 0;
-      background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
-      padding: var(--gutter-2);
+      padding: 0;
       display: flex;
       align-items: center;
       gap: var(--gutter);
       transition: opacity 0.3s ease;
 
-      .control-button {
-        @include noButton;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.1);
-        color: var(--palette-white);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background 0.3s ease;
-
-        &:hover {
-          background: rgba(255, 255, 255, 0.2);
-        }
-      }
-
       .progress-container {
         flex: 1;
+        height: var(--gutter-half);
+        position: relative;
+        &:after {
+          content: "";
+          position: absolute;
+          top: 50%;
+          left: 0;
+          width: 100%;
+          height: 1px;
+          background: var(--palette-white);
+          transform: translateY(-50%);
+        }
 
         .progress-bar {
           width: 100%;
-          height: 4px;
-          background: rgba(255, 255, 255, 0.2);
-          border-radius: 2px;
+          height: var(--gutter-half);
+          background: transparent;
+          border-radius: 0;
           cursor: pointer;
           position: relative;
 
           .progress-fill {
             height: 100%;
             background: var(--palette-white);
-            border-radius: 2px;
+            border-radius: 0;
             transition: width 0.1s ease;
           }
 
@@ -575,11 +543,39 @@ onBeforeUnmount(() => {
       }
     }
 
-    .video-caption {
+    .video-caption-container {
       position: absolute;
-      bottom: 80px;
-      left: var(--gutter-2);
-      right: var(--gutter-2);
+      bottom: 0;
+      padding-bottom: var(--gutter-2);
+      left: 0;
+      right: 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      width: 100%;
+      :deep(.control-button) {
+        @include noButton;
+
+        color: var(--palette-white);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        @include bodyType;
+        @include foundersRegular;
+        @include linkStyle;
+
+        .play-text,
+        .pause-text {
+          @include bodyType;
+          @include linkStyle;
+          i {
+            @include heldaneTextItalic;
+          }
+        }
+      }
+    }
+    .video-caption {
       color: var(--palette-white);
 
       :deep(p) {
