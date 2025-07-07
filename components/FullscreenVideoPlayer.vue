@@ -207,7 +207,7 @@ const initializePlayer = () => {
     // Set up event listeners
     player.on("play", () => {
       isPlaying.value = true;
-      showControlsTemporarily();
+      showControls.value = true; // Keep controls visible
       emit("play");
     });
 
@@ -243,11 +243,6 @@ const destroyPlayer = () => {
     progressInterval = null;
   }
 
-  if (controlsTimeout) {
-    clearTimeout(controlsTimeout);
-    controlsTimeout = null;
-  }
-
   // Reset state
   isPlaying.value = false;
   currentTime.value = 0;
@@ -281,17 +276,8 @@ const seekTo = (event) => {
 };
 
 const showControlsTemporarily = () => {
+  // For fullscreen variant, controls should always remain visible
   showControls.value = true;
-
-  if (controlsTimeout) {
-    clearTimeout(controlsTimeout);
-  }
-
-  controlsTimeout = setTimeout(() => {
-    if (isPlaying.value) {
-      showControls.value = false;
-    }
-  }, 3000);
 };
 
 const formatTime = (seconds) => {
@@ -304,9 +290,8 @@ const formatTime = (seconds) => {
 
 // Mouse movement to show controls
 const onMouseMove = () => {
-  if (isFullscreen.value && isPlaying.value) {
-    showControlsTemporarily();
-  }
+  // For fullscreen variant, controls are always visible
+  // No need to show/hide based on mouse movement
 };
 
 // Keyboard shortcuts
