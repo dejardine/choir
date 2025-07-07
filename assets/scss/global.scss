@@ -184,6 +184,11 @@ body.page-routing {
 }
 
   /* =============================================================================
-   Modernizer
+   Fullscreen video
    ========================================================================== */
-
+   body.fullscreen-video-open {
+    overflow: hidden; // Prevent body scrolling
+    .global-main-menu {
+      display: none;
+    }
+  }

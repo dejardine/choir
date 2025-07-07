@@ -14,11 +14,14 @@
       />
       <div class="play-button-overlay">
         <button class="play-button" aria-label="Play video">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M8 5v14l11-7z" fill="currentColor" />
-          </svg>
+          <span class="play-text">Play</span>
         </button>
       </div>
+    </div>
+
+    <!-- Caption below thumbnail -->
+    <div v-if="caption" class="video-caption-thumbnail">
+      <PrismicRichText :field="caption" />
     </div>
 
     <!-- Fullscreen overlay -->
@@ -149,6 +152,9 @@ let progressInterval = null;
 const openFullscreen = () => {
   isFullscreen.value = true;
 
+  // Add class to body
+  document.body.classList.add("fullscreen-video-open");
+
   // Fade in overlay
   gsap.fromTo(
     fullscreenOverlay.value,
@@ -170,6 +176,9 @@ const openFullscreen = () => {
 };
 
 const closeFullscreen = () => {
+  // Remove class from body
+  document.body.classList.remove("fullscreen-video-open");
+
   // Fade out animations
   gsap.to(fullscreenContent.value, {
     scale: 0.9,
@@ -353,6 +362,12 @@ onMounted(() => {
 onBeforeUnmount(() => {
   document.removeEventListener("mousemove", onMouseMove);
   document.removeEventListener("keydown", onKeyDown);
+
+  // Clean up body class if component is unmounted while fullscreen is open
+  if (isFullscreen.value) {
+    document.body.classList.remove("fullscreen-video-open");
+  }
+
   destroyPlayer();
 });
 </script>
@@ -366,7 +381,6 @@ onBeforeUnmount(() => {
   width: 100%;
   cursor: pointer;
   overflow: hidden;
-  border-radius: var(--border-radius);
 
   .thumbnail-image {
     width: 100%;
@@ -381,11 +395,10 @@ onBeforeUnmount(() => {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0;
+    opacity: 1;
     transition: opacity 0.3s ease;
   }
 
@@ -399,7 +412,10 @@ onBeforeUnmount(() => {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.3s ease;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: none;
+    cursor: pointer;
 
     @include breakpoint(mobile) {
       width: 60px;
@@ -409,15 +425,30 @@ onBeforeUnmount(() => {
     &:hover {
       transform: scale(1.1);
     }
+
+    .play-text {
+      @include smallType;
+      @include heldaneTextItalic;
+
+      @include breakpoint(mobile) {
+        font-size: 12px;
+        letter-spacing: 0.3px;
+      }
+    }
   }
 
   &:hover {
-    .play-button-overlay {
-      opacity: 1;
-    }
+  }
 
-    .thumbnail-image {
-      transform: scale(1.05);
+  .video-caption-thumbnail {
+    :deep(p) {
+      @include smallType;
+      @include heldaneText;
+      em {
+        @include heldaneTextItalic;
+      }
+      color: var(--color-text);
+      margin-top: var(--gutter);
     }
   }
 }
@@ -428,7 +459,7 @@ onBeforeUnmount(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.95);
+  background: var(--palette-black);
   z-index: 9999;
   display: flex;
   align-items: center;
@@ -560,37 +591,6 @@ onBeforeUnmount(() => {
         em {
           @include heldaneTextItalic;
         }
-      }
-    }
-  }
-
-  @include breakpoint(mobile) {
-    .fullscreen-content {
-      .close-button {
-        top: var(--gutter);
-        right: var(--gutter);
-        width: 36px;
-        height: 36px;
-      }
-
-      .video-controls {
-        padding: var(--gutter);
-
-        .control-button {
-          width: 36px;
-          height: 36px;
-        }
-
-        .time-display {
-          min-width: 100px;
-          font-size: 12px;
-        }
-      }
-
-      .video-caption {
-        bottom: 70px;
-        left: var(--gutter);
-        right: var(--gutter);
       }
     }
   }
