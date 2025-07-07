@@ -89,7 +89,6 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, watch, nextTick } from "vue";
 import Player from "@vimeo/player";
-import { CustomEase } from "gsap/dist/CustomEase";
 
 const props = defineProps({
   videoId: {
@@ -109,10 +108,9 @@ const props = defineProps({
 const emit = defineEmits(["ready", "play", "pause"]);
 
 // GSAP
-const { $gsap } = useNuxtApp();
+const { $gsap, $CustomEase } = useNuxtApp();
 
 // Create custom ease
-const customEase = CustomEase.create("custom", "1,0,0,1");
 
 // Refs
 const thumbnailContainer = ref(null);
@@ -152,7 +150,7 @@ const openFullscreen = () => {
       {
         y: "0%",
         duration: 0.6,
-        ease: customEase,
+        ease: $CustomEase.create("custom", "M0,0 C1,0 0,1 1,1 "),
       }
     );
 
@@ -167,18 +165,11 @@ const closeFullscreen = () => {
   // Remove class from body
   document.body.classList.remove("fullscreen-video-open");
 
-  // Fade out animations
-  $gsap.to(fullscreenContent.value, {
-    scale: 0.9,
-    opacity: 0,
-    duration: 0.3,
-    ease: "power2.in",
-  });
-
+  // Animate overlay out
   $gsap.to(fullscreenOverlay.value, {
-    opacity: 0,
-    duration: 0.3,
-    ease: "power2.in",
+    y: "100%",
+    duration: 0.6,
+    ease: $CustomEase.create("custom", "M0,0 C1,0 0,1 1,1 "),
     onComplete: () => {
       isFullscreen.value = false;
       destroyPlayer();
