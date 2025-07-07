@@ -437,7 +437,7 @@ onBeforeUnmount(() => {
       @include noButton;
       position: absolute;
       top: var(--gutter);
-      right: var(--gutterPadding);
+      right: 0;
 
       color: var(--palette-white);
       display: flex;
