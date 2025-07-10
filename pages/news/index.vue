@@ -1,12 +1,22 @@
 <template>
   <div class="page page-news" ref="pageRoot">
     <GlobalMainMenu />
+    <PageHeader
+      :heading="page?.newsLandingPage?.data?.heading"
+      :subheading="page?.newsLandingPage?.data?.sub_heading"
+      :paragraph="page?.newsLandingPage?.data?.paragraph"
+    />
+    <NewsGrid
+      v-if="newsGridData?.newsLandingPageWithData?.data?.news_items"
+      :page="newsGridData"
+    />
     <GlobalFooter />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, nextTick, watchEffect } from "vue";
+import NewsGrid from "~/components/NewsGrid.vue";
 
 import {
   useColorMode,
@@ -22,6 +32,7 @@ import { globalRouteTransition } from "~/utils/GlobalRouteTransition";
 // Get the data
 const prismic = usePrismic();
 
+// Get basic data for PageHeader
 const { data: page } = await useAsyncData("newsLandingData", async () => {
   try {
     const [newsLandingPage] = await Promise.all([
@@ -33,9 +44,39 @@ const { data: page } = await useAsyncData("newsLandingData", async () => {
     };
   } catch (error) {
     console.error("Error fetching news landing page data:", error);
-    // You might want to handle the error appropriately here
-    // For example, redirect to an error page or show a notification
-    throw error; // This will propagate the error to Nuxt's error handling
+    throw error;
+  }
+});
+
+// Get detailed data for NewsGrid
+const { data: newsGridData } = await useAsyncData("newsGridData", async () => {
+  try {
+    const graphQuery = `{
+      news_landing {
+        news_items {
+          item {
+            ...on news {
+              image_thumbnail
+              video_thumbnail
+              heading
+              paragraph
+              link
+            }
+          }
+        }
+      }
+    }`;
+
+    const [newsLandingPageWithData] = await Promise.all([
+      prismic.client.getSingle("news_landing", { graphQuery }),
+    ]);
+
+    return {
+      newsLandingPageWithData,
+    };
+  } catch (error) {
+    console.error("Error fetching news grid data:", error);
+    return { newsLandingPageWithData: null };
   }
 });
 

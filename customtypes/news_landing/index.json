@@ -1,6 +1,9 @@
 {
   "format": "page",
   "id": "news_landing",
+  "label": "News Landing",
+  "repeatable": false,
+  "status": true,
   "json": {
     "SEO": {
       "uid": {
@@ -44,9 +47,26 @@
           "multi": "heading2"
         }
       }
+    },
+    "Content": {
+      "news_items": {
+        "type": "Group",
+        "config": {
+          "label": "News items",
+          "repeat": true,
+          "fields": {
+            "item": {
+              "type": "Link",
+              "config": {
+                "label": "Item",
+                "select": "document",
+                "repeat": false,
+                "customtypes": ["news"]
+              }
+            }
+          }
+        }
+      }
     }
-  },
-  "label": "News Landing",
-  "repeatable": false,
-  "status": true
+  }
 }

@@ -1295,6 +1295,21 @@ export type NewsDocument<Lang extends string = string> =
   prismic.PrismicDocumentWithUID<Simplify<NewsDocumentData>, "news", Lang>;
 
 /**
+ * Item in *News Landing → News items*
+ */
+export interface NewsLandingDocumentDataNewsItemsItem {
+  /**
+   * Item field in *News Landing → News items*
+   *
+   * - **Field Type**: Content Relationship
+   * - **Placeholder**: *None*
+   * - **API ID Path**: news_landing.news_items[].item
+   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   */
+  item: prismic.ContentRelationshipField<"news">;
+}
+
+/**
  * Content for News Landing documents
  */
 interface NewsLandingDocumentData {
@@ -1338,7 +1353,18 @@ interface NewsLandingDocumentData {
    * - **Tab**: Introduction
    * - **Documentation**: https://prismic.io/docs/field#rich-text-title
    */
-  sub_heading: prismic.RichTextField;
+  sub_heading: prismic.RichTextField /**
+   * News items field in *News Landing*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: news_landing.news_items[]
+   * - **Tab**: Content
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */;
+  news_items: prismic.GroupField<
+    Simplify<NewsLandingDocumentDataNewsItemsItem>
+  >;
 }
 
 /**
@@ -2454,6 +2480,7 @@ declare module "@prismicio/client" {
       NewsDocumentData,
       NewsLandingDocument,
       NewsLandingDocumentData,
+      NewsLandingDocumentDataNewsItemsItem,
       WorkDocument,
       WorkDocumentData,
       WorkDocumentDataProjectsItem,

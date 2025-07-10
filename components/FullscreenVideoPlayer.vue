@@ -163,7 +163,6 @@ const openFullscreen = () => {
 
 const closeFullscreen = () => {
   // Remove class from body
-  document.body.classList.remove("fullscreen-video-open");
 
   // Animate overlay out
   $gsap.to(fullscreenOverlay.value, {
@@ -173,6 +172,7 @@ const closeFullscreen = () => {
     onComplete: () => {
       isFullscreen.value = false;
       destroyPlayer();
+      document.body.classList.remove("fullscreen-video-open");
     },
   });
 };
