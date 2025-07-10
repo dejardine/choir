@@ -219,7 +219,7 @@ const allNewsItems = computed(() => {
       multipliedItems.push(clonedItem);
     });
   }
-  return multipliedItems;
+  return originalItems;
 });
 
 const topNewsItems = computed(() => {
@@ -280,7 +280,10 @@ new Promise((resolve) => {
       }
     }
     &:nth-child(2) {
-      grid-column: 11 / span 2;
+      grid-column: 10 / span 3;
+      @include breakpoint(display) {
+        grid-column: 11 / span 2;
+      }
     }
   }
 }
