@@ -23,19 +23,9 @@
             <!-- Case 1: Link exists AND data is populated by graphQuery -->
             <template v-if="newsGroup.item && newsGroup.item.data">
               <div class="item-content">
-                <!-- Image Thumbnail -->
-                <ImageHalf
-                  v-if="
-                    newsGroup.item.data.image_thumbnail &&
-                    newsGroup.item.data.image_thumbnail.url
-                  "
-                  :imageField="newsGroup.item.data.image_thumbnail"
-                  class="thumbnail-image"
-                />
-
-                <!-- Video Thumbnail -->
+                <!-- Video Thumbnail with Cover (only if both exist) -->
                 <VimeoPlayerLoop
-                  v-else-if="
+                  v-if="
                     newsGroup.item.data.video_thumbnail &&
                     newsGroup.item.data.image_thumbnail?.url
                   "
@@ -43,6 +33,15 @@
                   :cover-image-url="newsGroup.item.data.image_thumbnail.url"
                   :cover-image="newsGroup.item.data.image_thumbnail"
                   class="thumbnail-video"
+                />
+                <!-- Image Thumbnail (if no video, but image exists) -->
+                <ImageHalf
+                  v-else-if="
+                    newsGroup.item.data.image_thumbnail &&
+                    newsGroup.item.data.image_thumbnail.url
+                  "
+                  :imageField="newsGroup.item.data.image_thumbnail"
+                  class="thumbnail-image"
                 />
 
                 <!-- Fallback if no media (but data object exists) -->
@@ -107,19 +106,9 @@
             <!-- Case 1: Link exists AND data is populated by graphQuery -->
             <template v-if="newsGroup.item && newsGroup.item.data">
               <div class="item-content">
-                <!-- Image Thumbnail -->
-                <ImageHalf
-                  v-if="
-                    newsGroup.item.data.image_thumbnail &&
-                    newsGroup.item.data.image_thumbnail.url
-                  "
-                  :imageField="newsGroup.item.data.image_thumbnail"
-                  class="thumbnail-image"
-                />
-
-                <!-- Video Thumbnail -->
+                <!-- Video Thumbnail with Cover (only if both exist) -->
                 <VimeoPlayerLoop
-                  v-else-if="
+                  v-if="
                     newsGroup.item.data.video_thumbnail &&
                     newsGroup.item.data.image_thumbnail?.url
                   "
@@ -127,6 +116,15 @@
                   :cover-image-url="newsGroup.item.data.image_thumbnail.url"
                   :cover-image="newsGroup.item.data.image_thumbnail"
                   class="thumbnail-video"
+                />
+                <!-- Image Thumbnail (if no video, but image exists) -->
+                <ImageHalf
+                  v-else-if="
+                    newsGroup.item.data.image_thumbnail &&
+                    newsGroup.item.data.image_thumbnail.url
+                  "
+                  :imageField="newsGroup.item.data.image_thumbnail"
+                  class="thumbnail-image"
                 />
 
                 <!-- Fallback if no media (but data object exists) -->
