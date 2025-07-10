@@ -169,8 +169,17 @@
     </div>
 
     <!-- Load More Button -->
-    <div v-if="showLoadMoreButton" class="load-more-container">
-      <button @click="loadMore" class="load-more-button">Load More</button>
+    <div class="load-more-container">
+      <button
+        v-if="showLoadMoreButton"
+        @click="loadMore"
+        class="load-more-button"
+      >
+        Load More
+      </button>
+      <button @click="scrollToTop" class="back-to-top-button">
+        From the start
+      </button>
     </div>
   </div>
 </template>
@@ -186,6 +195,9 @@ const props = defineProps({
     required: true,
   },
 });
+
+// Load GSAP libraries we need
+const { $gsap, $ScrollTrigger, $ScrollToPlugin } = useNuxtApp();
 
 // Reactive state for load more functionality
 const itemsToShow = ref(13); // Start with 13 items (2 top + 11 bottom)
@@ -224,6 +236,19 @@ const showLoadMoreButton = computed(() => {
 
 const loadMore = () => {
   itemsToShow.value += 11;
+};
+
+const scrollToTop = () => {
+  if ($ScrollToPlugin) {
+    $gsap.to(window, {
+      duration: 1,
+      scrollTo: { y: 0, autoKill: true },
+      ease: "power2.inOut",
+    });
+  } else {
+    console.warn("ScrollToPlugin is not available.");
+    window.scrollTo({ top: 0, behavior: "smooth" }); // Fallback
+  }
 };
 
 new Promise((resolve) => {
@@ -317,14 +342,30 @@ new Promise((resolve) => {
   border-top: 1px solid var(--color-border);
   padding-top: var(--gutter);
   height: 50vh;
+  position: relative;
 }
 
 .load-more-button {
-  @include bodyType;
+  @include smallType;
   @include foundersMedium;
   @include noButton;
   color: var(--color-text);
   cursor: pointer;
   @include linkStyle;
+}
+
+.back-to-top-button {
+  position: absolute;
+  right: var(--gutterPadding);
+  top: var(--gutter);
+  padding: 0;
+
+  cursor: pointer;
+
+  @include noButton;
+  @include smallType;
+  @include foundersMedium;
+  @include linkStyle;
+  color: var(--color-text);
 }
 </style>
