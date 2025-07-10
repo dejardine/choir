@@ -1234,21 +1234,15 @@ interface NewsDocumentData {
   image_thumbnail: prismic.ImageField<never>;
 
   /**
-   * Video Thumbnail field in *News Item*
+   * Vimeo Loop field in *News Item*
    *
-   * - **Field Type**: Link
+   * - **Field Type**: Text
    * - **Placeholder**: *None*
    * - **API ID Path**: news.video_thumbnail
    * - **Tab**: Thumbnail
-   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   * - **Documentation**: https://prismic.io/docs/field#key-text
    */
-  video_thumbnail: prismic.LinkField<
-    string,
-    string,
-    unknown,
-    prismic.FieldState,
-    never
-  > /**
+  video_thumbnail: prismic.KeyTextField /**
    * Heading field in *News Item*
    *
    * - **Field Type**: Title

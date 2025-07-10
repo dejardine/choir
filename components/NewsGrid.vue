@@ -167,11 +167,16 @@
         </div>
       </template>
     </div>
+
+    <!-- Load More Button -->
+    <div v-if="showLoadMoreButton" class="load-more-container">
+      <button @click="loadMore" class="load-more-button">Load More</button>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { defineProps, computed } from "vue";
+import { defineProps, computed, ref } from "vue";
 import ImageHalf from "./ImageHalf.vue";
 import VimeoPlayerLoop from "./VimeoPlayerLoop.vue";
 
@@ -182,18 +187,44 @@ const props = defineProps({
   },
 });
 
+// Reactive state for load more functionality
+const itemsToShow = ref(13); // Start with 13 items (2 top + 11 bottom)
+
 // Computed properties to separate news items
-const newsItems = computed(() => {
-  return props.page?.newsLandingPageWithData?.data?.news_items || [];
+const allNewsItems = computed(() => {
+  const originalItems =
+    props.page?.newsLandingPageWithData?.data?.news_items || [];
+  // Multiply the array by 5 for test data
+  const multipliedItems = [];
+  for (let i = 0; i < 5; i++) {
+    originalItems.forEach((item, index) => {
+      // Create a deep copy of the item with a unique key
+      const clonedItem = JSON.parse(JSON.stringify(item));
+      // Add a suffix to make each item unique
+      if (clonedItem.item?.id) {
+        clonedItem.item.id = `${clonedItem.item.id}-copy-${i + 1}`;
+      }
+      multipliedItems.push(clonedItem);
+    });
+  }
+  return multipliedItems;
 });
 
 const topNewsItems = computed(() => {
-  return newsItems.value.slice(0, 2);
+  return allNewsItems.value.slice(0, 2);
 });
 
 const bottomNewsItems = computed(() => {
-  return newsItems.value.slice(2);
+  return allNewsItems.value.slice(2, itemsToShow.value);
 });
+
+const showLoadMoreButton = computed(() => {
+  return itemsToShow.value < allNewsItems.value.length;
+});
+
+const loadMore = () => {
+  itemsToShow.value += 11;
+};
 
 new Promise((resolve) => {
   const script = document.createElement("script");
@@ -207,10 +238,6 @@ new Promise((resolve) => {
 <style lang="scss" scoped>
 @import "@/assets/scss/global.scss";
 @import "@/assets/scss/breakpoints.scss";
-
-.news-grid-container {
-  padding-bottom: 20vh;
-}
 
 .news-grid {
   display: grid;
@@ -281,5 +308,23 @@ new Promise((resolve) => {
       margin-bottom: 0;
     }
   }
+}
+
+.load-more-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--gutter);
+  height: 50vh;
+}
+
+.load-more-button {
+  @include bodyType;
+  @include foundersMedium;
+  @include noButton;
+  color: var(--color-text);
+  cursor: pointer;
+  @include linkStyle;
 }
 </style>

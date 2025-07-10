@@ -38,14 +38,10 @@
         }
       },
       "video_thumbnail": {
-        "type": "Link",
+        "type": "Text",
         "config": {
-          "label": "Video Thumbnail",
-          "placeholder": "",
-          "select": null,
-          "allowTargetBlank": false,
-          "allowText": false,
-          "repeat": false
+          "label": "Vimeo Loop",
+          "placeholder": ""
         }
       }
     },
