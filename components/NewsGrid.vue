@@ -2,6 +2,10 @@
   <div class="news-grid-container">
     <!-- Top section with two most recent items -->
     <div class="news-grid news-grid-top">
+      <div class="toggle-buttons">
+        <button>Grid</button> /
+        <button>Score</button>
+      </div>
       <template
         v-for="(newsGroup, index) in topNewsItems"
         :key="newsGroup.item?.id || `news-grid-top-item-${index}`"
@@ -272,15 +276,36 @@ new Promise((resolve) => {
 }
 
 .news-grid-top {
+  position: relative;
+
+  .toggle-buttons {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: var(--gutter-half);
+    grid-column: 1 / 2;
+    grid-row: 1;
+
+    button {
+      @include noButton;
+      @include smallType;
+      @include foundersMedium;
+      @include linkStyle;
+      color: var(--color-text);
+    }
+  }
+
   .news-grid-item {
-    &:nth-child(1) {
+    &:nth-child(2) {
       grid-column: 7 / span 3;
+      grid-row: 1;
       @include breakpoint(display) {
         grid-column: 9 / span 2;
       }
     }
-    &:nth-child(2) {
+    &:nth-child(3) {
       grid-column: 10 / span 3;
+      grid-row: 1;
       @include breakpoint(display) {
         grid-column: 11 / span 2;
       }
