@@ -128,3 +128,20 @@ definePageMeta({
   pageTransition: globalRouteTransition,
 });
 </script>
+
+<style lang="scss" scoped>
+.page-news {
+  :deep(.page-header) {
+    margin-bottom: 0;
+    position: relative;
+    .page-header-wrap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1;
+      padding: var(--gutter) var(--gutterPadding);
+    }
+  }
+}
+</style>
