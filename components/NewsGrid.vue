@@ -189,6 +189,15 @@
 
     <!-- Score View -->
     <div class="score-view" :class="{ hidden: currentView === 'grid' }">
+      <!-- Fixed header for score view -->
+      <div class="score-header">
+        <PageHeader
+          :heading="newsLandingPage?.data?.heading"
+          :subheading="newsLandingPage?.data?.sub_heading"
+          :paragraph="newsLandingPage?.data?.paragraph"
+        />
+      </div>
+
       <!-- Fixed toggle buttons for score view -->
       <div class="score-toggle-buttons">
         <button
@@ -345,11 +354,16 @@ import {
 } from "vue";
 import ImageHalf from "./ImageHalf.vue";
 import VimeoPlayerLoop from "./VimeoPlayerLoop.vue";
+import PageHeader from "./PageHeader.vue";
 
 const props = defineProps({
   page: {
     type: Object,
     required: true,
+  },
+  newsLandingPage: {
+    type: Object,
+    required: false,
   },
 });
 
@@ -713,11 +727,24 @@ new Promise((resolve) => {
   }
 }
 
+.score-header {
+  position: fixed;
+  top: calc(50vh);
+  left: 0;
+  width: 100%;
+  z-index: 1002;
+  transform: translateY(-50%);
+  pointer-events: none;
+  :deep(.page-header) {
+    margin-top: 0;
+  }
+}
+
 .score-toggle-buttons {
   position: fixed;
   bottom: var(--gutterPadding);
   left: var(--gutterPadding);
-  z-index: 1001;
+  z-index: 1006;
   display: flex;
   justify-content: flex-start;
   align-items: center;
@@ -746,8 +773,9 @@ new Promise((resolve) => {
   height: 100vh;
   overflow: hidden;
   padding: var(--gutterPadding);
-  padding-top: calc(var(--gutter)); // Account for toggle buttons
+  padding-top: calc(var(--gutter));
   position: relative;
+  z-index: 1003;
 }
 
 .score-items {

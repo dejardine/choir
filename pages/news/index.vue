@@ -9,6 +9,7 @@
     <NewsGrid
       v-if="newsGridData?.newsLandingPageWithData?.data?.news_items"
       :page="newsGridData"
+      :newsLandingPage="page?.newsLandingPage"
     />
     <GlobalFooter />
   </div>
