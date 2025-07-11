@@ -189,8 +189,27 @@
 
     <!-- Score View -->
     <div class="score-view" :class="{ hidden: currentView === 'grid' }">
+      <!-- Fixed toggle buttons for score view -->
+      <div class="score-toggle-buttons">
+        <button
+          @click="setView('grid')"
+          :class="{ active: currentView === 'grid' }"
+        >
+          Grid
+        </button>
+        /
+        <button
+          @click="setView('score')"
+          :class="{ active: currentView === 'score' }"
+        >
+          Score
+        </button>
+      </div>
       <div class="score-container" ref="scoreContainer">
         <div class="score-items" ref="scoreItems">
+          <!-- Start spacer -->
+          <div class="score-spacer start-spacer"></div>
+
           <template
             v-for="(newsGroup, index) in allNewsItems"
             :key="newsGroup.item?.id || `score-item-${index}`"
@@ -208,54 +227,65 @@
                 <!-- Case 1: Link exists AND data is populated by graphQuery -->
                 <template v-if="newsGroup.item && newsGroup.item.data">
                   <div class="item-content">
-                    <!-- Video Thumbnail with Cover (only if both exist) -->
-                    <VimeoPlayerLoop
-                      v-if="
-                        newsGroup.item.data.video_thumbnail &&
-                        newsGroup.item.data.image_thumbnail?.url
-                      "
-                      :video-id="newsGroup.item.data.video_thumbnail"
-                      :cover-image-url="newsGroup.item.data.image_thumbnail.url"
-                      :cover-image="newsGroup.item.data.image_thumbnail"
-                      class="thumbnail-video"
-                    />
-                    <!-- Image Thumbnail (if no video, but image exists) -->
-                    <ImageHalf
-                      v-else-if="
-                        newsGroup.item.data.image_thumbnail &&
-                        newsGroup.item.data.image_thumbnail.url
-                      "
-                      :imageField="newsGroup.item.data.image_thumbnail"
-                      class="thumbnail-image"
-                    />
-
-                    <!-- Fallback if no media (but data object exists) -->
-                    <div v-else class="no-media"></div>
-
-                    <!-- Heading -->
-                    <div
-                      v-if="newsGroup.item.data.heading"
-                      class="news-heading"
+                    <!-- Link wrapper if link exists -->
+                    <prismic-link
+                      v-if="newsGroup.item.data.link"
+                      :field="newsGroup.item.data.link"
+                      class="score-link"
                     >
-                      <prismic-rich-text :field="newsGroup.item.data.heading" />
-                    </div>
-
-                    <!-- Paragraph -->
-                    <div
-                      v-if="newsGroup.item.data.paragraph"
-                      class="news-paragraph"
-                    >
-                      <prismic-rich-text
-                        :field="newsGroup.item.data.paragraph"
+                      <!-- Video Thumbnail with Cover (only if both exist) -->
+                      <VimeoPlayerLoop
+                        v-if="
+                          newsGroup.item.data.video_thumbnail &&
+                          newsGroup.item.data.image_thumbnail?.url
+                        "
+                        :video-id="newsGroup.item.data.video_thumbnail"
+                        :cover-image-url="
+                          newsGroup.item.data.image_thumbnail.url
+                        "
+                        :cover-image="newsGroup.item.data.image_thumbnail"
+                        class="thumbnail-video"
                       />
-                    </div>
+                      <!-- Image Thumbnail (if no video, but image exists) -->
+                      <ImageHalf
+                        v-else-if="
+                          newsGroup.item.data.image_thumbnail &&
+                          newsGroup.item.data.image_thumbnail.url
+                        "
+                        :imageField="newsGroup.item.data.image_thumbnail"
+                        class="thumbnail-image"
+                      />
+                      <!-- Fallback if no media (but data object exists) -->
+                      <div v-else class="no-media"></div>
+                    </prismic-link>
 
-                    <!-- Link -->
-                    <div v-if="newsGroup.item.data.link" class="news-link">
-                      <prismic-link
-                        :field="newsGroup.item.data.link"
-                      ></prismic-link>
-                    </div>
+                    <!-- No link wrapper - just media -->
+                    <template v-else>
+                      <!-- Video Thumbnail with Cover (only if both exist) -->
+                      <VimeoPlayerLoop
+                        v-if="
+                          newsGroup.item.data.video_thumbnail &&
+                          newsGroup.item.data.image_thumbnail?.url
+                        "
+                        :video-id="newsGroup.item.data.video_thumbnail"
+                        :cover-image-url="
+                          newsGroup.item.data.image_thumbnail.url
+                        "
+                        :cover-image="newsGroup.item.data.image_thumbnail"
+                        class="thumbnail-video"
+                      />
+                      <!-- Image Thumbnail (if no video, but image exists) -->
+                      <ImageHalf
+                        v-else-if="
+                          newsGroup.item.data.image_thumbnail &&
+                          newsGroup.item.data.image_thumbnail.url
+                        "
+                        :imageField="newsGroup.item.data.image_thumbnail"
+                        class="thumbnail-image"
+                      />
+                      <!-- Fallback if no media (but data object exists) -->
+                      <div v-else class="no-media"></div>
+                    </template>
                   </div>
                 </template>
 
@@ -275,6 +305,11 @@
               </div>
             </div>
           </template>
+
+          <!-- End spacer -->
+          <div class="score-spacer end-spacer">
+            <!-- Debug: End spacer rendered -->
+          </div>
         </div>
       </div>
     </div>
@@ -319,7 +354,7 @@ const props = defineProps({
 });
 
 // Load GSAP libraries we need
-const { $gsap, $ScrollTrigger, $ScrollToPlugin } = useNuxtApp();
+const { $gsap, $ScrollTrigger, $ScrollToPlugin, $Draggable } = useNuxtApp();
 
 // Reactive state for load more functionality
 const itemsToShow = ref(13); // Start with 13 items (2 top + 11 bottom)
@@ -329,14 +364,15 @@ const currentView = ref("grid");
 const scoreContainer = ref(null);
 const scoreItems = ref(null);
 let scrollTriggerInstance = null;
+let draggableInstance = null;
 
 // Computed properties to separate news items
 const allNewsItems = computed(() => {
   const originalItems =
     props.page?.newsLandingPageWithData?.data?.news_items || [];
-  // Multiply the array by 5 for test data
+  // Multiply the array by 3 for more content
   const multipliedItems = [];
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 3; i++) {
     originalItems.forEach((item, index) => {
       // Create a deep copy of the item with a unique key
       const clonedItem = JSON.parse(JSON.stringify(item));
@@ -347,7 +383,7 @@ const allNewsItems = computed(() => {
       multipliedItems.push(clonedItem);
     });
   }
-  return originalItems;
+  return multipliedItems;
 });
 
 const topNewsItems = computed(() => {
@@ -406,16 +442,29 @@ const initializeScrollTrigger = () => {
   // Calculate the total width needed for horizontal scroll
   const itemWidth = 400; // Width of each score item
   const gap = 40; // Gap between items
+  const startSpacerWidth = window.innerWidth * 0.333333; // 33.3333vw
+  const endSpacerWidth = window.innerWidth * 0.25; // 25vw
   const totalWidth =
-    allNewsItems.value.length * itemWidth +
-    (allNewsItems.value.length - 1) * gap;
+    startSpacerWidth + // Start spacer
+    allNewsItems.value.length * itemWidth + // All items
+    (allNewsItems.value.length - 1) * gap + // Gaps between items
+    endSpacerWidth; // End spacer
 
   // Set the container width
   scoreItems.value.style.width = `${totalWidth}px`;
 
+  // Set page height based on score items width for proper scroll distance
+  document.body.style.minHeight = `${totalWidth}px`;
+
+  // Debug: Log the actual DOM structure
+  console.log("Score items container:", scoreItems.value);
+  console.log("Container width set to:", totalWidth);
+  console.log("Number of child elements:", scoreItems.value.children.length);
+
   // Create a dummy trigger element that spans the scroll distance
+  const scrollDistance = totalWidth - window.innerWidth;
   const triggerElement = document.createElement("div");
-  triggerElement.style.height = `${totalWidth - window.innerWidth}px`;
+  triggerElement.style.height = `${scrollDistance}px`;
   triggerElement.style.width = "1px";
   triggerElement.style.position = "absolute";
   triggerElement.style.top = "0";
@@ -431,7 +480,7 @@ const initializeScrollTrigger = () => {
     end: "bottom top",
     scrub: 1,
     animation: $gsap.to(scoreItems.value, {
-      x: -(totalWidth - window.innerWidth),
+      x: -scrollDistance, // Use original scroll distance (already includes end spacer)
       ease: "none",
     }),
     onUpdate: (self) => {
@@ -449,10 +498,40 @@ const initializeScrollTrigger = () => {
   // Store the trigger element for cleanup
   scrollTriggerInstance.triggerElement = triggerElement;
 
+  // Draggable functionality disabled for score view
+  // if ($Draggable && scoreItems.value) {
+  //   const maxDrag = totalWidth - window.innerWidth;
+  //
+  //   draggableInstance = $Draggable.create(scoreItems.value, {
+  //     type: "x",
+  //     bounds: {
+  //       minX: -maxDrag,
+  //       maxX: 0,
+  //     },
+  //     inertia: true,
+  //     onDrag: function () {
+  //       // Update ScrollTrigger progress based on drag position
+  //       const progress = Math.abs(this.x) / maxDrag;
+  //       if (scrollTriggerInstance) {
+  //         scrollTriggerInstance.progress = progress;
+  //       }
+  //     },
+  //     onDragEnd: function () {
+  //       // Optional: Add snap-to-item functionality
+  //       console.log("Drag ended at position:", this.x);
+  //     },
+  //   })[0];
+  // }
+
   console.log("ScrollTrigger initialized with:", {
     totalWidth,
     windowWidth: window.innerWidth,
-    scrollDistance: totalWidth - window.innerWidth,
+    scrollDistance,
+    startSpacerWidth,
+    endSpacerWidth,
+    itemCount: allNewsItems.value.length,
+    itemWidth,
+    gap,
   });
 };
 
@@ -464,6 +543,12 @@ const destroyScrollTrigger = () => {
       document.body.removeChild(scrollTriggerInstance.triggerElement);
     }
     scrollTriggerInstance = null;
+  }
+
+  // Clean up draggable instance
+  if (draggableInstance) {
+    draggableInstance.kill();
+    draggableInstance = null;
   }
 };
 
@@ -480,6 +565,7 @@ watch(currentView, (newView) => {
   } else {
     // Restore normal scrolling
     console.log("Switched to grid view");
+    document.body.style.minHeight = ""; // Reset to default
   }
 });
 
@@ -537,21 +623,21 @@ new Promise((resolve) => {
       }
     }
   }
+}
 
-  .news-grid-item {
-    &:nth-child(2) {
-      grid-column: 7 / span 3;
-      grid-row: 1;
-      @include breakpoint(display) {
-        grid-column: 9 / span 2;
-      }
+.news-grid-item {
+  &:nth-child(2) {
+    grid-column: 7 / span 3;
+    grid-row: 1;
+    @include breakpoint(display) {
+      grid-column: 9 / span 2;
     }
-    &:nth-child(3) {
-      grid-column: 10 / span 3;
-      grid-row: 1;
-      @include breakpoint(display) {
-        grid-column: 11 / span 2;
-      }
+  }
+  &:nth-child(3) {
+    grid-column: 10 / span 3;
+    grid-row: 1;
+    @include breakpoint(display) {
+      grid-column: 11 / span 2;
     }
   }
 }
@@ -564,6 +650,9 @@ new Promise((resolve) => {
   }
   .thumbnail-image,
   .thumbnail-video {
+    width: 100%;
+    height: auto; // Auto height for natural aspect ratio
+
     :deep(img) {
       width: 100%;
       height: auto;
@@ -624,12 +713,40 @@ new Promise((resolve) => {
   }
 }
 
+.score-toggle-buttons {
+  position: fixed;
+  bottom: var(--gutterPadding);
+  left: var(--gutterPadding);
+  z-index: 1001;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: var(--gutter-half);
+
+  button {
+    @include noButton;
+    @include smallType;
+    @include foundersMedium;
+    @include linkStyle;
+    color: var(--color-text);
+    transition: opacity 0.3s ease;
+
+    &.active {
+      opacity: 1;
+    }
+
+    &:not(.active) {
+      opacity: 0.5;
+    }
+  }
+}
+
 .score-container {
   width: 100%;
   height: 100vh;
   overflow: hidden;
   padding: var(--gutterPadding);
-  padding-top: calc(var(--gutterPadding) + 60px); // Account for toggle buttons
+  padding-top: calc(var(--gutter)); // Account for toggle buttons
   position: relative;
 }
 
@@ -638,6 +755,22 @@ new Promise((resolve) => {
   gap: 40px;
   height: 100%;
   align-items: center;
+  justify-content: flex-start;
+}
+
+.score-spacer {
+  flex-shrink: 0;
+  height: 100%;
+}
+
+.start-spacer {
+  width: 33.3333vw; // Start gap
+  display: block;
+}
+
+.end-spacer {
+  width: 33.333vw; // End gap
+  display: block;
 }
 
 .score-item {
@@ -655,41 +788,44 @@ new Promise((resolve) => {
     justify-content: center;
   }
 
-  .thumbnail-image,
-  .thumbnail-video {
+  .score-link {
+    display: block;
+    width: 400px;
+    height: 100%;
+    text-decoration: none;
+  }
+
+  // Score view specific styling for videos
+  .score-view .score-link {
+    height: 300px; // Only in score view
+  }
+}
+
+// Ensure VimeoPlayerLoop gets proper dimensions in score view
+.score-item :deep(.vimeo-player-wrapper) {
+  width: 100% !important;
+  height: 300px !important;
+}
+
+.thumbnail-image,
+.thumbnail-video {
+  width: 100%;
+  height: auto; // Auto height for natural aspect ratio
+  display: block; // Ensure proper block display
+
+  :deep(img) {
     width: 100%;
     height: auto;
-    margin-bottom: var(--gutter);
-
-    :deep(img) {
-      width: 100%;
-      height: auto;
-    }
   }
 
-  .news-heading {
-    margin-bottom: var(--gutter-half);
-    :deep(h2) {
-      margin: 0;
-      @include smallType;
-      @include foundersMedium;
-    }
+  :deep(.vimeo-player-wrapper) {
+    width: 100%;
+    height: 100%;
   }
 
-  .news-paragraph {
-    margin-bottom: var(--gutter-half);
-    :deep(p) {
-      margin: 0;
-      @include smallType;
-      color: var(--color-border);
-    }
-  }
-
-  .news-link {
-    :deep(a) {
-      @include smallType;
-      @include linkStyle;
-    }
+  :deep(iframe) {
+    width: 100%;
+    height: 100%;
   }
 }
 

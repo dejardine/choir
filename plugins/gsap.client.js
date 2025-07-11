@@ -1,10 +1,10 @@
-import gsap from "gsap/dist/gsap";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import { ScrollToPlugin } from "gsap/dist/ScrollToPlugin";
-import { CustomEase } from "gsap/dist/CustomEase";
-import { TextPlugin } from "gsap/dist/TextPlugin";
-import { InertiaPlugin } from "gsap/dist/InertiaPlugin";
-import { Draggable } from "gsap/dist/Draggable";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import { CustomEase } from "gsap/CustomEase";
+import { TextPlugin } from "gsap/TextPlugin";
+import { InertiaPlugin } from "gsap/InertiaPlugin";
+import { Draggable } from "gsap/Draggable";
 
 if (process.client) {
   gsap.registerPlugin(

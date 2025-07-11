@@ -1,9 +1,8 @@
 // GSAP import
-import gsap from "gsap/dist/gsap";
-import { CustomEase } from "gsap/dist/CustomEase";
-
-import { ScrollToPlugin } from "gsap/dist/ScrollToPlugin";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
+import gsap from "gsap";
+import { CustomEase } from "gsap/CustomEase";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 if (process.client) {
   gsap.registerPlugin(ScrollToPlugin, CustomEase, ScrollTrigger);
