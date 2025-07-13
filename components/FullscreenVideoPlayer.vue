@@ -451,8 +451,9 @@ onBeforeUnmount(() => {
     .video-container {
       position: relative;
       width: 100%;
-      height: 100%;
-      padding-top: var(--gutter-5);
+      height: 100vh;
+      display: flex;
+      align-items: center;
 
       .vimeo-player {
         width: 100%;
@@ -476,6 +477,7 @@ onBeforeUnmount(() => {
       align-items: center;
       gap: var(--gutter);
       transition: opacity 0.3s ease;
+      z-index: 10;
 
       .progress-container {
         flex: 1;
@@ -529,12 +531,15 @@ onBeforeUnmount(() => {
       position: absolute;
       bottom: 0;
       padding-bottom: var(--gutter-2);
+      padding-top: var(--gutter);
       left: 0;
       right: 0;
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
       width: 100%;
+      background: var(--palette-black);
+
       :deep(.control-button) {
         @include noButton;
 
