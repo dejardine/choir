@@ -1,0 +1,88 @@
+{
+  "id": "double_media",
+  "type": "SharedSlice",
+  "name": "DoubleMedia",
+  "description": "DoubleMedia",
+  "variations": [
+    {
+      "id": "default",
+      "name": "Default",
+      "docURL": "...",
+      "version": "initial",
+      "description": "Default",
+      "imageUrl": "",
+      "primary": {
+        "left_image": {
+          "type": "Image",
+          "config": {
+            "label": "Left Image",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "left_vimeo_video_link": {
+          "type": "Text",
+          "config": {
+            "label": "Left Vimeo Video Link",
+            "placeholder": ""
+          }
+        },
+        "left_caption": {
+          "type": "StructuredText",
+          "config": {
+            "label": "Left caption",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,em"
+          }
+        },
+        "right_image": {
+          "type": "Image",
+          "config": {
+            "label": "Right Image",
+            "constraint": {},
+            "thumbnails": []
+          }
+        },
+        "right_vimeo_video_link": {
+          "type": "Text",
+          "config": {
+            "label": "Right Vimeo Video Link",
+            "placeholder": ""
+          }
+        },
+        "bottom_margin": {
+          "type": "Boolean",
+          "config": {
+            "label": "Bottom Margin",
+            "placeholder_false": "false",
+            "placeholder_true": "true",
+            "default_value": false
+          }
+        },
+        "align_media": {
+          "type": "Select",
+          "config": {
+            "label": "Align media",
+            "placeholder": "",
+            "options": [
+              "Align left",
+              "Align center",
+              "Align right"
+            ]
+          }
+        },
+        "right_caption": {
+          "type": "StructuredText",
+          "config": {
+            "label": "Right Caption",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,em"
+          }
+        }
+      },
+      "items": {}
+    }
+  ]
+}

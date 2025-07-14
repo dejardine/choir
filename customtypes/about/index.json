@@ -213,11 +213,13 @@
                 "placeholder": ""
               }
             },
-            "alternative_title": {
-              "type": "Text",
+            "alternative_title_rich": {
+              "type": "StructuredText",
               "config": {
-                "label": "Alternative Title",
-                "placeholder": ""
+                "label": "Alternative title",
+                "placeholder": "",
+                "allowTargetBlank": true,
+                "multi": "paragraph"
               }
             }
           }

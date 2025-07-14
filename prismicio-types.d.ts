@@ -104,14 +104,14 @@ export interface AboutDocumentDataTeamListItem {
   job_title: prismic.KeyTextField;
 
   /**
-   * Alternative Title field in *About Landing → Team List*
+   * Alternative title field in *About Landing → Team List*
    *
-   * - **Field Type**: Text
+   * - **Field Type**: Rich Text
    * - **Placeholder**: *None*
-   * - **API ID Path**: about.team_list[].alternative_title
-   * - **Documentation**: https://prismic.io/docs/field#key-text
+   * - **API ID Path**: about.team_list[].alternative_title_rich
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
    */
-  alternative_title: prismic.KeyTextField;
+  alternative_title_rich: prismic.RichTextField;
 }
 
 /**
@@ -438,6 +438,7 @@ export interface CaseStudyDocumentDataIndustryItem {
 }
 
 type CaseStudyDocumentDataSlices4Slice =
+  | DoubleMediaSlice
   | AudioPlayerSlice
   | TextSliceSlice
   | VideoPlayerSlice
@@ -1551,6 +1552,124 @@ export type AudioPlayerSlice = prismic.SharedSlice<
 >;
 
 /**
+ * Primary content in *DoubleMedia → Default → Primary*
+ */
+export interface DoubleMediaSliceDefaultPrimary {
+  /**
+   * Left Image field in *DoubleMedia → Default → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: double_media.default.primary.left_image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  left_image: prismic.ImageField<never>;
+
+  /**
+   * Left Vimeo Video Link field in *DoubleMedia → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: double_media.default.primary.left_vimeo_video_link
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  left_vimeo_video_link: prismic.KeyTextField;
+
+  /**
+   * Left caption field in *DoubleMedia → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: double_media.default.primary.left_caption
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  left_caption: prismic.RichTextField;
+
+  /**
+   * Right Image field in *DoubleMedia → Default → Primary*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: double_media.default.primary.right_image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  right_image: prismic.ImageField<never>;
+
+  /**
+   * Right Vimeo Video Link field in *DoubleMedia → Default → Primary*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: double_media.default.primary.right_vimeo_video_link
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  right_vimeo_video_link: prismic.KeyTextField;
+
+  /**
+   * Bottom Margin field in *DoubleMedia → Default → Primary*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: double_media.default.primary.bottom_margin
+   * - **Documentation**: https://prismic.io/docs/field#boolean
+   */
+  bottom_margin: prismic.BooleanField;
+
+  /**
+   * Align media field in *DoubleMedia → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: double_media.default.primary.align_media
+   * - **Documentation**: https://prismic.io/docs/field#select
+   */
+  align_media: prismic.SelectField<
+    "Align left" | "Align center" | "Align right"
+  >;
+
+  /**
+   * Right Caption field in *DoubleMedia → Default → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: double_media.default.primary.right_caption
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  right_caption: prismic.RichTextField;
+}
+
+/**
+ * Default variation for DoubleMedia Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type DoubleMediaSliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<DoubleMediaSliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *DoubleMedia*
+ */
+type DoubleMediaSliceVariation = DoubleMediaSliceDefault;
+
+/**
+ * DoubleMedia Shared Slice
+ *
+ * - **API ID**: `double_media`
+ * - **Description**: DoubleMedia
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type DoubleMediaSlice = prismic.SharedSlice<
+  "double_media",
+  DoubleMediaSliceVariation
+>;
+
+/**
  * Primary content in *LargeMedia → Image → Primary*
  */
 export interface LargeMediaSliceDefaultPrimary {
@@ -2483,6 +2602,10 @@ declare module "@prismicio/client" {
       AudioPlayerSliceDefaultPrimary,
       AudioPlayerSliceVariation,
       AudioPlayerSliceDefault,
+      DoubleMediaSlice,
+      DoubleMediaSliceDefaultPrimary,
+      DoubleMediaSliceVariation,
+      DoubleMediaSliceDefault,
       LargeMediaSlice,
       LargeMediaSliceDefaultPrimary,
       LargeMediaSliceVideoPrimary,

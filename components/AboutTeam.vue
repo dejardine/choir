@@ -15,7 +15,7 @@
         }}</span>
       </div>
       <div class="about-team-title-alt">
-        {{ currentTeamMember.alternative_title }}
+        <prismic-rich-text :field="currentTeamMember.alternative_title_rich" />
       </div>
     </div>
     <div ref="teamPeople" class="about-team-people">
@@ -57,7 +57,7 @@ const tripledTeamList = computed(() => {
 const currentTeamMember = ref({
   name: "",
   job_title: "",
-  alternative_title: "",
+  alternative_title_rich: null,
 });
 
 const updateCurrentTeamMember = () => {
@@ -86,8 +86,8 @@ const updateCurrentTeamMember = () => {
     currentTeamMember.value = {
       name: tripledTeamList.value[currentIndex].name || "",
       job_title: tripledTeamList.value[currentIndex].job_title || "",
-      alternative_title:
-        tripledTeamList.value[currentIndex].alternative_title || "",
+      alternative_title_rich:
+        tripledTeamList.value[currentIndex].alternative_title_rich || null,
     };
   }
 };
@@ -240,14 +240,20 @@ onUnmounted(() => {
 .about-team-title {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   width: 100%;
   border-top: 1px solid var(--color-border);
   padding: var(--gutter) var(--gutterPadding);
   z-index: 100;
   @include bodyType;
   strong {
-    margin-right: var(--gutter);
+    margin-right: var(--gutter-half);
+  }
+}
+
+.about-team-title-alt {
+  :deep(p) {
+    margin-bottom: var(--gutter);
   }
 }
 </style>

@@ -201,6 +201,9 @@
         "fieldset": "Slice Zone",
         "config": {
           "choices": {
+            "double_media": {
+              "type": "SharedSlice"
+            },
             "audio_player": {
               "type": "SharedSlice"
             },

@@ -1,0 +1,96 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"left_image": {
+				"origin": {
+					"id": "main",
+					"url": "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2",
+					"width": 3648,
+					"height": 4560
+				},
+				"url": "https://images.unsplash.com/photo-1525547719571-a2d4ac8945e2",
+				"width": 3648,
+				"height": 4560,
+				"edit": {
+					"zoom": 1,
+					"crop": {
+						"x": 0,
+						"y": 0
+					},
+					"background": "transparent"
+				},
+				"alt": "jar",
+				"credits": null,
+				"__TYPE__": "ImageContent",
+				"thumbnails": {}
+			},
+			"left_vimeo_video_link": {
+				"__TYPE__": "FieldContent",
+				"value": "pure",
+				"type": "Text"
+			},
+			"right_image": {
+				"origin": {
+					"id": "main",
+					"url": "https://images.unsplash.com/photo-1560762484-813fc97650a0",
+					"width": 3344,
+					"height": 2509
+				},
+				"url": "https://images.unsplash.com/photo-1560762484-813fc97650a0",
+				"width": 3344,
+				"height": 2509,
+				"edit": {
+					"zoom": 1,
+					"crop": {
+						"x": 0,
+						"y": 0
+					},
+					"background": "transparent"
+				},
+				"alt": "large",
+				"credits": null,
+				"__TYPE__": "ImageContent",
+				"thumbnails": {}
+			},
+			"right_vimeo_video_link": {
+				"__TYPE__": "FieldContent",
+				"value": "ride",
+				"type": "Text"
+			},
+			"bottom_margin": {
+				"__TYPE__": "BooleanContent",
+				"value": true
+			},
+			"align_media": {
+				"__TYPE__": "FieldContent",
+				"value": "Align right",
+				"type": "Select"
+			},
+			"right_caption": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "paragraph",
+						"content": {
+							"text": "Culpa ullamco ipsum proident deserunt sunt cillum sunt ea pariatur magna aliquip. Esse laboris sit esse fugiat aute exercitation occaecat voluptate cillum ad. Nisi culpa commodo Lorem incididunt deserunt labore esse cillum ad veniam consectetur non adipisicing irure."
+						}
+					}
+				]
+			},
+			"left_caption": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "paragraph",
+						"content": {
+							"text": "Veniam consequat do labore."
+						}
+					}
+				]
+			}
+		},
+		"items": []
+	}
+]

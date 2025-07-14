@@ -80,9 +80,9 @@ onMounted(() => {
       alpha: 1,
       duration: 0.35,
       ease: "power4.in",
-      duration: 0.4,
+      duration: 0.3,
       alpha: 0,
-      y: "-50px",
+      y: "-20px",
       ease: "power4.inOut",
     })
     .to("#preloader", {
