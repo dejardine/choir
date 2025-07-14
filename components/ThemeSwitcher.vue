@@ -15,17 +15,35 @@ function toggleMode() {
 </script>
 
 <template>
-  <button
+  <div
     v-if="isMounted"
+    class="theme-switcher-container"
     @click="toggleMode"
-    class="theme-switcher"
     :aria-label="`Switch to ${colorMode.value === 'dark' ? 'light' : 'dark'} mode`"
-    :class="{ 'is-dark': colorMode.value === 'dark' }"
-  ></button>
+    role="button"
+    tabindex="0"
+    @keydown.enter="toggleMode"
+    @keydown.space="toggleMode"
+  >
+    <div
+      class="theme-switcher"
+      :class="{ 'is-dark': colorMode.value === 'dark' }"
+    ></div>
+  </div>
 </template>
 
 <style scoped lang="scss">
 @use "@/assets/scss/breakpoints" as *;
+
+.theme-switcher-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--gutter-2));
+  height: 100%;
+  cursor: pointer;
+  grid-column: 9 / span 1;
+}
 
 .theme-switcher {
   background-color: var(--color-reverse);
@@ -34,15 +52,13 @@ function toggleMode() {
   width: var(--gutter-half);
   height: var(--gutter-half);
   border-radius: 50%;
-  padding: 0;
-  cursor: pointer;
   transition:
     background-color 0.3s ease,
     color 0.3s ease,
     border-color 0.3s ease;
-  &:hover {
-    opacity: 0.8;
-    text-decoration: none;
-  }
+}
+
+.theme-switcher-container:hover .theme-switcher {
+  opacity: 0.8;
 }
 </style>
