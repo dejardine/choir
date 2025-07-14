@@ -164,7 +164,6 @@ const rightVimeoVideoId = computed(() => {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
 
   &.double-media-left {
     grid-column: 1 / span 4;
@@ -204,16 +203,15 @@ const rightVimeoVideoId = computed(() => {
 }
 
 .caption {
-  @include smallType;
-  color: var(--color-text);
-
   :deep(p) {
     margin: 0;
-  }
-
-  :deep(em) {
-    font-style: normal;
-    @include heldaneTextItalic;
+    @include smallType;
+    @include heldaneText;
+    em {
+      @include heldaneTextItalic;
+    }
+    color: var(--color-text);
+    margin-top: var(--gutter);
   }
 
   :deep(a) {
