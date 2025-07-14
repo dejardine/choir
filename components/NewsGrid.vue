@@ -5,7 +5,7 @@
       class="news-grid news-grid-top"
       :class="{ hidden: currentView === 'score' }"
     >
-      <div class="toggle-buttons">
+      <div class="toggle-buttons animate-in">
         <button
           @click="setView('grid')"
           :class="{ active: currentView === 'grid' }"

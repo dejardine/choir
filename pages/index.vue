@@ -3,13 +3,14 @@
     <GlobalMainMenu />
     <div id="content">
       <HomeHero :home="page?.home" />
-      <HomeProjects :home="page?.home" />
-      <HomeAbout :home="page?.home" />
+      <HomeProjects :home="page?.home" class="animate-in" />
+      <HomeAbout :home="page?.home" class="animate-in" />
     </div>
     <div class="footer-wrap">
       <CTA
         :cta="page.home.data.call_to_action"
         :ctaLink="page.home.data.call_to_action_link"
+        class="animate-in"
       />
       <GlobalFooter />
     </div>

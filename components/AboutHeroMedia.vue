@@ -1,5 +1,5 @@
 <template>
-  <div class="about-hero-media">
+  <div class="about-hero-media animate-in">
     <client-only>
       <swiper
         v-if="hasSlides"

@@ -92,13 +92,13 @@ const setupParallax = async () => {
   );
 
   mediaItems.forEach((mediaItem: any) => {
-    const speed = parseFloat(mediaItem.dataset.parallaxSpeed) || 0.7;
+    const speed = parseFloat(mediaItem.dataset.parallaxSpeed) || 1.3;
 
     const st = ($ScrollTrigger as any).create({
       trigger: mediaItem,
       start: "top bottom",
       end: "bottom top",
-      scrub: true,
+      scrub: 1, // Smooth scrubbing
       onUpdate: (self: any) => {
         // Get element's position relative to viewport
         const rect = mediaItem.getBoundingClientRect();
@@ -111,7 +111,7 @@ const setupParallax = async () => {
 
         // Only apply parallax when element is near or in viewport
         if (Math.abs(distanceFromCenter) <= 1.5) {
-          const maxParallaxDistance = window.innerHeight * 0.3;
+          const maxParallaxDistance = window.innerHeight * 0.2;
           // Positive multiplier with speed > 1 makes it move UP when scrolling down
           const parallaxY =
             distanceFromCenter * maxParallaxDistance * (speed - 1);
@@ -274,6 +274,10 @@ onUnmounted(() => {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: var(--gutter);
+  :deep(img),
+  :deep(iframe) {
+    will-change: transform;
+  }
 }
 
 .project-copy {
