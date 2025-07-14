@@ -134,6 +134,7 @@ definePageMeta({
 .page-news {
   :deep(.page-header) {
     margin-bottom: 0;
+    padding: 0;
     position: relative;
     .page-header-wrap {
       position: absolute;

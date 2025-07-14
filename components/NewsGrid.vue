@@ -213,6 +213,7 @@
         >
           Score
         </button>
+        <div class="score-toggle-arrow">>></div>
       </div>
       <div class="score-container" ref="scoreContainer">
         <div class="score-items" ref="scoreItems">
@@ -765,6 +766,15 @@ new Promise((resolve) => {
     &:not(.active) {
       opacity: 0.5;
     }
+  }
+
+  .score-toggle-arrow {
+    @include smallType;
+    @include foundersMedium;
+    position: fixed;
+    bottom: var(--gutterPadding);
+    right: var(--gutterPadding);
+    z-index: 1006;
   }
 }
 
