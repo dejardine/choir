@@ -76,14 +76,18 @@ onMounted(() => {
       },
       "-=2.25"
     )
-    .to(".preloader-logo-wipe", {
+    .to(".preloader-logo", {
       alpha: 1,
       duration: 0.35,
       ease: "power4.in",
+      duration: 0.4,
+      alpha: 0,
+      y: "-50px",
+      ease: "power4.inOut",
     })
     .to("#preloader", {
       duration: 0.8,
-      delay: 0.4,
+      delay: 0,
       alpha: 0,
       ease: "power2.inOut",
       onComplete: () => {
