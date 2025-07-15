@@ -7,7 +7,7 @@
         effect="fade"
         :loop="true"
         :autoplay="{
-          delay: 5000,
+          delay: 500000,
           disableOnInteraction: false,
         }"
         :navigation="{
@@ -22,7 +22,7 @@
           v-for="(slide, index) in props?.home?.data?.slideshow"
           :key="`slide-${index}`"
         >
-          <VimeoPlayerLoop
+          <VimeoPlayerLoopHero
             v-if="slide.vimeo_video_loop"
             :video-id="getVimeoId(slide.vimeo_video_loop)"
             :cover-image-url="slide.image?.url"
@@ -182,6 +182,7 @@ onMounted(() => {
   .swiper-slide {
     width: 100%;
     height: 100vh;
+    background-color: var(--palette-black);
     :deep(.image-full-container) {
       height: 100vh;
       img {
@@ -191,50 +192,7 @@ onMounted(() => {
         object-fit: cover;
       }
     }
-    :deep(.vimeo-player-wrapper) {
-      height: 100vh;
-      position: relative;
 
-      iframe {
-        display: block !important;
-        object-fit: cover;
-        position: absolute !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        min-height: 100vh !important;
-        max-height: 100vh !important;
-        aspect-ratio: unset !important;
-        position: absolute;
-        top: 50% !important;
-        left: 50% !important;
-        width: 100vw;
-        height: 100vh !important;
-
-        transform: translate(-50%, -50%);
-        @media (min-aspect-ratio: 16/9) {
-          /* height = 100 * (9 / 16) = 56.25 */
-          height: 56.25vw !important;
-        }
-        @media (max-aspect-ratio: 16/9) {
-          /* width = 100 / (9 / 16) = 177.777777 */
-          width: 177.78vh !important;
-        }
-      }
-
-      // Target any responsive wrapper that Vimeo might add
-      > div {
-        height: 100vh !important;
-        padding-top: 0 !important;
-        position: relative !important;
-        overflow: hidden !important;
-      }
-
-      // Override any aspect-ratio containers
-      [style*="padding-top"] {
-        padding-top: 0 !important;
-        height: 100vh !important;
-      }
-    }
     .caption-controls {
       position: absolute;
       bottom: 0;

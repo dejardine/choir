@@ -56,7 +56,7 @@ const isFadingOut = ref(false);
 
 onMounted(() => {
   console.log(
-    "VimeoPlayerLoop: onMounted triggered. Props:",
+    "VimeoPlayerLoopHero: onMounted triggered. Props:",
     JSON.parse(JSON.stringify(props))
   );
 
@@ -64,26 +64,26 @@ onMounted(() => {
     const img = new Image();
     img.onload = () =>
       console.log(
-        "VimeoPlayerLoop: Cover image preloaded",
+        "VimeoPlayerLoopHero: Cover image preloaded",
         props.coverImageUrl
       );
     img.onerror = () =>
       console.error(
-        "VimeoPlayerLoop: Error preloading cover image",
+        "VimeoPlayerLoopHero: Error preloading cover image",
         props.coverImageUrl
       );
     img.src = props.coverImageUrl;
   } else {
-    console.log("VimeoPlayerLoop: No coverImageUrl provided.");
+    console.log("VimeoPlayerLoopHero: No coverImageUrl provided.");
   }
 
   if (!playerContainer.value) {
-    console.error("VimeoPlayerLoop: playerContainer ref is not available.");
+    console.error("VimeoPlayerLoopHero: playerContainer ref is not available.");
     return;
   }
 
   console.log(
-    "VimeoPlayerLoop: Initializing Vimeo Player with videoId:",
+    "VimeoPlayerLoopHero: Initializing Vimeo Player with videoId:",
     props.videoId
   );
   try {
@@ -103,7 +103,7 @@ onMounted(() => {
 
     player.on("error", (error) => {
       console.error(
-        "VimeoPlayerLoop: Player error event:",
+        "VimeoPlayerLoopHero: Player error event:",
         error.name,
         error.message,
         error.method
@@ -114,7 +114,7 @@ onMounted(() => {
       .ready()
       .then(() => {
         console.log(
-          "VimeoPlayerLoop: Player is ready for videoId:",
+          "VimeoPlayerLoopHero: Player is ready for videoId:",
           props.videoId
         );
         if (props.autoplay) {
@@ -122,7 +122,7 @@ onMounted(() => {
             .play()
             .then(() => {
               console.log(
-                "VimeoPlayerLoop: Playback started for videoId:",
+                "VimeoPlayerLoopHero: Playback started for videoId:",
                 props.videoId
               );
               if (props.coverImageUrl) {
@@ -133,7 +133,7 @@ onMounted(() => {
             })
             .catch((error) => {
               console.error(
-                "VimeoPlayerLoop: Error starting playback for videoId:",
+                "VimeoPlayerLoopHero: Error starting playback for videoId:",
                 props.videoId,
                 error
               );
@@ -144,14 +144,14 @@ onMounted(() => {
       })
       .catch((error) => {
         console.error(
-          "VimeoPlayerLoop: Error on player.ready() for videoId:",
+          "VimeoPlayerLoopHero: Error on player.ready() for videoId:",
           props.videoId,
           error
         );
       });
   } catch (error) {
     console.error(
-      "VimeoPlayerLoop: Error initializing Vimeo Player instance for videoId:",
+      "VimeoPlayerLoopHero: Error initializing Vimeo Player instance for videoId:",
       props.videoId,
       error
     );
@@ -187,7 +187,7 @@ defineExpose({
 onBeforeUnmount(() => {
   if (player) {
     console.log(
-      "VimeoPlayerLoop: Destroying player for videoId:",
+      "VimeoPlayerLoopHero: Destroying player for videoId:",
       props.videoId
     );
     player.destroy();
@@ -197,6 +197,9 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped lang="scss">
+@use "@/assets/scss/breakpoints.scss" as *;
+@use "@/assets/scss/global.scss" as *;
+
 .vimeo-player-wrapper {
   position: relative;
   width: 100%;
@@ -206,6 +209,70 @@ onBeforeUnmount(() => {
   /* Ensure it takes up space, aspect ratio usually handled by player or parent */
   /* For example, if parent has aspect-ratio, this can be height: 100% */
   /* Or, define an aspect ratio here if it's always consistent */
+
+  &.full-height {
+    height: 100vh;
+    :deep(div) {
+      height: 100vh !important;
+      padding-top: 0 !important;
+      position: relative !important;
+      overflow: hidden !important;
+    }
+    :deep(iframe) {
+      display: block !important;
+      object-fit: cover;
+      position: absolute !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      min-height: 100vh !important;
+      max-height: 100vh !important;
+      aspect-ratio: unset !important;
+      position: absolute;
+      top: 50% !important;
+      left: 50% !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      /* Prevent any inline styles from being applied */
+      width: 100vw !important;
+      height: 100vh !important;
+
+      transform: translate(-50%, -50%);
+      @media (min-aspect-ratio: 16/9) {
+        /* height = 100 * (9 / 16) = 56.25 */
+        height: 56.25vw !important;
+      }
+      @media (max-aspect-ratio: 16/9) and (min-aspect-ratio: 16/10) {
+        /* For 16:10 displays like Apple Studio Display */
+        /* width = 100 / (10 / 16) = 160vh */
+        width: 160vh !important;
+      }
+      @media (max-aspect-ratio: 16/10) {
+        /* For even wider displays */
+        width: 177.78vh !important;
+      }
+    }
+
+    > div {
+      height: 100vh !important;
+      padding-top: 0 !important;
+      position: relative !important;
+      overflow: hidden !important;
+    }
+
+    // Target any responsive wrapper that Vimeo might add
+    > div {
+      height: 100vh !important;
+      padding-top: 0 !important;
+      position: relative !important;
+      overflow: hidden !important;
+    }
+
+    // Override any aspect-ratio containers
+    [style*="padding-top"] {
+      padding-top: 0 !important;
+      height: 100vh !important;
+    }
+  }
 }
 
 .cover-image {
