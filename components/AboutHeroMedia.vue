@@ -16,7 +16,7 @@
         @swiper="onSwiperInit"
       >
         <swiper-slide v-for="(slide, index) in slides" :key="index">
-          <VimeoPlayerLoop
+          <VimeoPlayerLoopHero
             v-if="slide.vimeo_video_loop"
             :video-id="getVimeoId(slide.vimeo_video_loop)"
             :cover-image-url="slide.image?.url"
