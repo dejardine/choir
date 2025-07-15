@@ -488,88 +488,16 @@ const initializeScrollTrigger = () => {
   triggerElement.style.opacity = "0";
   document.body.appendChild(triggerElement);
 
-  // Get all score items for individual animations
-  const scoreItemElements = scoreItems.value.querySelectorAll(".score-item");
-
-  // Define speed patterns for all items
-  const fastMovementMultiplier = 0.4; // Fast items speed
-  const slowMovementMultiplier = 0.4; // Slow items speed
-  const normalMovementMultiplier = 0.4; // Normal items speed
-
-  // Create arrays for each speed group based on patterns
-  const fastMovingItems = [];
-  const slowMovingItems = [];
-  const normalMovingItems = [];
-
-  // Pattern: Every 3rd item gets a different speed
-  // You can change this pattern by modifying the conditions
-  for (let i = 0; i < scoreItemElements.length; i++) {
-    if (i % 3 === 0) {
-      // Every 3rd item (0, 3, 6, 9, 12...) - fast
-      fastMovingItems.push(i);
-    } else if (i % 3 === 1) {
-      // Every 3rd item + 1 (1, 4, 7, 10, 13...) - slow
-      slowMovingItems.push(i);
-    } else {
-      // Every 3rd item + 2 (2, 5, 8, 11, 14...) - normal
-      normalMovingItems.push(i);
-    }
-  }
-
-  // Create individual animations for fast-moving items
-  const fastItemAnimations = [];
-  fastMovingItems.forEach((itemIndex) => {
-    if (scoreItemElements[itemIndex]) {
-      const animation = $gsap.to(scoreItemElements[itemIndex], {
-        x: -scrollDistance * fastMovementMultiplier,
-        ease: "none",
-      });
-      fastItemAnimations.push(animation);
-    }
-  });
-
-  // Create individual animations for slow-moving items
-  const slowItemAnimations = [];
-  slowMovingItems.forEach((itemIndex) => {
-    if (scoreItemElements[itemIndex]) {
-      const animation = $gsap.to(scoreItemElements[itemIndex], {
-        x: -scrollDistance * slowMovementMultiplier,
-        ease: "none",
-      });
-      slowItemAnimations.push(animation);
-    }
-  });
-
-  // Create individual animations for normal-moving items
-  const normalItemAnimations = [];
-  normalMovingItems.forEach((itemIndex) => {
-    if (scoreItemElements[itemIndex]) {
-      const animation = $gsap.to(scoreItemElements[itemIndex], {
-        x: -scrollDistance * normalMovementMultiplier,
-        ease: "none",
-      });
-      normalItemAnimations.push(animation);
-    }
-  });
-
-  // Create the main container animation (background movement)
-  const mainAnimation = $gsap.to(scoreItems.value, {
-    x: -scrollDistance,
-    ease: "none",
-  });
-
   // Create horizontal scroll with ScrollTrigger
   scrollTriggerInstance = $ScrollTrigger.create({
     trigger: triggerElement,
     start: "top top",
     end: "bottom top",
     scrub: 1,
-    animation: $gsap
-      .timeline()
-      .add(mainAnimation)
-      .add(fastItemAnimations, 0) // Start fast animations at the same time
-      .add(slowItemAnimations, 0) // Start slow animations at the same time
-      .add(normalItemAnimations, 0), // Start normal animations at the same time
+    animation: $gsap.to(scoreItems.value, {
+      x: -scrollDistance, // Use original scroll distance (already includes end spacer)
+      ease: "none",
+    }),
     onUpdate: (self) => {
       // Debug logging
       console.log("ScrollTrigger progress:", self.progress);
@@ -584,12 +512,6 @@ const initializeScrollTrigger = () => {
 
   // Store the trigger element for cleanup
   scrollTriggerInstance.triggerElement = triggerElement;
-
-  // Store animations for cleanup
-  scrollTriggerInstance.fastItemAnimations = fastItemAnimations;
-  scrollTriggerInstance.slowItemAnimations = slowItemAnimations;
-  scrollTriggerInstance.normalItemAnimations = normalItemAnimations;
-  scrollTriggerInstance.mainAnimation = mainAnimation;
 
   // Draggable functionality disabled for score view
   // if ($Draggable && scoreItems.value) {
@@ -625,12 +547,6 @@ const initializeScrollTrigger = () => {
     itemCount: allNewsItems.value.length,
     itemWidth,
     gap,
-    fastMovingItems,
-    fastMovementMultiplier,
-    slowMovingItems,
-    slowMovementMultiplier,
-    normalMovingItems,
-    normalMovementMultiplier,
   });
 };
 
@@ -641,27 +557,6 @@ const destroyScrollTrigger = () => {
     if (scrollTriggerInstance.triggerElement) {
       document.body.removeChild(scrollTriggerInstance.triggerElement);
     }
-
-    // Clean up individual animations
-    if (scrollTriggerInstance.fastItemAnimations) {
-      scrollTriggerInstance.fastItemAnimations.forEach((animation) => {
-        animation.kill();
-      });
-    }
-    if (scrollTriggerInstance.slowItemAnimations) {
-      scrollTriggerInstance.slowItemAnimations.forEach((animation) => {
-        animation.kill();
-      });
-    }
-    if (scrollTriggerInstance.normalItemAnimations) {
-      scrollTriggerInstance.normalItemAnimations.forEach((animation) => {
-        animation.kill();
-      });
-    }
-    if (scrollTriggerInstance.mainAnimation) {
-      scrollTriggerInstance.mainAnimation.kill();
-    }
-
     scrollTriggerInstance = null;
   }
 
