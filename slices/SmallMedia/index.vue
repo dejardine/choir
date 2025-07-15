@@ -67,6 +67,10 @@ const videoCoverImageUrl = computed(() => {
         <div v-else>
           <!-- Default SmallMedia: Image data is missing. -->
         </div>
+        <!-- Caption for default variation -->
+        <div v-if="slice.primary.caption" class="caption">
+          <PrismicRichText :field="slice.primary.caption" />
+        </div>
       </template>
       <template v-else-if="slice.variation === 'videoLoop'">
         <VimeoPlayerLoop
@@ -76,6 +80,10 @@ const videoCoverImageUrl = computed(() => {
         />
         <div v-else>
           <!-- Video SmallMedia: Video ID or Cover Image URL is missing. -->
+        </div>
+        <!-- Caption for default variation -->
+        <div v-if="slice.primary.caption" class="caption">
+          <PrismicRichText :field="slice.primary.caption" />
         </div>
       </template>
     </div>
@@ -149,6 +157,27 @@ const videoCoverImageUrl = computed(() => {
     width: 100%;
     height: auto;
     aspect-ratio: 16/9;
+  }
+  .caption {
+    :deep(p) {
+      margin: 0;
+      @include smallType;
+      @include heldaneText;
+      em {
+        @include heldaneTextItalic;
+      }
+      color: var(--color-text);
+      margin-top: var(--gutter);
+    }
+
+    :deep(a) {
+      color: inherit;
+      text-decoration: underline;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
   }
 }
 </style>
