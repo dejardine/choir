@@ -15,20 +15,28 @@
           prevEl: prevButton,
         }"
         class="home-hero-slider"
+        @slideChange="handleSlideChange"
+        @swiper="onSwiperInit"
       >
         <swiper-slide
           v-for="(slide, index) in props?.home?.data?.slideshow"
           :key="`slide-${index}`"
         >
-          <ImageFull :imageField="slide?.image" v-if="slide?.image?.url" />
-          <video
-            v-else-if="slide.video?.url"
-            :src="slide?.video?.url"
-            autoplay
-            muted
-            loop
-            playsinline
-          ></video>
+          <VimeoPlayerLoop
+            v-if="slide.vimeo_video_loop"
+            :video-id="getVimeoId(slide.vimeo_video_loop)"
+            :cover-image-url="slide.image?.url"
+            :cover-image="slide.image"
+            :ref="
+              (el) => {
+                if (el) videoPlayers[index] = el;
+              }
+            "
+            :autoplay="false"
+            :full-height="true"
+            @ready="onVideoReady(index)"
+          />
+          <ImageFull v-else-if="slide?.image?.url" :imageField="slide?.image" />
           <div class="caption-controls">
             <prismic-rich-text :field="slide?.caption" />
             <div class="caption-controls-controls">
@@ -70,6 +78,85 @@ const isMounted = ref(false);
 const prevButton = ref(null);
 const nextButton = ref(null);
 
+// Store references to video players
+const videoPlayers = ref({});
+const readyVideos = ref({});
+let swiperInstance = null;
+
+// Helper function to extract Vimeo ID
+const getVimeoId = (url) => {
+  if (!url) return null;
+
+  // Clean the URL: remove leading/trailing whitespace and quotes
+  const cleanedUrl = url.trim().replace(/["""]/g, "");
+
+  // Regex to capture Vimeo ID from various URL formats
+  const vimeoRegex =
+    /(?:www\.|player\.)?vimeo.com\/(?:channels\/(?:\w+\/)?|groups\/(?:[^/]*)\/videos\/|album\/(?:\d+)\/video\/|video\/|event\/)?(\d+)/i;
+  const match = cleanedUrl.match(vimeoRegex);
+
+  if (match && match[1]) {
+    // Ensure the extracted ID is purely numeric and parse it
+    const numericId = match[1].replace(/\D/g, ""); // Remove any non-digit characters just in case
+    return numericId ? parseInt(numericId, 10) : null;
+  }
+  return null;
+};
+
+// Handle video ready event
+const onVideoReady = (index) => {
+  console.log("Video ready:", index);
+  readyVideos.value[index] = true;
+
+  // If this is the first video and swiper is initialized, play it
+  if (swiperInstance && swiperInstance.activeIndex === index) {
+    const player = videoPlayers.value[index];
+    if (player?.play) {
+      player.play();
+    }
+  }
+};
+
+// Handle swiper initialization
+const onSwiperInit = (swiper) => {
+  console.log("Swiper initialized");
+  swiperInstance = swiper;
+
+  // Play the first video if it's ready
+  const firstIndex = swiper.activeIndex;
+  if (readyVideos.value[firstIndex]) {
+    const player = videoPlayers.value[firstIndex];
+    if (player?.play) {
+      player.play();
+    }
+  }
+};
+
+// Handle slide changes
+const handleSlideChange = async (swiper) => {
+  console.log("Slide changed to:", swiper.activeIndex);
+  const currentIndex = swiper.activeIndex;
+
+  // Pause all videos
+  Object.entries(videoPlayers.value).forEach(([index, player]) => {
+    if (player?.pause && index !== currentIndex.toString()) {
+      player.pause();
+    }
+  });
+
+  // Play the current video if it's ready
+  if (readyVideos.value[currentIndex]) {
+    const currentPlayer = videoPlayers.value[currentIndex];
+    if (currentPlayer?.play) {
+      try {
+        await currentPlayer.play();
+      } catch (error) {
+        console.error("Error playing video:", error);
+      }
+    }
+  }
+};
+
 onMounted(() => {
   isMounted.value = true;
 });
@@ -90,19 +177,62 @@ onMounted(() => {
 
 .home-hero-slider {
   width: 100%;
-  height: 100%;
+  height: 100vh;
 
   .swiper-slide {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     :deep(.image-full-container) {
-      height: 100%;
-      img,
-      video {
+      height: 100vh;
+      img {
         display: block;
         width: 100%;
-        height: 100%;
+        height: 100vh;
         object-fit: cover;
+      }
+    }
+    :deep(.vimeo-player-wrapper) {
+      height: 100vh;
+      position: relative;
+
+      iframe {
+        display: block !important;
+        object-fit: cover;
+        position: absolute !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        min-height: 100vh !important;
+        max-height: 100vh !important;
+        aspect-ratio: unset !important;
+        position: absolute;
+        top: 50% !important;
+        left: 50% !important;
+        width: 100vw;
+        height: 100vh !important;
+
+        transform: translate(-50%, -50%);
+        @media (min-aspect-ratio: 16/9) {
+          /* height = 100 * (9 / 16) = 56.25 */
+          height: 56.25vw !important;
+        }
+        @media (max-aspect-ratio: 16/9) {
+          /* width = 100 / (9 / 16) = 177.777777 */
+          width: 177.78vh !important;
+        }
+      }
+
+      // Target any responsive wrapper that Vimeo might add
+      > div {
+        height: 100vh !important;
+        padding-top: 0 !important;
+        position: relative !important;
+        overflow: hidden !important;
+      }
+
+      // Override any aspect-ratio containers
+      [style*="padding-top"] {
+        padding-top: 0 !important;
+        height: 100vh !important;
       }
     }
     .caption-controls {

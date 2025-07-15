@@ -1,5 +1,9 @@
 <template>
-  <div ref="playerContainer" class="vimeo-player-wrapper">
+  <div
+    ref="playerContainer"
+    class="vimeo-player-wrapper"
+    :class="{ 'full-height': fullHeight }"
+  >
     <img
       v-if="coverImageUrl"
       :src="coverImageUrl"
@@ -37,6 +41,10 @@ const props = defineProps({
   autoplay: {
     type: Boolean,
     default: true,
+  },
+  fullHeight: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -198,6 +206,27 @@ onBeforeUnmount(() => {
   /* Ensure it takes up space, aspect ratio usually handled by player or parent */
   /* For example, if parent has aspect-ratio, this can be height: 100% */
   /* Or, define an aspect ratio here if it's always consistent */
+
+  &.full-height {
+    height: 100vh;
+
+    iframe {
+      height: 100vh !important;
+      min-height: 100vh !important;
+      max-height: 100vh !important;
+      aspect-ratio: unset !important;
+    }
+
+    > div {
+      height: 100vh !important;
+      padding-top: 0 !important;
+    }
+
+    [style*="padding-top"] {
+      padding-top: 0 !important;
+      height: 100vh !important;
+    }
+  }
 }
 
 .cover-image {

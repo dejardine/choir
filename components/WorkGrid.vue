@@ -143,8 +143,14 @@ new Promise((resolve) => {
       aspect-ratio: 3/2;
       object-fit: cover;
       object-position: center bottom;
-      margin-bottom: var(--gutter-half);
+      transition: all 1s;
+      transform-origin: center center;
     }
+    :deep(iframe) {
+      transition: all 1s;
+      transform-origin: center center;
+    }
+    overflow: hidden;
   }
 
   .thumbnail-title {
@@ -163,6 +169,17 @@ new Promise((resolve) => {
   &:nth-last-child(-n + 2) {
     .thumbnail-title {
       margin-bottom: 0;
+    }
+  }
+  &:hover {
+    .thumbnail-image,
+    .thumbnail-video {
+      :deep(img) {
+        transform: scale(1.05);
+      }
+      :deep(iframe) {
+        transform: scale(1.05);
+      }
     }
   }
 }

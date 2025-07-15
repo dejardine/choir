@@ -43,15 +43,11 @@
                 "thumbnails": []
               }
             },
-            "video": {
-              "type": "Link",
+            "vimeo_video_loop": {
+              "type": "Text",
               "config": {
-                "label": "Video Loop",
-                "placeholder": "",
-                "select": null,
-                "allowTargetBlank": false,
-                "allowText": false,
-                "repeat": false
+                "label": "Vimeo Video Loop",
+                "placeholder": ""
               }
             },
             "caption": {

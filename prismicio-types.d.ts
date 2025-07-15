@@ -876,14 +876,14 @@ export interface HomeDocumentDataSlideshowItem {
   image: prismic.ImageField<never>;
 
   /**
-   * Video Loop field in *Home → Slideshow*
+   * Vimeo Video Loop field in *Home → Slideshow*
    *
-   * - **Field Type**: Link
+   * - **Field Type**: Text
    * - **Placeholder**: *None*
-   * - **API ID Path**: home.slideshow[].video
-   * - **Documentation**: https://prismic.io/docs/field#link-content-relationship
+   * - **API ID Path**: home.slideshow[].vimeo_video_loop
+   * - **Documentation**: https://prismic.io/docs/field#key-text
    */
-  video: prismic.LinkField<string, string, unknown, prismic.FieldState, never>;
+  vimeo_video_loop: prismic.KeyTextField;
 
   /**
    * Caption field in *Home → Slideshow*
