@@ -20,6 +20,15 @@
             "thumbnails": []
           }
         },
+        "caption": {
+          "type": "StructuredText",
+          "config": {
+            "label": "Caption",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,em"
+          }
+        },
         "align_image": {
           "type": "Select",
           "config": {
@@ -76,6 +85,15 @@
           "config": {
             "label": "Vimeo Video Link",
             "placeholder": ""
+          }
+        },
+        "caption": {
+          "type": "StructuredText",
+          "config": {
+            "label": "Caption",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,em"
           }
         },
         "align_image": {

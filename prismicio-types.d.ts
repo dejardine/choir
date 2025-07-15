@@ -1684,6 +1684,16 @@ export interface LargeMediaSliceDefaultPrimary {
   image: prismic.ImageField<never>;
 
   /**
+   * Caption field in *LargeMedia → Image → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: large_media.default.primary.caption
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  caption: prismic.RichTextField;
+
+  /**
    * Bottom Margin field in *LargeMedia → Image → Primary*
    *
    * - **Field Type**: Boolean
@@ -1731,6 +1741,16 @@ export interface LargeMediaSliceVideoPrimary {
    * - **Documentation**: https://prismic.io/docs/field#key-text
    */
   vimeo_video_link_new: prismic.KeyTextField;
+
+  /**
+   * Caption field in *LargeMedia → Video Loop → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: large_media.video.primary.caption
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  caption: prismic.RichTextField;
 
   /**
    * Bottom Margin field in *LargeMedia → Video Loop → Primary*
@@ -1789,15 +1809,14 @@ export interface MediumMediaSliceDefaultPrimary {
   image: prismic.ImageField<never>;
 
   /**
-   * Bottom Margin field in *MediumMedia → Image → Primary*
+   * Caption field in *MediumMedia → Image → Primary*
    *
-   * - **Field Type**: Boolean
+   * - **Field Type**: Rich Text
    * - **Placeholder**: *None*
-   * - **Default Value**: false
-   * - **API ID Path**: medium_media.default.primary.bottom_margin
-   * - **Documentation**: https://prismic.io/docs/field#boolean
+   * - **API ID Path**: medium_media.default.primary.caption
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
    */
-  bottom_margin: prismic.BooleanField;
+  caption: prismic.RichTextField;
 
   /**
    * Align Media field in *MediumMedia → Image → Primary*
@@ -1812,6 +1831,17 @@ export interface MediumMediaSliceDefaultPrimary {
     "Align left" | "Align center" | "Align right",
     "filled"
   >;
+
+  /**
+   * Bottom Margin field in *MediumMedia → Image → Primary*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: medium_media.default.primary.bottom_margin
+   * - **Documentation**: https://prismic.io/docs/field#boolean
+   */
+  bottom_margin: prismic.BooleanField;
 }
 
 /**
@@ -1852,15 +1882,14 @@ export interface MediumMediaSliceVideoPrimary {
   vimeo_video_link_new: prismic.KeyTextField;
 
   /**
-   * Bottom Margin field in *MediumMedia → Video Loop → Primary*
+   * Caption field in *MediumMedia → Video Loop → Primary*
    *
-   * - **Field Type**: Boolean
+   * - **Field Type**: Rich Text
    * - **Placeholder**: *None*
-   * - **Default Value**: false
-   * - **API ID Path**: medium_media.video.primary.bottom_margin
-   * - **Documentation**: https://prismic.io/docs/field#boolean
+   * - **API ID Path**: medium_media.video.primary.caption
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
    */
-  bottom_margin: prismic.BooleanField;
+  caption: prismic.RichTextField;
 
   /**
    * Align media field in *MediumMedia → Video Loop → Primary*
@@ -1875,6 +1904,17 @@ export interface MediumMediaSliceVideoPrimary {
     "Align left" | "Align center" | "Align right",
     "filled"
   >;
+
+  /**
+   * Bottom Margin field in *MediumMedia → Video Loop → Primary*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: medium_media.video.primary.bottom_margin
+   * - **Documentation**: https://prismic.io/docs/field#boolean
+   */
+  bottom_margin: prismic.BooleanField;
 }
 
 /**
@@ -2220,6 +2260,16 @@ export interface SmallMediaSliceDefaultPrimary {
   image: prismic.ImageField<never>;
 
   /**
+   * Caption field in *SmallMedia → Image → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: small_media.default.primary.caption
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  caption: prismic.RichTextField;
+
+  /**
    * Align Image field in *SmallMedia → Image → Primary*
    *
    * - **Field Type**: Select
@@ -2295,6 +2345,16 @@ export interface SmallMediaSliceVideoLoopPrimary {
    * - **Documentation**: https://prismic.io/docs/field#key-text
    */
   vimeo_video_link_new: prismic.KeyTextField;
+
+  /**
+   * Caption field in *SmallMedia → Video loop → Primary*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: small_media.videoLoop.primary.caption
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  caption: prismic.RichTextField;
 
   /**
    * Align Video field in *SmallMedia → Video loop → Primary*

@@ -34,6 +34,17 @@
 				"__TYPE__": "FieldContent",
 				"value": "Align left",
 				"type": "Select"
+			},
+			"caption": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "paragraph",
+						"content": {
+							"text": "Quis occaecat velit sunt ea."
+						}
+					}
+				]
 			}
 		},
 		"items": []
@@ -78,6 +89,17 @@
 				"__TYPE__": "FieldContent",
 				"value": "announced",
 				"type": "Text"
+			},
+			"caption": {
+				"__TYPE__": "StructuredTextContent",
+				"value": [
+					{
+						"type": "paragraph",
+						"content": {
+							"text": "In aute dolor duis et. Est voluptate minim cillum esse et commodo veniam."
+						}
+					}
+				]
 			}
 		},
 		"items": [

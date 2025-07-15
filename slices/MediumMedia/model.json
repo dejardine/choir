@@ -20,13 +20,13 @@
             "thumbnails": []
           }
         },
-        "bottom_margin": {
-          "type": "Boolean",
+        "caption": {
+          "type": "StructuredText",
           "config": {
-            "label": "Bottom Margin",
-            "placeholder_false": "false",
-            "placeholder_true": "true",
-            "default_value": false
+            "label": "Caption",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,em"
           }
         },
         "align_media": {
@@ -40,6 +40,15 @@
               "Align right"
             ],
             "default_value": "Align left"
+          }
+        },
+        "bottom_margin": {
+          "type": "Boolean",
+          "config": {
+            "label": "Bottom Margin",
+            "placeholder_false": "false",
+            "placeholder_true": "true",
+            "default_value": false
           }
         }
       },
@@ -68,13 +77,13 @@
             "placeholder": ""
           }
         },
-        "bottom_margin": {
-          "type": "Boolean",
+        "caption": {
+          "type": "StructuredText",
           "config": {
-            "label": "Bottom Margin",
-            "placeholder_false": "false",
-            "placeholder_true": "true",
-            "default_value": false
+            "label": "Caption",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,em"
           }
         },
         "align_media": {
@@ -88,6 +97,15 @@
               "Align right"
             ],
             "default_value": "Align left"
+          }
+        },
+        "bottom_margin": {
+          "type": "Boolean",
+          "config": {
+            "label": "Bottom Margin",
+            "placeholder_false": "false",
+            "placeholder_true": "true",
+            "default_value": false
           }
         }
       },

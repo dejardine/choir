@@ -16,7 +16,10 @@
       <div
         v-if="projectGroup.case_study && projectGroup.case_study.data"
         class="archive-grid-item animate-in"
-        :class="{ 'is-open': openItemId === projectGroup.case_study.id }"
+        :class="{
+          'is-open': openItemId === projectGroup.case_study.id,
+          [`archive-grid-item-${index + 1}`]: true,
+        }"
         @click="toggleItem(projectGroup.case_study.id)"
       >
         <div class="item-content">
@@ -347,7 +350,7 @@ onUnmounted(() => {
   grid-template-columns: repeat(12, 1fr);
   gap: var(--gutter);
   padding: 0;
-  padding-top: calc(50vh + var(--gutter));
+  padding-top: calc(50vh - 1px);
   position: relative;
   z-index: 20;
 }
@@ -408,6 +411,7 @@ onUnmounted(() => {
   top: 50vh;
   left: 0;
   transform: translateY(-50%);
+  pointer-events: none;
 }
 
 .project-info-bottom {
@@ -451,7 +455,9 @@ onUnmounted(() => {
 .archive-grid-item {
   grid-column: auto / span 12;
   padding: 0 var(--gutterPadding);
-
+  &.archive-grid-item-1 {
+    padding-top: var(--gutter);
+  }
   .item-content {
   }
 
@@ -478,6 +484,7 @@ onUnmounted(() => {
     }
     border-bottom: 1px solid var(--color-border);
     border-top: 1px solid var(--color-border);
+    padding-top: var(--gutter);
   }
 
   // Add cursor pointer to indicate clickable

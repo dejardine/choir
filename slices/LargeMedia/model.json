@@ -20,6 +20,15 @@
             "thumbnails": []
           }
         },
+        "caption": {
+          "type": "StructuredText",
+          "config": {
+            "label": "Caption",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,em"
+          }
+        },
         "bottom_margin": {
           "type": "Boolean",
           "config": {
@@ -53,6 +62,15 @@
           "config": {
             "label": "Vimeo Video Link",
             "placeholder": ""
+          }
+        },
+        "caption": {
+          "type": "StructuredText",
+          "config": {
+            "label": "Caption",
+            "placeholder": "",
+            "allowTargetBlank": true,
+            "multi": "paragraph,em"
           }
         },
         "bottom_margin": {
