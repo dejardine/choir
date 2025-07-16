@@ -46,6 +46,11 @@ onMounted(() => {
     delay: 0,
     ease: "power4.in",
   })
+    .to(".preloader-loader", {
+      xPercent: 100,
+      duration: 1,
+      ease: "power4.in",
+    })
 
     .to("#preloader", {
       duration: 0.8,
