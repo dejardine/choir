@@ -145,6 +145,14 @@ const toggleItem = (itemId) => {
     // Open the clicked item and close any other open item
     openItemId.value = itemId;
   }
+
+  // Refresh ScrollTrigger after accordion state changes
+  // to recalculate positions for image swapping
+  nextTick(() => {
+    if ($ScrollTrigger) {
+      $ScrollTrigger.refresh();
+    }
+  });
 };
 
 // Method to process scope text and replace line breaks with commas
