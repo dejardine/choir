@@ -148,10 +148,14 @@ const toggleItem = (itemId) => {
 
   // Refresh ScrollTrigger after accordion state changes
   // to recalculate positions for image swapping
+  // Delay based on CSS transition duration (0.6s) plus a small buffer
   nextTick(() => {
-    if ($ScrollTrigger) {
-      $ScrollTrigger.refresh();
-    }
+    setTimeout(() => {
+      if ($ScrollTrigger) {
+        $ScrollTrigger.refresh();
+        console.log("ScrollTrigger refreshed");
+      }
+    }, 650); // 600ms for transition + 50ms buffer
   });
 };
 
