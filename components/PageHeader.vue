@@ -65,4 +65,8 @@ defineProps({
   width: calc(25% + var(--gutter));
   display: inline-block;
 }
+
+.page-header-wrap {
+  max-width: 1600px;
+}
 </style>
