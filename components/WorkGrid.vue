@@ -47,22 +47,43 @@
                 class="thumbnail-image"
               />
 
-              <!-- Gallery Thumbnail (using ThumbnailGallery component) -->
-              <ThumbnailGallery
+              <!-- Slideshow Thumbnail (using Swiper with autoplay) -->
+              <div
                 v-else-if="
                   projectGroup.case_study.data.gallery_thumbnail &&
                   projectGroup.case_study.data.gallery_thumbnail.length > 0
                 "
-                :images="
-                  projectGroup.case_study.data.gallery_thumbnail.map(
-                    (item) => ({
-                      url: item.image.url,
-                      alt: item.image.alt,
-                      dimensions: item.image.dimensions,
-                    })
-                  )
-                "
-              />
+                class="thumbnail-slideshow"
+              >
+                <client-only>
+                  <swiper
+                    :ref="(el) => setSwiperRef(el, index)"
+                    :modules="[EffectFade, Autoplay]"
+                    :slides-per-view="1"
+                    :space-between="0"
+                    effect="fade"
+                    :fade-effect="{ crossFade: true }"
+                    :loop="true"
+                    :autoplay="{
+                      delay: 2500,
+                      disableOnInteraction: false,
+                      pauseOnMouseEnter: false,
+                    }"
+                    class="work-grid-swiper"
+                  >
+                    <swiper-slide
+                      v-for="(item, slideIndex) in projectGroup.case_study.data
+                        .gallery_thumbnail"
+                      :key="slideIndex"
+                    >
+                      <ImageHalf
+                        :imageField="item.image"
+                        class="slideshow-image"
+                      />
+                    </swiper-slide>
+                  </swiper>
+                </client-only>
+              </div>
 
               <!-- Fallback if no media (but data object exists) -->
               <div v-else class="no-media">
@@ -104,9 +125,12 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue";
+import { defineProps, ref, onMounted } from "vue";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { EffectFade, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-fade";
 import ImageHalf from "./ImageHalf.vue";
-import ThumbnailGallery from "./ThumbnailGallery.vue";
 import VimeoPlayerLoop from "./VimeoPlayerLoop.vue";
 
 const props = defineProps({
@@ -116,13 +140,38 @@ const props = defineProps({
   },
 });
 
-new Promise((resolve) => {
-  const script = document.createElement("script");
-  script.src = "https://player.vimeo.com/api/player.js";
-  script.onload = () => resolve("Vimeo API loaded");
-  script.onerror = () => resolve("Vimeo API failed to load");
-  document.head.appendChild(script);
-}).then(console.log);
+const swiperInstances = ref({});
+
+const setSwiperRef = (el, index) => {
+  if (el) {
+    swiperInstances.value[index] = el.swiper;
+  }
+};
+
+const startAutoplay = (index) => {
+  const swiperInstance = swiperInstances.value[index];
+  if (swiperInstance && swiperInstance.autoplay) {
+    swiperInstance.autoplay.start();
+  }
+};
+
+const stopAutoplay = (index) => {
+  const swiperInstance = swiperInstances.value[index];
+  if (swiperInstance && swiperInstance.autoplay) {
+    swiperInstance.autoplay.stop();
+  }
+};
+
+// Only load Vimeo script on client side
+if (process.client) {
+  new Promise((resolve) => {
+    const script = document.createElement("script");
+    script.src = "https://player.vimeo.com/api/player.js";
+    script.onload = () => resolve("Vimeo API loaded");
+    script.onerror = () => resolve("Vimeo API failed to load");
+    document.head.appendChild(script);
+  }).then(console.log);
+}
 </script>
 
 <style lang="scss" scoped>
@@ -136,7 +185,8 @@ new Promise((resolve) => {
 .work-grid-item {
   grid-column: auto / span 6;
   .thumbnail-image,
-  .thumbnail-video {
+  .thumbnail-video,
+  .thumbnail-slideshow {
     :deep(img) {
       width: 100%;
       height: auto;
@@ -151,6 +201,28 @@ new Promise((resolve) => {
       transform-origin: center center;
     }
     overflow: hidden;
+  }
+
+  .thumbnail-slideshow {
+    width: 100%;
+    aspect-ratio: 3/2;
+    overflow: hidden;
+    cursor: pointer; // Indicate interactivity
+  }
+
+  .work-grid-swiper {
+    width: 100%;
+    height: 100%;
+  }
+
+  .slideshow-image {
+    :deep(img) {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      aspect-ratio: 3/2;
+    }
   }
 
   .thumbnail-title {
@@ -173,7 +245,8 @@ new Promise((resolve) => {
   }
   &:hover {
     .thumbnail-image,
-    .thumbnail-video {
+    .thumbnail-video,
+    .thumbnail-slideshow {
       :deep(img) {
         transform: scale(1.05);
       }
