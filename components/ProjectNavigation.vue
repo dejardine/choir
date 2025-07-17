@@ -6,30 +6,28 @@
       class="next-project-link"
       @mouseenter="handleMouseEnter"
       @mouseleave="handleMouseLeave"
-      @mousemove="handleMouseMove"
     >
       Another Project
     </nuxt-link>
     <button @click="scrollToTop" class="back-to-top-button">
       From the start
     </button>
-  </div>
-
-  <!-- Floating hover image -->
-  <div
-    v-if="isHovering && nextProjectAltThumbnail && nextProjectAltThumbnail.url"
-    class="hover-image"
-    :style="{
-      left: mousePosition.x + 'px',
-      top: mousePosition.y + 'px',
-    }"
-  >
-    <img
-      :src="nextProjectAltThumbnail.url"
-      :alt="nextProjectAltThumbnail.alt || 'Next project thumbnail'"
-      width="150"
-      height="auto"
-    />
+    <div
+      v-show="
+        isHovering && nextProjectAltThumbnail && nextProjectAltThumbnail.url
+      "
+      ref="hoverImageRef"
+      class="hover-image"
+      :class="`hover-image--${imageOrientation}`"
+    >
+      <img
+        :src="nextProjectAltThumbnail.url"
+        :alt="nextProjectAltThumbnail.alt || 'Next project thumbnail'"
+        width="150"
+        height="auto"
+        style="display: none"
+      />
+    </div>
   </div>
 </template>
 
@@ -55,22 +53,52 @@ const scrollToTop = () => {
 
 // Hover image functionality
 const isHovering = ref(false);
-const mousePosition = ref({ x: 0, y: 0 });
-const hoverImage = ref(null);
-
-const handleMouseMove = (event) => {
-  mousePosition.value = { x: event.clientX, y: event.clientY };
-};
+const hoverImageRef = ref(null);
 
 const handleMouseEnter = () => {
   isHovering.value = true;
+
+  // Animate image in with GSAP
+  if (hoverImageRef.value && $gsap) {
+    const img = hoverImageRef.value.querySelector("img");
+    if (img) {
+      $gsap.set(img, { scaleY: 0, display: "block" });
+      $gsap.to(img, {
+        scaleY: 1,
+        duration: 0.4,
+        ease: "power4.inOut",
+        alpha: 1,
+      });
+    }
+  }
 };
 
 const handleMouseLeave = () => {
-  // Add a small delay to prevent flickering when moving between elements
-  setTimeout(() => {
-    isHovering.value = false;
-  }, 100);
+  // Animate image out with GSAP
+  if (hoverImageRef.value && $gsap) {
+    const img = hoverImageRef.value.querySelector("img");
+    if (img) {
+      $gsap.to(img, {
+        alpha: 0,
+        duration: 0.3,
+        ease: "power2.in",
+        onComplete: () => {
+          // Hide the element after animation completes
+          isHovering.value = false;
+        },
+      });
+    } else {
+      // Fallback if no image found
+      setTimeout(() => {
+        isHovering.value = false;
+      }, 100);
+    }
+  } else {
+    // Fallback if GSAP not available
+    setTimeout(() => {
+      isHovering.value = false;
+    }, 100);
+  }
 };
 
 const props = defineProps({
@@ -111,6 +139,27 @@ const nextProjectAltThumbnail = computed(() => {
     return null;
   }
   return nextProject.value.data.alt_thumbnail;
+});
+
+// Determine image orientation and size class
+const imageOrientation = computed(() => {
+  if (
+    !nextProjectAltThumbnail.value ||
+    !nextProjectAltThumbnail.value.dimensions
+  ) {
+    return "square"; // Default fallback
+  }
+
+  const { width, height } = nextProjectAltThumbnail.value.dimensions;
+  const ratio = width / height;
+
+  if (ratio > 1.2) {
+    return "landscape";
+  } else if (ratio < 0.8) {
+    return "portrait";
+  } else {
+    return "square";
+  }
 });
 
 const nextProjectLink = computed(() => {
@@ -166,17 +215,42 @@ const nextProjectLink = computed(() => {
 }
 
 .hover-image {
-  position: fixed;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, calc(-100% - var(--gutter)));
   pointer-events: none;
   z-index: 2000;
-  transform: translate(-50%, -50%);
-  transition:
-    opacity 0.3s ease,
-    transform 0.1s ease;
+  transition: opacity 0.3s ease;
 
   img {
     width: 150px;
     height: auto;
+    transform-origin: center;
+  }
+
+  // Landscape images - wider
+  &--landscape {
+    img {
+      width: 300px;
+      height: auto;
+    }
+  }
+
+  // Portrait images - taller
+  &--portrait {
+    img {
+      width: 200px;
+      height: auto;
+    }
+  }
+
+  // Square images - default size
+  &--square {
+    img {
+      width: 150px;
+      height: auto;
+    }
   }
 }
 </style>
