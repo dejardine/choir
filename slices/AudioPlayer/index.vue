@@ -193,7 +193,7 @@ const progressPercentage = computed(() => {
 
 .audio-player-slice {
   width: 100%;
-  margin: var(--slide-padding) var(--gutterPadding);
+  margin: var(--slide-padding) 0;
   position: relative;
 }
 
@@ -220,6 +220,7 @@ const progressPercentage = computed(() => {
 
 .player-left {
   grid-column: 1 / span 3;
+  padding-left: var(--gutterPadding);
 }
 
 .player-content {

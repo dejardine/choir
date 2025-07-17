@@ -83,6 +83,18 @@ const setupScrollTrigger = () => {
     onUpdate: (self) => {
       updateCurrentProject();
     },
+    onEnter: () => {
+      projectTitle.value.classList.add("pinned");
+    },
+    onLeave: () => {
+      projectTitle.value.classList.remove("pinned");
+    },
+    onEnterBack: () => {
+      projectTitle.value.classList.add("pinned");
+    },
+    onLeaveBack: () => {
+      projectTitle.value.classList.remove("pinned");
+    },
   });
 
   // Additional ScrollTrigger for updating content
@@ -238,14 +250,17 @@ onUnmounted(() => {
 }
 
 .home-project-title-text {
-  transition: opacity 0.3s ease;
   position: absolute;
   top: var(--gutter);
   left: var(--gutterPadding);
+  opacity: 0;
+
+  .pinned & {
+    opacity: 1;
+  }
 }
 
 .home-project-title-link {
-  transition: opacity 0.3s ease;
   @include bodyType;
   @include foundersMedium;
   a {
@@ -254,6 +269,11 @@ onUnmounted(() => {
   position: absolute;
   top: var(--gutter);
   right: var(--gutterPadding);
+  opacity: 0;
+
+  .pinned & {
+    opacity: 1;
+  }
 }
 
 .home-projects-introduction {

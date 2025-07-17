@@ -1,17 +1,40 @@
 <template>
   <div class="project-navigation" v-if="nextProject">
     <nuxt-link to="/work/" class="back-to-work"> Back to all work </nuxt-link>
-    <nuxt-link :to="nextProjectLink" class="next-project-link">
+    <nuxt-link
+      :to="nextProjectLink"
+      class="next-project-link"
+      @mouseenter="handleMouseEnter"
+      @mouseleave="handleMouseLeave"
+      @mousemove="handleMouseMove"
+    >
       Another Project
     </nuxt-link>
     <button @click="scrollToTop" class="back-to-top-button">
       From the start
     </button>
   </div>
+
+  <!-- Floating hover image -->
+  <div
+    v-if="isHovering && nextProjectAltThumbnail && nextProjectAltThumbnail.url"
+    class="hover-image"
+    :style="{
+      left: mousePosition.x + 'px',
+      top: mousePosition.y + 'px',
+    }"
+  >
+    <img
+      :src="nextProjectAltThumbnail.url"
+      :alt="nextProjectAltThumbnail.alt || 'Next project thumbnail'"
+      width="150"
+      height="auto"
+    />
+  </div>
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { PrismicText } from "@prismicio/vue";
 
 // Load GSAP libraries we need
@@ -28,6 +51,26 @@ const scrollToTop = () => {
     console.warn("ScrollToPlugin is not available.");
     window.scrollTo({ top: 0, behavior: "smooth" }); // Fallback
   }
+};
+
+// Hover image functionality
+const isHovering = ref(false);
+const mousePosition = ref({ x: 0, y: 0 });
+const hoverImage = ref(null);
+
+const handleMouseMove = (event) => {
+  mousePosition.value = { x: event.clientX, y: event.clientY };
+};
+
+const handleMouseEnter = () => {
+  isHovering.value = true;
+};
+
+const handleMouseLeave = () => {
+  // Add a small delay to prevent flickering when moving between elements
+  setTimeout(() => {
+    isHovering.value = false;
+  }, 100);
 };
 
 const props = defineProps({
@@ -62,6 +105,14 @@ const nextProject = computed(() => {
   return null;
 });
 
+// Get the alt_thumbnail for the next project
+const nextProjectAltThumbnail = computed(() => {
+  if (!nextProject.value || !nextProject.value.data) {
+    return null;
+  }
+  return nextProject.value.data.alt_thumbnail;
+});
+
 const nextProjectLink = computed(() => {
   if (nextProject.value) {
     return `/work/${nextProject.value.uid}`;
@@ -72,6 +123,8 @@ const nextProjectLink = computed(() => {
 
 <style scoped lang="scss">
 @use "@/assets/scss/global.scss" as *;
+@use "@/assets/scss/breakpoints.scss" as *;
+
 .project-navigation {
   position: absolute;
   top: 0;
@@ -110,5 +163,20 @@ const nextProjectLink = computed(() => {
 
   @include noButton;
   @include linkStyle;
+}
+
+.hover-image {
+  position: fixed;
+  pointer-events: none;
+  z-index: 2000;
+  transform: translate(-50%, -50%);
+  transition:
+    opacity 0.3s ease,
+    transform 0.1s ease;
+
+  img {
+    width: 150px;
+    height: auto;
+  }
 }
 </style>

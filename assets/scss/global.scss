@@ -107,7 +107,7 @@ body.page-routing {
 }
 
 .footer-wrap {
-  z-index: 5;
+  z-index: 10;
   position: relative;
   height:calc(100vh + var(--gutter-2));
   background: var(--color-background);  

@@ -72,7 +72,7 @@ const { data: page } = await useAsyncData(
         route.params.uid
       );
 
-      // GraphQuery to fetch thumbnail_title from linked case_study documents
+      // GraphQuery to fetch thumbnail_title and alt_thumbnail from linked case_study documents
       // within the 'work' page's 'projects' group.
       const workPageGraphQuery = `{
         work {
@@ -80,6 +80,7 @@ const { data: page } = await useAsyncData(
             case_study {
               ...on case_study {
                 thumbnail_title
+                alt_thumbnail
               }
             }
           }

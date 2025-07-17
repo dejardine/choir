@@ -43,6 +43,14 @@
           ]
         }
       },
+      "alt_thumbnail": {
+        "type": "Image",
+        "config": {
+          "label": "Alt Thumbnail",
+          "constraint": {},
+          "thumbnails": []
+        }
+      },
       "vimeo_loop_thumbnail": {
         "type": "Text",
         "config": {

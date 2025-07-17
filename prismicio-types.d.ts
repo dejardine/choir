@@ -483,6 +483,17 @@ interface CaseStudyDocumentData {
   image_thumbnail: prismic.ImageField<"Square">;
 
   /**
+   * Alt Thumbnail field in *Case Study*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: case_study.alt_thumbnail
+   * - **Tab**: Thumbnail
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  alt_thumbnail: prismic.ImageField<never>;
+
+  /**
    * Vimeo Loop Thumbnail field in *Case Study*
    *
    * - **Field Type**: Text
