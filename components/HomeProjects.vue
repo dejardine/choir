@@ -77,22 +77,11 @@ const setupScrollTrigger = () => {
     trigger: projectTitle.value,
     start: "center center",
     endTrigger: homeProjects.value,
-    end: "bottom bottom",
+    end: "bottom center",
     pin: projectTitle.value,
     pinSpacing: false,
     onUpdate: (self) => {
       updateCurrentProject();
-
-      // Fade out in the last 20% of the scroll
-      const fadeStart = 0.99; // Start fading at 80% progress
-      let opacity = 1;
-
-      if (self.progress > fadeStart) {
-        const fadeProgress = (self.progress - fadeStart) / (1 - fadeStart);
-        opacity = 1 - fadeProgress;
-      }
-
-      $gsap.set(projectTitle.value, { opacity: opacity });
     },
   });
 
@@ -100,7 +89,7 @@ const setupScrollTrigger = () => {
   const updateST = $ScrollTrigger.create({
     trigger: homeSlices.value,
     start: "top center",
-    end: "bottom center",
+    end: "bottom center-1px",
     onUpdate: (self) => {
       updateCurrentProject();
     },
@@ -206,7 +195,6 @@ onUnmounted(() => {
   margin-top: 100vh;
   padding: var(--gutterPadding) 0;
   padding-bottom: 20vh;
-  border-bottom: 1px solid var(--color-border);
   position: relative;
   z-index: 11;
   background-color: var(--color-background);
@@ -237,7 +225,7 @@ onUnmounted(() => {
   align-items: center;
   width: 100%;
   border-top: 1px solid var(--color-border);
-  padding: var(--gutter) var(--gutterPadding);
+  padding: 0;
   z-index: 100;
 
   &.pinned {
@@ -251,6 +239,9 @@ onUnmounted(() => {
 
 .home-project-title-text {
   transition: opacity 0.3s ease;
+  position: absolute;
+  top: var(--gutter);
+  left: var(--gutterPadding);
 }
 
 .home-project-title-link {
@@ -260,6 +251,9 @@ onUnmounted(() => {
   a {
     @include linkStyle;
   }
+  position: absolute;
+  top: var(--gutter);
+  right: var(--gutterPadding);
 }
 
 .home-projects-introduction {

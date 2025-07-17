@@ -154,6 +154,7 @@ onUnmounted(() => {
     :data-slice-type="slice.slice_type"
     :data-slice-variation="slice.variation"
     class="project-section"
+    :class="`project-section-${index}`"
     :data-title="slice.primary.project_copy"
     :data-link="slice.primary.project_link"
   >
@@ -289,6 +290,9 @@ onUnmounted(() => {
 }
 
 .project-section {
+  &.project-section-0 {
+    padding-top: 25vh;
+  }
   &:nth-of-type(3n + 1) {
     .media-item {
       &:nth-of-type(1) {

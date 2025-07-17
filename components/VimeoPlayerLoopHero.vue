@@ -74,10 +74,22 @@ const calculateIframeDimensions = () => {
 
 // Function to apply iframe sizing
 const applyIframeSizing = () => {
-  if (!playerContainer.value || !props.fullHeight) return;
+  console.log("VimeoPlayerLoopHero: applyIframeSizing called");
+
+  if (!playerContainer.value || !props.fullHeight) {
+    console.log(
+      "VimeoPlayerLoopHero: Early return - container or fullHeight not available"
+    );
+    return;
+  }
 
   const iframe = playerContainer.value.querySelector("iframe");
-  if (!iframe) return;
+  if (!iframe) {
+    console.log("VimeoPlayerLoopHero: No iframe found in container");
+    return;
+  }
+
+  console.log("VimeoPlayerLoopHero: Found iframe, applying sizing...");
 
   const dimensions = calculateIframeDimensions();
   if (!dimensions) return;
@@ -160,7 +172,11 @@ const handleResize = () => {
 
 // Function to continuously monitor iframe (Vimeo can override styles)
 const monitorIframe = () => {
-  if (!props.fullHeight) return;
+  console.log("VimeoPlayerLoopHero: monitorIframe started");
+  if (!props.fullHeight) {
+    console.log("VimeoPlayerLoopHero: monitorIframe - fullHeight is false");
+    return;
+  }
 
   iframeResizeInterval = setInterval(() => {
     const iframe = playerContainer.value?.querySelector("iframe");
@@ -181,6 +197,8 @@ const monitorIframe = () => {
         console.log("VimeoPlayerLoopHero: Iframe size changed, reapplying...");
         applyIframeSizing();
       }
+    } else {
+      console.log("VimeoPlayerLoopHero: No iframe found during monitoring");
     }
   }, 50); // Check every 50ms for more aggressive monitoring
 };
