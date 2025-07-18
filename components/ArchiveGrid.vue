@@ -133,6 +133,13 @@ const currentScrollPosition = ref(0);
 // ScrollTrigger instances for cleanup
 let scrollTriggerInstances = [];
 
+// Store resize handler reference for cleanup
+let resizeHandler = null;
+let resizeTimeout = null;
+
+// Store pending timeouts for cleanup
+let pendingTimeouts = [];
+
 // Get GSAP and ScrollTrigger from Nuxt app
 const { $gsap, $ScrollTrigger } = useNuxtApp();
 
@@ -150,12 +157,15 @@ const toggleItem = (itemId) => {
   // to recalculate positions for image swapping
   // Delay based on CSS transition duration (0.6s) plus a small buffer
   nextTick(() => {
-    setTimeout(() => {
+    const refreshTimeout = setTimeout(() => {
       if ($ScrollTrigger) {
         $ScrollTrigger.refresh();
         console.log("ScrollTrigger refreshed");
       }
     }, 650); // 600ms for transition + 50ms buffer
+
+    // Store timeout reference for potential cleanup (though this is short-lived)
+    // In a more complex scenario, you might want to store this and clear it on unmount
   });
 };
 
@@ -179,7 +189,11 @@ const setupScrollTrigger = () => {
 
   // Kill existing ScrollTrigger instances
   if (scrollTriggerInstances.length > 0) {
-    scrollTriggerInstances.forEach((st) => st.kill());
+    scrollTriggerInstances.forEach((st) => {
+      if (st && typeof st.kill === "function") {
+        st.kill();
+      }
+    });
     scrollTriggerInstances = [];
   }
 
@@ -212,7 +226,7 @@ const setupScrollTrigger = () => {
 
   items.forEach((item, index) => {
     const projectGroup = props.page?.archive?.data?.projects[index];
-    if (!projectGroup?.case_study?.data?.image_thumbnail) return;
+    if (!projectGroup?.case_study?.data?.alt_thumbnail) return;
 
     const st = $ScrollTrigger.create({
       trigger: item,
@@ -220,12 +234,12 @@ const setupScrollTrigger = () => {
       end: "bottom center",
       onEnter: () => {
         console.log(`Entering item ${index}`);
-        currentThumbnail.value = projectGroup.case_study.data.image_thumbnail;
+        currentThumbnail.value = projectGroup.case_study.data.alt_thumbnail;
       },
       onLeave: () => {
         console.log(`Leaving item ${index}`);
         // Only clear if we're not entering another item
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
           const isAnyItemActive = Array.from(items).some(
             (otherItem, otherIndex) => {
               if (otherIndex === index) return false;
@@ -249,16 +263,24 @@ const setupScrollTrigger = () => {
             currentThumbnail.value = null;
             console.log("No items active, clearing image");
           }
+
+          // Remove timeout from pending list
+          const timeoutIndex = pendingTimeouts.indexOf(timeout);
+          if (timeoutIndex > -1) {
+            pendingTimeouts.splice(timeoutIndex, 1);
+          }
         }, 50);
+
+        pendingTimeouts.push(timeout);
       },
       onEnterBack: () => {
         console.log(`Entering back item ${index}`);
-        currentThumbnail.value = projectGroup.case_study.data.image_thumbnail;
+        currentThumbnail.value = projectGroup.case_study.data.alt_thumbnail;
       },
       onLeaveBack: () => {
         console.log(`Leaving back item ${index}`);
         // Only clear if we're not entering another item
-        setTimeout(() => {
+        const timeout = setTimeout(() => {
           const isAnyItemActive = Array.from(items).some(
             (otherItem, otherIndex) => {
               if (otherIndex === index) return false;
@@ -282,7 +304,15 @@ const setupScrollTrigger = () => {
             currentThumbnail.value = null;
             console.log("No items active, clearing image");
           }
+
+          // Remove timeout from pending list
+          const timeoutIndex = pendingTimeouts.indexOf(timeout);
+          if (timeoutIndex > -1) {
+            pendingTimeouts.splice(timeoutIndex, 1);
+          }
         }, 50);
+
+        pendingTimeouts.push(timeout);
       },
     });
 
@@ -323,10 +353,10 @@ onMounted(async () => {
     }, 500); // Increased from 100ms to 500ms
 
     // Add resize handler
-    const resizeHandler = () => {
+    resizeHandler = () => {
       // Debounce resize events
-      clearTimeout(resizeHandler.timeout);
-      resizeHandler.timeout = setTimeout(() => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
         console.log("Resize detected, re-setting up ScrollTrigger");
         setupScrollTrigger();
       }, 250);
@@ -339,6 +369,24 @@ onMounted(async () => {
 onUnmounted(() => {
   if (process.client) {
     try {
+      // Clean up resize event listener
+      if (resizeHandler) {
+        window.removeEventListener("resize", resizeHandler);
+        resizeHandler = null;
+      }
+
+      // Clear any pending resize timeout
+      if (resizeTimeout) {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = null;
+      }
+
+      // Clear all pending timeouts
+      pendingTimeouts.forEach((timeout) => {
+        clearTimeout(timeout);
+      });
+      pendingTimeouts = [];
+
       // Clean up ScrollTrigger instances
       if (scrollTriggerInstances.length > 0) {
         scrollTriggerInstances.forEach((st) => {
@@ -348,6 +396,8 @@ onUnmounted(() => {
         });
         scrollTriggerInstances = [];
       }
+
+      console.log("ArchiveGrid ScrollTrigger cleanup completed");
     } catch (error) {
       console.warn("Error during ScrollTrigger cleanup:", error);
     }
@@ -381,7 +431,6 @@ onUnmounted(() => {
   width: 100%;
   :deep(img) {
     height: auto;
-    aspect-ratio: 1/1;
     object-fit: cover;
     position: absolute;
     top: 50%;
