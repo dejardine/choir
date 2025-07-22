@@ -1,6 +1,7 @@
 <template>
   <div class="page page-about" ref="pageRoot">
     <GlobalMainMenu />
+    <GlobalMobileMenu />
 
     <PageHeader
       :heading="page?.about?.data?.heading"

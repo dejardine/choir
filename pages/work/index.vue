@@ -1,6 +1,7 @@
 <template>
   <div class="page page-work" ref="pageRoot">
     <GlobalMainMenu />
+    <GlobalMobileMenu />
     <PageHeader
       :heading="page?.work?.data?.heading"
       :subheading="page?.work?.data?.sub_heading"

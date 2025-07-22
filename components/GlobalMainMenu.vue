@@ -7,7 +7,13 @@
         </li>
       </ul>
       <ThemeSwitcher class="theme-switcher-menu" />
-
+      <button
+        class="mobile-menu-toggle"
+        @click="handleMobileMenuToggle"
+        :class="{ 'is-open': isMobileMenuOpen }"
+      >
+        Menu
+      </button>
       <ul class="default-menu-column-right">
         <li
           v-for="(item, index) in defaultMenuLinks"
@@ -25,6 +31,7 @@ import { computed } from "vue"; // Import computed
 import { useRoute } from "vue-router"; // Import useRoute
 import ThemeSwitcher from "./ThemeSwitcher.vue";
 import { usePrismic, useAsyncData } from "#imports";
+import { useMobileMenu } from "~/composables/useMobileMenu";
 
 // Get the current route
 const route = useRoute();
@@ -48,11 +55,19 @@ const defaultMenuLinks = computed(() => {
   return menuData.value?.data?.links || [];
 });
 
+// Mobile menu functionality
+const { toggleMobileMenu, isMobileMenuOpen } = useMobileMenu();
+
+const handleMobileMenuToggle = () => {
+  toggleMobileMenu();
+};
+
 // using remainingDefaultMenuLinks
 </script>
 
 <style lang="scss" scoped>
 @use "@/assets/scss/breakpoints.scss" as *;
+@use "@/assets/scss/global.scss" as *;
 
 // Styles specific to home menu
 .global-main-menu {
@@ -86,6 +101,9 @@ const defaultMenuLinks = computed(() => {
   grid-column: 1 / span 6;
 }
 .default-menu-column-right {
+  @include breakpoint(mobile) {
+    display: none;
+  }
   grid-column: 10 / span 3;
 
   display: flex;
@@ -115,5 +133,27 @@ const defaultMenuLinks = computed(() => {
 }
 .theme-switcher {
   grid-column: 9 / span 1;
+}
+
+.mobile-menu-toggle {
+  @include noButton;
+  @include menuType;
+  color: var(--color-reverse);
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  grid-column: 10 / span 3;
+  text-align: right;
+  display: none;
+  transition: opacity 0.3s ease;
+
+  @include breakpoint(mobile) {
+    display: block;
+  }
+
+  &.is-open {
+    opacity: 0.5;
+  }
 }
 </style>

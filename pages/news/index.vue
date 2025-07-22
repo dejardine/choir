@@ -1,6 +1,7 @@
 <template>
   <div class="page page-news" ref="pageRoot">
     <GlobalMainMenu />
+    <GlobalMobileMenu />
     <PageHeader
       :heading="page?.newsLandingPage?.data?.heading"
       :subheading="page?.newsLandingPage?.data?.sub_heading"

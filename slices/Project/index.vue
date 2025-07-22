@@ -91,47 +91,48 @@ const setupParallax = async () => {
     ".media-item.has-parallax"
   );
 
-  mediaItems.forEach((mediaItem: any) => {
+  console.log(`Found ${mediaItems.length} parallax items`);
+
+  mediaItems.forEach((mediaItem: any, index: number) => {
     const speed = parseFloat(mediaItem.dataset.parallaxSpeed) || 1.3;
 
+    // Calculate the parallax percentage (negative for upward movement)
+    const parallaxPercent = -(speed - 1) * 100;
+
+    console.log(
+      `Setting up parallax for item ${index + 1}: speed=${speed}, percent=${parallaxPercent}%, element:`,
+      mediaItem
+    );
+
+    // Use a simpler approach with direct ScrollTrigger
     const st = ($ScrollTrigger as any).create({
       trigger: mediaItem,
       start: "top bottom",
       end: "bottom top",
-      scrub: 1, // Smooth scrubbing
+      scrub: 1,
       onUpdate: (self: any) => {
-        // Get element's position relative to viewport
-        const rect = mediaItem.getBoundingClientRect();
-        const elementCenter = rect.top + rect.height / 2;
-        const viewportCenter = window.innerHeight / 2;
+        const progress = self.progress;
+        const maxY = parallaxPercent * (mediaItem.offsetHeight / 100);
+        const currentY = progress * maxY;
 
-        // Calculate distance from viewport center (-1 to 1)
-        const distanceFromCenter =
-          (elementCenter - viewportCenter) / (window.innerHeight / 2);
+        console.log(
+          `Progress: ${progress.toFixed(2)}, Y: ${currentY.toFixed(2)}`
+        );
 
-        // Only apply parallax when element is near or in viewport
-        if (Math.abs(distanceFromCenter) <= 1.5) {
-          const maxParallaxDistance = window.innerHeight * 0.2;
-          // Positive multiplier with speed > 1 makes it move UP when scrolling down
-          const parallaxY =
-            distanceFromCenter * maxParallaxDistance * (speed - 1);
-
-          ($gsap as any).set(mediaItem, {
-            y: parallaxY,
-            ease: "none",
-          });
-        } else {
-          // Reset transform when far from viewport
-          ($gsap as any).set(mediaItem, {
-            y: 0,
-            ease: "none",
-          });
-        }
+        ($gsap as any).set(mediaItem, {
+          y: currentY,
+          force3D: true,
+        });
       },
     });
 
     scrollTriggerInstances.push(st);
+    console.log(`Created ScrollTrigger for item ${index + 1}:`, st);
   });
+
+  console.log(
+    `Created ${scrollTriggerInstances.length} ScrollTrigger instances`
+  );
 };
 
 onMounted(() => {
@@ -287,6 +288,7 @@ onUnmounted(() => {
 
 .media-item.has-parallax {
   will-change: transform;
+  backface-visibility: hidden; // Optimize for transforms
 }
 
 .project-section {

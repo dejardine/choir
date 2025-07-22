@@ -1,6 +1,7 @@
 <template>
   <div class="page page-archive" ref="pageRoot">
     <GlobalMainMenu />
+    <GlobalMobileMenu />
     <ArchiveGrid :page="page" />
     <div class="footer-wrap">
       <CTATop :cta="page?.archive?.data?.call_to_action" />
