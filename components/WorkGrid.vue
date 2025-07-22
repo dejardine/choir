@@ -175,6 +175,8 @@ if (process.client) {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/scss/breakpoints.scss";
+
 .work-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr); /* Two columns */
@@ -254,6 +256,9 @@ if (process.client) {
         transform: scale(1.05);
       }
     }
+  }
+  @include breakpoint(mobile) {
+    grid-column: auto / span 12;
   }
 }
 </style>

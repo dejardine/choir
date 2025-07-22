@@ -137,18 +137,27 @@ const rightVimeoVideoId = computed(() => {
   &.double-media--align-left {
     .double-media-container {
       grid-column: 1 / span 8;
+      @include breakpoint(mobile) {
+        grid-column: 1 / span 12;
+      }
     }
   }
 
   &.double-media--align-center {
     .double-media-container {
       grid-column: 3 / span 8;
+      @include breakpoint(mobile) {
+        grid-column: 1 / span 12;
+      }
     }
   }
 
   &.double-media--align-right {
     .double-media-container {
       grid-column: 5 / span 8;
+      @include breakpoint(mobile) {
+        grid-column: 1 / span 12;
+      }
     }
   }
 }
@@ -167,10 +176,16 @@ const rightVimeoVideoId = computed(() => {
 
   &.double-media-left {
     grid-column: 1 / span 4;
+    @include breakpoint(mobile) {
+      grid-column: auto / span 12;
+    }
   }
 
   &.double-media-right {
     grid-column: 6 / span 3;
+    @include breakpoint(mobile) {
+      grid-column: auto / span 12;
+    }
   }
 
   :deep(.image-full-container) {

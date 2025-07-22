@@ -46,6 +46,7 @@ const { data: globalData } = await useAsyncData("global", async () => {
 
 <style lang="scss" scoped>
 @use "@/assets/scss/global.scss" as *;
+@import "@/assets/scss/breakpoints.scss";
 
 footer {
   position: relative;
@@ -64,13 +65,23 @@ footer {
   .row-item {
     &:nth-of-type(1) {
       grid-column: 1 / span 3;
+      @include breakpoint(mobile) {
+        grid-column: auto / span 4;
+      }
     }
     &:nth-of-type(2) {
       grid-column: 4 / span 8;
+      @include breakpoint(mobile) {
+        grid-column: 6 / span 6;
+        text-align: left;
+      }
     }
     &:nth-of-type(3) {
       grid-column: 12 / span 1;
       text-align: right;
+      @include breakpoint(mobile) {
+        display: none;
+      }
     }
   }
   border-top: 1px solid var(--color-border);
@@ -80,9 +91,16 @@ footer {
   .row-item {
     &:nth-of-type(1) {
       grid-column: 5 / span 5;
+      @include breakpoint(mobile) {
+        grid-column: 4 / span 9;
+        text-align: left;
+      }
     }
     &:nth-of-type(2) {
       grid-column: 11 / span 2;
+      @include breakpoint(mobile) {
+        display: none;
+      }
     }
   }
 }
@@ -91,10 +109,17 @@ footer {
   .row-item {
     &:nth-of-type(1) {
       grid-column: 1 / span 5;
+      @include breakpoint(mobile) {
+        grid-column: auto / span 6;
+      }
     }
     &:nth-of-type(2) {
       grid-column: 6 / span 2;
       text-align: center;
+      @include breakpoint(mobile) {
+        grid-column: 9 / span 3;
+        text-align: left;
+      }
     }
   }
 }

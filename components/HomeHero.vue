@@ -210,6 +210,9 @@ onMounted(() => {
       grid-column: 1 / span 4;
       pointer-events: auto;
       line-height: 1;
+      @include breakpoint(mobile) {
+        grid-column: auto / span 9;
+      }
     }
     .caption-controls-controls {
       grid-column: 9 / span 4;
@@ -217,6 +220,10 @@ onMounted(() => {
 
       display: flex;
       justify-content: flex-start;
+      @include breakpoint(mobile) {
+        justify-content: flex-end;
+        grid-column: 10 / span 3;
+      }
       gap: var(--gutter-quarter);
       pointer-events: auto;
       color: var(--color-reverse);

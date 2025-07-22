@@ -32,6 +32,7 @@ defineProps({
 
 <style lang="scss" scoped>
 @import "@/assets/scss/global.scss";
+@import "@/assets/scss/breakpoints.scss";
 .page-header {
   padding: var(--gutterPadding);
   padding-bottom: 0;
@@ -64,6 +65,9 @@ defineProps({
 .page-header-wrap-start {
   width: calc(25% + var(--gutter));
   display: inline-block;
+  @include breakpoint(mobile) {
+    width: 100%;
+  }
 }
 
 .page-header-wrap {

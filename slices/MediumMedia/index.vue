@@ -119,18 +119,27 @@ const videoCoverImageUrl = computed(() => {
   &.medium-media--left {
     .medium-media-container {
       grid-column: 1 / span 8;
+      @include breakpoint(mobile) {
+        grid-column: auto / span 12;
+      }
     }
   }
 
   &.medium-media--center {
     .medium-media-container {
       grid-column: 3 / span 8;
+      @include breakpoint(mobile) {
+        grid-column: auto / span 12;
+      }
     }
   }
 
   &.medium-media--right {
     .medium-media-container {
       grid-column: 5 / span 8;
+      @include breakpoint(mobile) {
+        grid-column: auto / span 12;
+      }
     }
   }
 

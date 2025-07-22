@@ -150,6 +150,7 @@ const images = computed(() => {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/scss/breakpoints.scss";
 .small-gallery {
   width: 100%;
   padding: var(--gutter) var(--gutterPadding);
@@ -161,20 +162,38 @@ const images = computed(() => {
   }
   &.small-gallery--left {
     grid-column: 1 / span 4;
+    @include breakpoint(mobile) {
+      grid-column: auto / span 12;
+    }
     .swiper-container-wrapper {
       grid-column: 1 / span 4;
+      @include breakpoint(mobile) {
+        grid-column: auto / span 12;
+      }
     }
   }
   &.small-gallery--center {
     grid-column: 5 / span 4;
+    @include breakpoint(mobile) {
+      grid-column: auto / span 12;
+    }
     .swiper-container-wrapper {
       grid-column: 5 / span 4;
+      @include breakpoint(mobile) {
+        grid-column: auto / span 12;
+      }
     }
   }
   &.small-gallery--right {
     grid-column: 9 / span 4;
+    @include breakpoint(mobile) {
+      grid-column: auto / span 12;
+    }
     .swiper-container-wrapper {
       grid-column: 9 / span 4;
+      @include breakpoint(mobile) {
+        grid-column: auto / span 12;
+      }
     }
   }
 }

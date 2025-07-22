@@ -271,6 +271,7 @@ watchEffect(async () => {
 
 <style lang="scss" scoped>
 @import "@/assets/scss/global.scss";
+@import "@/assets/scss/breakpoints.scss";
 
 .project-information {
   position: relative;
@@ -310,10 +311,16 @@ watchEffect(async () => {
       }
     }
   }
+  @include breakpoint(mobile) {
+    grid-column: 1 / span 12;
+  }
 }
 
 .project-information-content-right {
   grid-column: 5 / span 8;
+  @include breakpoint(mobile) {
+    grid-column: 1 / span 12;
+  }
 }
 .more-info-button {
   @include noButton;
@@ -348,6 +355,9 @@ watchEffect(async () => {
     margin-top: var(--gutter);
     display: block;
   }
+  @include breakpoint(mobile) {
+    grid-column: 1 / span 12;
+  }
 }
 
 .project-information-content-right-right {
@@ -379,6 +389,9 @@ watchEffect(async () => {
       left: 0;
       transform: translateX(calc(-100% - 1px));
     }
+  }
+  @include breakpoint(mobile) {
+    grid-column: 1 / span 12;
   }
 }
 
