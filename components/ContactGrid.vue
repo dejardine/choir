@@ -1,14 +1,21 @@
 <template>
   <div class="contact-grid">
     <div class="contact-grid-columns">
-      <div class="contact-grid-column animate-in">
-        <div class="contact-grid-item">You've come this far.</div>
-        <div class="contact-grid-item">Might as well say hello</div>
-        <div class="contact-grid-item">&nbsp;</div>
-        <div class="contact-grid-item">&nbsp;</div>
-        <div class="contact-grid-item">&nbsp;</div>
+      <div class="contact-grid-column animate-in contact-grid-column-1">
+        <div class="contact-grid-item contact-grid-item-mobile-only">
+          &nbsp;
+        </div>
+        <div class="contact-grid-item contact-grid-item-split">
+          You've come this far.
+        </div>
+        <div class="contact-grid-item contact-grid-item-split">
+          Might as well say hello
+        </div>
+        <div class="contact-grid-item contact-grid-item-empty">&nbsp;</div>
+        <div class="contact-grid-item contact-grid-item-blank">&nbsp;</div>
+        <div class="contact-grid-item contact-grid-item-blank">&nbsp;</div>
       </div>
-      <div class="contact-grid-column animate-in">
+      <div class="contact-grid-column animate-in contact-grid-column-2">
         <div class="contact-grid-item">Contact:</div>
         <div class="contact-grid-item">
           <prismic-link :field="globalData?.data?.email"></prismic-link>
@@ -17,9 +24,9 @@
           <prismic-link :field="globalData?.data?.phone"></prismic-link>
         </div>
         <div class="contact-grid-item">&nbsp;</div>
-        <div class="contact-grid-item">&nbsp;</div>
+        <div class="contact-grid-item contact-grid-item-blank">&nbsp;</div>
       </div>
-      <div class="contact-grid-column animate-in">
+      <div class="contact-grid-column animate-in contact-grid-column-3">
         <div class="contact-grid-item">Studio:</div>
         <template v-if="addressLines?.length">
           <div
@@ -31,7 +38,10 @@
           </div>
         </template>
       </div>
-      <div class="contact-grid-column animate-in">
+      <div class="contact-grid-column animate-in contact-grid-column-4">
+        <div class="contact-grid-item contact-grid-item-mobile-only">
+          &nbsp;
+        </div>
         <div class="contact-grid-item">Online:</div>
         <div class="contact-grid-item">
           <prismic-link :field="globalData?.data?.linkedin"></prismic-link>
@@ -40,7 +50,7 @@
           <prismic-link :field="globalData?.data?.instagram"></prismic-link>
         </div>
         <div class="contact-grid-item">&nbsp;</div>
-        <div class="contact-grid-item">&nbsp;</div>
+        <div class="contact-grid-item contact-grid-item-blank">&nbsp;</div>
       </div>
     </div>
   </div>
@@ -79,6 +89,7 @@ const addressLines = computed(() => {
 
 <style lang="scss" scoped>
 @use "@/assets/scss/global.scss" as *;
+@use "@/assets/scss/breakpoints.scss" as *;
 
 .contact-grid {
   height: 100vh;
@@ -104,5 +115,83 @@ const addressLines = computed(() => {
   border-bottom: 1px solid var(--color-border);
   padding: var(--gutter-quarter) var(--gutterPadding);
   width: 100%;
+}
+
+.contact-grid-column-1 {
+  @include breakpoint(mobile) {
+    grid-column: 1 / span 12;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+  }
+  .contact-grid-item-blank {
+    @include breakpoint(mobile) {
+      display: none;
+    }
+  }
+  .contact-grid-item-split {
+    @include breakpoint(mobile) {
+      grid-column: auto / span 6;
+    }
+  }
+  .contact-grid-item-empty {
+    @include breakpoint(mobile) {
+      grid-column: auto / span 12;
+      border-bottom: none;
+    }
+  }
+  .contact-grid-item-mobile-only {
+    display: none;
+    @include breakpoint(mobile) {
+      display: block;
+      grid-column: auto / span 12;
+    }
+  }
+}
+
+.contact-grid-column-2 {
+  @include breakpoint(mobile) {
+    grid-column: 1 / span 6;
+  }
+  .contact-grid-item-empty {
+    @include breakpoint(mobile) {
+      grid-column: auto / span 12;
+      border-bottom: none;
+    }
+  }
+  .contact-grid-item-blank {
+    @include breakpoint(mobile) {
+      display: none;
+    }
+  }
+}
+
+.contact-grid-column-3 {
+  @include breakpoint(mobile) {
+    grid-column: 7 / span 6;
+  }
+  .contact-grid-item {
+    &:last-of-type {
+      @include breakpoint(mobile) {
+        border-bottom: none;
+      }
+    }
+  }
+}
+
+.contact-grid-column-4 {
+  @include breakpoint(mobile) {
+    grid-column: 1 / span 12;
+  }
+  .contact-grid-item-blank {
+    @include breakpoint(mobile) {
+      display: none;
+    }
+  }
+  .contact-grid-item-mobile-only {
+    display: none;
+    @include breakpoint(mobile) {
+      display: block;
+    }
+  }
 }
 </style>

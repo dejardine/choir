@@ -234,6 +234,9 @@ const nextProjectLink = computed(() => {
     img {
       width: 300px;
       height: auto;
+      @include breakpoint(mobile) {
+        width: 175px;
+      }
     }
   }
 
@@ -242,6 +245,9 @@ const nextProjectLink = computed(() => {
     img {
       width: 200px;
       height: auto;
+      @include breakpoint(mobile) {
+        width: 125px;
+      }
     }
   }
 

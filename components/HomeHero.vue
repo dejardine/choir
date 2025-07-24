@@ -44,9 +44,15 @@
           <div class="caption-controls">
             <prismic-rich-text :field="slide?.caption" />
             <div class="caption-controls-controls">
-              <button ref="prevButton" class="swiper-button-prev">Prev</button>
-              <span class="nav-separator">/</span>
-              <button ref="nextButton" class="swiper-button-next">Next</button>
+              <button ref="prevButton" class="swiper-button-prev">
+                <span v-if="$screens.isMobile" class="nav-arrow">&lt;</span>
+                <span v-else>Prev</span>
+              </button>
+              <span class="nav-separator" v-if="!$screens.isMobile">/</span>
+              <button ref="nextButton" class="swiper-button-next">
+                <span v-if="$screens.isMobile" class="nav-arrow">&gt;</span>
+                <span v-else>Next</span>
+              </button>
             </div>
           </div>
         </swiper-slide>
@@ -68,6 +74,9 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 // Optionally import basic navigation styles (can be overridden)
 // import 'swiper/css/navigation';
+
+// Get responsive screens
+const { $screens } = useNuxtApp();
 
 const props = defineProps({
   home: {
@@ -190,7 +199,6 @@ onMounted(() => {
     :deep(.image-home-hero-container) {
       height: 100vh;
       img {
-        display: block;
         width: 100%;
         height: 100vh;
         object-fit: cover;
@@ -215,7 +223,7 @@ onMounted(() => {
       pointer-events: auto;
       line-height: 1;
       @include breakpoint(mobile) {
-        grid-column: auto / span 9;
+        grid-column: auto / span 10;
       }
     }
     .caption-controls-controls {
@@ -226,7 +234,7 @@ onMounted(() => {
       justify-content: flex-start;
       @include breakpoint(mobile) {
         justify-content: flex-end;
-        grid-column: 10 / span 3;
+        grid-column: 11 / span 2;
       }
       gap: var(--gutter-quarter);
       pointer-events: auto;
@@ -237,6 +245,9 @@ onMounted(() => {
         color: var(--color-reverse);
         &:hover {
           text-decoration: underline;
+        }
+        .nav-arrow {
+          padding: var(--gutter-half);
         }
       }
       line-height: 1;

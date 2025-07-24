@@ -72,7 +72,7 @@ footer {
     &:nth-of-type(2) {
       grid-column: 4 / span 8;
       @include breakpoint(mobile) {
-        grid-column: 6 / span 6;
+        grid-column: 5 / span 6;
         text-align: left;
       }
     }
@@ -92,7 +92,7 @@ footer {
     &:nth-of-type(1) {
       grid-column: 5 / span 5;
       @include breakpoint(mobile) {
-        grid-column: 4 / span 9;
+        grid-column: 7 / span 5;
         text-align: left;
       }
     }
@@ -117,8 +117,8 @@ footer {
       grid-column: 6 / span 2;
       text-align: center;
       @include breakpoint(mobile) {
-        grid-column: 9 / span 3;
-        text-align: left;
+        grid-column: 10 / span 3;
+        text-align: right;
       }
     }
   }

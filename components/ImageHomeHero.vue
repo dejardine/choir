@@ -9,7 +9,19 @@
       :height="imageField?.dimensions?.height"
       sizes="sm:100vw md:100vw lg:100vw xl:100vw"
       loading="lazy"
-      class="full-width-image"
+      class="full-width-image image-landscape"
+      placeholder
+    />
+    <NuxtImg
+      provider="imgix"
+      crossorigin="anonymous"
+      :src="imageFieldPortrait?.url"
+      :alt="imageFieldPortrait?.alt || ''"
+      :width="imageFieldPortrait?.dimensions?.width"
+      :height="imageFieldPortrait?.dimensions?.height"
+      sizes="sm:100vw md:100vw lg:100vw xl:100vw"
+      loading="lazy"
+      class="full-width-image image-portrait"
       placeholder
     />
   </div>
@@ -32,12 +44,25 @@ const props = defineProps({
 </script>
 
 <style scoped lang="scss">
+@use "@/assets/scss/breakpoints.scss" as *;
 .image-home-hero-container {
   width: 100%;
   line-height: 0; /* Prevent extra space below image */
   :deep(img) {
     width: 100%;
     height: auto;
+  }
+  .image-landscape {
+    display: block;
+    @include breakpoint(mobilePortrait) {
+      display: none;
+    }
+  }
+  .image-portrait {
+    display: none;
+    @include breakpoint(mobilePortrait) {
+      display: block;
+    }
   }
 }
 </style>

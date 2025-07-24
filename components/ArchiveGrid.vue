@@ -407,6 +407,8 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 @use "@/assets/scss/global" as *;
+@use "@/assets/scss/breakpoints.scss" as *;
+
 .archive-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
@@ -437,6 +439,10 @@ onUnmounted(() => {
     left: calc((7 / 12 * 100vw) + var(--gutterPadding) + (7 * var(--gutter)));
     transform: translateY(-50%);
     width: calc((2.5 / 12 * 100vw) + (1.5 * var(--gutter)));
+    @include breakpoint(mobile) {
+      left: 66.6666vw;
+      width: 33.3333vw;
+    }
   }
 
   &:after {
@@ -458,6 +464,9 @@ onUnmounted(() => {
   grid-column: 1 / span 12;
   gap: var(--gutter);
   width: 100%;
+  @include breakpoint(mobile) {
+    grid-template-columns: 6fr 6fr;
+  }
   .label {
     @include smallType;
     @include foundersMedium;
@@ -526,10 +535,16 @@ onUnmounted(() => {
     display: grid;
     grid-template-columns: 4fr 8fr;
     gap: var(--gutter);
+    @include breakpoint(mobile) {
+      grid-template-columns: 6fr 6fr;
+    }
   }
 
   .client-column,
   .industry-column {
+    @include breakpoint(mobile) {
+      grid-column: auto / span 1;
+    }
   }
 
   &:nth-last-child(-n + 2) {
