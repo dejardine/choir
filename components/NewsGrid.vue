@@ -3,7 +3,9 @@
     <!-- Top section with two most recent items -->
     <div
       class="news-grid news-grid-top"
-      :class="{ hidden: currentView === 'score' }"
+      :class="{
+        hidden: currentView === 'score' || screens.isMobile,
+      }"
     >
       <div class="toggle-buttons animate-in">
         <button
@@ -327,14 +329,18 @@
     <!-- Load More Button -->
     <div
       class="load-more-container"
-      :class="{ hidden: currentView === 'score' }"
+      :class="{
+        hidden:
+          currentView === 'score' ||
+          (screens.isMobile && currentView === 'score'),
+      }"
     >
       <button
         v-if="showLoadMoreButton"
         @click="loadMore"
         class="load-more-button"
       >
-        Load More
+        Load more
       </button>
       <button @click="scrollToTop" class="back-to-top-button">
         From the start
@@ -356,6 +362,9 @@ import {
 import ImageHalf from "./ImageHalf.vue";
 import VimeoPlayerLoop from "./VimeoPlayerLoop.vue";
 import PageHeader from "./PageHeader.vue";
+
+// Import responsive composable
+const { screens } = useResponsive();
 
 const props = defineProps({
   page: {
@@ -402,10 +411,18 @@ const allNewsItems = computed(() => {
 });
 
 const topNewsItems = computed(() => {
+  // On mobile, return empty array to hide top section
+  if (screens.value.isMobile) {
+    return [];
+  }
   return allNewsItems.value.slice(0, 2);
 });
 
 const bottomNewsItems = computed(() => {
+  // On mobile, show all items from the beginning
+  if (screens.value.isMobile) {
+    return allNewsItems.value.slice(0, itemsToShow.value);
+  }
   return allNewsItems.value.slice(2, itemsToShow.value);
 });
 
@@ -604,6 +621,13 @@ new Promise((resolve) => {
   padding: var(--gutterPadding);
   transition: opacity 0.3s ease;
 
+  @include breakpoint(mobile) {
+    grid-template-columns: repeat(6, 1fr);
+    gap: var(--gutter);
+    padding: var(--gutter);
+    padding-top: 30vh;
+  }
+
   &.hidden {
     opacity: 0;
     pointer-events: none;
@@ -620,7 +644,9 @@ new Promise((resolve) => {
     gap: var(--gutter-half);
     grid-column: 1 / 2;
     grid-row: 1;
-
+    @include breakpoint(mobile) {
+      display: none;
+    }
     button {
       @include noButton;
       @include smallType;
@@ -638,6 +664,10 @@ new Promise((resolve) => {
       }
     }
   }
+
+  @include breakpoint(mobile) {
+    display: none;
+  }
 }
 
 .news-grid-item {
@@ -647,12 +677,20 @@ new Promise((resolve) => {
     @include breakpoint(display) {
       grid-column: 9 / span 2;
     }
+    @include breakpoint(mobile) {
+      grid-column: auto / span 6;
+      grid-row: auto;
+    }
   }
   &:nth-child(3) {
     grid-column: 10 / span 3;
     grid-row: 1;
     @include breakpoint(display) {
       grid-column: 11 / span 2;
+    }
+    @include breakpoint(mobile) {
+      grid-column: auto / span 6;
+      grid-row: auto;
     }
   }
 }
@@ -662,6 +700,10 @@ new Promise((resolve) => {
   margin-bottom: var(--gutter-5);
   @include breakpoint(display) {
     grid-column: auto / span 2;
+  }
+  @include breakpoint(mobile) {
+    grid-column: auto / span 6;
+    margin-bottom: var(--gutter-5);
   }
   .thumbnail-image,
   .thumbnail-video {
@@ -700,6 +742,9 @@ new Promise((resolve) => {
     :deep(a) {
       @include smallType;
       @include linkStyle;
+    }
+    @include breakpoint(mobile) {
+      margin-bottom: 0;
     }
   }
 
@@ -877,6 +922,13 @@ new Promise((resolve) => {
   position: relative;
   transition: opacity 0.3s ease;
 
+  @include breakpoint(mobile) {
+    height: 30vh;
+    padding-top: var(--gutter);
+    justify-content: flex-start;
+    padding-left: var(--gutter);
+  }
+
   &.hidden {
     opacity: 0;
     pointer-events: none;
@@ -905,5 +957,10 @@ new Promise((resolve) => {
   @include foundersMedium;
   @include linkStyle;
   color: var(--color-text);
+
+  @include breakpoint(mobile) {
+    right: var(--gutter);
+    top: var(--gutter);
+  }
 }
 </style>
