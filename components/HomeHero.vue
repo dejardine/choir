@@ -36,7 +36,10 @@
             :full-height="true"
             @ready="onVideoReady(index)"
           />
-          <ImageFull v-else-if="slide?.image?.url" :imageField="slide?.image" />
+          <ImageHomeHero
+            v-else-if="slide?.image?.url"
+            :imageField="slide?.image"
+          />
           <div class="caption-controls">
             <prismic-rich-text :field="slide?.caption" />
             <div class="caption-controls-controls">
@@ -183,7 +186,7 @@ onMounted(() => {
     width: 100%;
     height: 100vh;
     background-color: var(--palette-black);
-    :deep(.image-full-container) {
+    :deep(.image-home-hero-container) {
       height: 100vh;
       img {
         display: block;

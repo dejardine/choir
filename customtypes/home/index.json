@@ -43,6 +43,14 @@
                 "thumbnails": []
               }
             },
+            "image_portrait": {
+              "type": "Image",
+              "config": {
+                "label": "Image Portrait",
+                "constraint": {},
+                "thumbnails": []
+              }
+            },
             "vimeo_video_loop": {
               "type": "Text",
               "config": {
