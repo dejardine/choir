@@ -39,6 +39,7 @@
           <ImageHomeHero
             v-else-if="slide?.image?.url"
             :imageField="slide?.image"
+            :imageFieldPortrait="slide?.image_portrait"
           />
           <div class="caption-controls">
             <prismic-rich-text :field="slide?.caption" />

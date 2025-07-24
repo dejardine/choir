@@ -20,6 +20,7 @@
 
 const props = defineProps({
   imageField: Object,
+  imageFieldPortrait: Object,
 });
 
 // const cleanImageUrl = computed(() => { // Removed

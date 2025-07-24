@@ -887,6 +887,16 @@ export interface HomeDocumentDataSlideshowItem {
   image: prismic.ImageField<never>;
 
   /**
+   * Image Portrait field in *Home → Slideshow*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: home.slideshow[].image_portrait
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image_portrait: prismic.ImageField<never>;
+
+  /**
    * Vimeo Video Loop field in *Home → Slideshow*
    *
    * - **Field Type**: Text

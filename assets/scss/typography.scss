@@ -91,7 +91,7 @@
   @include breakpoint(mobile) {
     --subheading: clamp(1.938rem, calc(1.938rem + 1.5 * (100vw - 20rem) / 60), 3.438rem);
     --mobileMenu: clamp(2.625rem, calc(2.625rem + 0.625 * (100vw - 20rem) / 30.75), 3.25rem);
-
+    --cta: clamp(2.875rem, calc(2.875rem + 0.875 * (100vw - 62rem) / 32.5), 3.75rem);
   }
 }
 

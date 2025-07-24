@@ -258,6 +258,9 @@ onUnmounted(() => {
   .pinned & {
     opacity: 1;
   }
+  @include breakpoint(mobile) {
+    width: 66.666%;
+  }
 }
 
 .home-project-title-link {
