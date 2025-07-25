@@ -161,7 +161,7 @@ const swiperAutoplayOptions = ref({
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: var(--gutter);
-  padding: var(--gutterPadding) 0;
+  padding: 0 0 var(--gutter) 0;
   :deep(p) {
     @include bodyType;
     text-align: center;
@@ -171,6 +171,9 @@ const swiperAutoplayOptions = ref({
 
 .about-what-slider-inner {
   grid-column: 6 / span 2;
+  @include breakpoint(mobile) {
+    grid-column: 1 / span 12;
+  }
 }
 .about-what-swiper {
   width: 100%;

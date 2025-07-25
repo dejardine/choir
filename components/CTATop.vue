@@ -35,7 +35,8 @@ const scrollToTop = () => {
 </script>
 
 <style lang="scss" scoped>
-@import "~/assets/scss/global.scss";
+@use "@/assets/scss/global.scss" as *;
+@use "@/assets/scss/breakpoints.scss" as *;
 
 .call-to-action-top {
   position: relative;
@@ -49,6 +50,10 @@ const scrollToTop = () => {
     text-align: center;
     @include bodyType;
     display: inline;
+    @include breakpoint(mobile) {
+      justify-self: flex-start;
+      margin-right: auto;
+    }
   }
 }
 

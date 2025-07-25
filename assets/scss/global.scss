@@ -43,6 +43,10 @@
   --control-height: 38px;
   --border-radius: 8px;
   --slide-padding:25vh;
+  @include breakpoint(mobile) {
+    --slide-padding:20vh;
+
+  }
 }
 
 html.dark {

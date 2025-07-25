@@ -6,7 +6,7 @@
           &nbsp;
         </div>
         <div class="contact-grid-item contact-grid-item-split">
-          You've come this far.
+          You've come this far
         </div>
         <div class="contact-grid-item contact-grid-item-split">
           Might as well say hello

@@ -196,6 +196,9 @@ onUnmounted(() => {
       @include breakpoint(mobile) {
         width: 100%;
       }
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
     @include breakpoint(mobile) {
       padding-left: var(--gutterPadding);

@@ -34,7 +34,10 @@
             <prismic-link :field="project?.link" class="link"></prismic-link>
           </div>
         </div>
-        <div class="project-information-content-right-right">
+        <div
+          class="project-information-content-right-right"
+          ref="projectInformationContentRightRightEl"
+        >
           <div class="project-information-reveal" ref="revealRightEl">
             <prismic-rich-text :field="project?.information" />
             <blockquote v-if="project?.quote[0]">
@@ -87,6 +90,7 @@ const projectInformationEl = ref(null); // Ref for the .project-information-cont
 const moreInfoButtonEl = ref(null);
 const revealLeftEl = ref(null); // Left column content to reveal
 const revealRightEl = ref(null); // Right column content to reveal
+const projectInformationContentRightRightEl = ref(null); // Right column container
 
 // --- Observers ---
 let headerObserver = null; // MutationObserver to detect header height changes
@@ -114,6 +118,13 @@ const toggleInfo = () => {
   );
 
   if (isInfoVisible.value) {
+    // Show the right column first
+    if (projectInformationContentRightRightEl.value) {
+      $gsap.set(projectInformationContentRightRightEl.value, {
+        display: "block",
+      });
+    }
+
     // Animate open
     tl.to(revealElements, {
       height: "auto",
@@ -149,6 +160,14 @@ const toggleInfo = () => {
         height: 0,
         duration: 0.5,
         ease: "expo.inOut",
+        onComplete: () => {
+          // Hide the right column after animation completes
+          if (projectInformationContentRightRightEl.value) {
+            $gsap.set(projectInformationContentRightRightEl.value, {
+              display: "none",
+            });
+          }
+        },
       },
       "-=0.2" // Start height animation slightly before children fully faded
     );
@@ -294,6 +313,9 @@ watchEffect(async () => {
   grid-gap: var(--gutter);
   padding: var(--gutterPadding);
   padding-bottom: 25vh;
+  @include breakpoint(mobile) {
+    padding-bottom: 15vh;
+  }
 }
 
 .project-information-content-left {
@@ -362,7 +384,11 @@ watchEffect(async () => {
 
 .project-information-content-right-right {
   padding-top: var(--gutter-8);
+  @include breakpoint(mobile) {
+    padding-top: var(--gutter-5);
+  }
   grid-column: 3 / span 6;
+  display: none; /* Hidden initially until info is toggled */
   :deep(p) {
     @include largeBodyType;
     margin-bottom: var(--gutter);
