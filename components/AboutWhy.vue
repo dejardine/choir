@@ -20,6 +20,8 @@ const props = defineProps({
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/scss/breakpoints.scss";
+
 .about-why {
   padding: var(--gutter) var(--gutterPadding);
   border-top: 1px solid var(--color-border);
@@ -61,6 +63,9 @@ const props = defineProps({
     max-width: 885px;
     width: 65vw;
     margin: 0 auto;
+    @include breakpoint(mobile) {
+      width: 100%;
+    }
   }
 }
 

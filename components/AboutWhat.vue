@@ -85,6 +85,8 @@ const swiperAutoplayOptions = ref({
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/scss/breakpoints.scss";
+
 .about-what {
   padding: var(--gutter) var(--gutterPadding);
   border-top: 1px solid var(--color-border);
@@ -143,6 +145,9 @@ const swiperAutoplayOptions = ref({
     max-width: 885px;
     width: 65vw;
     margin: 0 auto;
+    @include breakpoint(mobile) {
+      width: 100%;
+    }
   }
   margin-bottom: 10vh;
   &:last-child {

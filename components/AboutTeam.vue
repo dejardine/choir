@@ -150,6 +150,8 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/scss/breakpoints.scss";
+
 .about-team-number {
   text-transform: uppercase;
   @include smallType;
@@ -191,6 +193,13 @@ onUnmounted(() => {
       width: 65vw;
       margin: 0 auto;
       margin-bottom: var(--gutter-2);
+      @include breakpoint(mobile) {
+        width: 100%;
+      }
+    }
+    @include breakpoint(mobile) {
+      padding-left: var(--gutterPadding);
+      padding-right: var(--gutterPadding);
     }
   }
 }
