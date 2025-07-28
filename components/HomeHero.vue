@@ -7,7 +7,7 @@
         effect="fade"
         :loop="true"
         :autoplay="{
-          delay: 5000,
+          delay: 50000000,
           disableOnInteraction: false,
         }"
         :navigation="{
@@ -217,6 +217,7 @@ onMounted(() => {
       pointer-events: none;
       mix-blend-mode: exclusion;
       align-items: flex-end;
+      color: var(--palette-white);
     }
     :deep(p) {
       grid-column: 1 / span 4;
@@ -228,7 +229,6 @@ onMounted(() => {
     }
     .caption-controls-controls {
       grid-column: 9 / span 4;
-      mix-blend-mode: exclusion;
 
       display: flex;
       justify-content: flex-start;
@@ -238,7 +238,7 @@ onMounted(() => {
       }
       gap: var(--gutter-quarter);
       pointer-events: auto;
-      color: var(--color-reverse);
+      color: var(--palette-black);
       .swiper-button-prev,
       .swiper-button-next {
         @include noButton;

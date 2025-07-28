@@ -173,7 +173,7 @@ const handleClickOutside = (event) => {
     padding: 0;
     margin: 0;
     a {
-      color: var(--color-reverse);
+      color: var(--color-text);
     }
   }
 }
@@ -187,7 +187,7 @@ const handleClickOutside = (event) => {
 .mobile-menu-close {
   @include noButton;
   @include menuType;
-  color: var(--color-reverse);
+  color: var(--color-text);
   background-color: transparent;
   border: none;
   padding: 0;
