@@ -133,6 +133,9 @@ const swiperAutoplayOptions = ref({
     margin-top: 20vh;
     aspect-ratio: 1/1;
     display: block;
+    @include breakpoint(mobile) {
+      grid-column: 4 / span 6;
+    }
   }
 }
 
