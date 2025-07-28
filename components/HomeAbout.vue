@@ -114,10 +114,16 @@ const swiperAutoplayOptions = ref({
   .home-about-copy {
     grid-column: 2 / span 10;
     grid-row: 1 / span 1;
+    @include breakpoint(mobile) {
+      grid-column: 1 / span 12;
+    }
   }
   :deep(p) {
     @include mediumType;
     text-align: center;
+    @include breakpoint(mobile) {
+      text-align: left;
+    }
   }
   padding-bottom: 20vh;
   padding-top: 20vh;

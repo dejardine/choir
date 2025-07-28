@@ -43,9 +43,9 @@
   --control-height: 38px;
   --border-radius: 8px;
   --slide-padding:25vh;
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0);
   @include breakpoint(mobile) {
     --slide-padding:20vh;
-
   }
 }
 

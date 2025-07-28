@@ -186,18 +186,42 @@ onMounted(() => {
   overflow: hidden;
   top: 0;
   left: 0;
+  @include breakpoint(mobile) {
+    height: 100dvh;
+    // Fallback for browsers that don't support dvh
+    height: 100vh;
+    height: 100dvh;
+  }
 }
 
 .home-hero-slider {
   width: 100%;
   height: 100vh;
+  @include breakpoint(mobile) {
+    height: 100dvh;
+    // Fallback for browsers that don't support dvh
+    height: 100vh;
+    height: 100dvh;
+  }
 
   .swiper-slide {
     width: 100%;
     height: 100vh;
     background-color: var(--palette-black);
+    @include breakpoint(mobile) {
+      height: 100dvh;
+      // Fallback for browsers that don't support dvh
+      height: 100vh;
+      height: 100dvh;
+    }
     :deep(.image-home-hero-container) {
       height: 100vh;
+      @include breakpoint(mobile) {
+        height: 100dvh;
+        // Fallback for browsers that don't support dvh
+        height: 100vh;
+        height: 100dvh;
+      }
       img {
         width: 100%;
         height: 100vh;
@@ -218,6 +242,12 @@ onMounted(() => {
       mix-blend-mode: exclusion;
       align-items: flex-end;
       color: var(--palette-white);
+
+      @include breakpoint(mobile) {
+        // Use env() to account for iOS Safari dynamic viewport
+        bottom: var(--safe-area-inset-bottom);
+        padding-bottom: calc(var(--gutter) + var(--safe-area-inset-bottom));
+      }
     }
     :deep(p) {
       grid-column: 1 / span 4;
