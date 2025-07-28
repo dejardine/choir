@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick, watchEffect } from "vue";
+import { ref, onMounted, nextTick, watchEffect, watch } from "vue";
 
 import {
   useColorMode,
@@ -83,23 +83,39 @@ const colorMode = useColorMode();
 const currentThemeColor = ref("");
 const pageRoot = ref(null);
 
+// Updated updateThemeColor function to use --color-background CSS variable
 const updateThemeColor = async () => {
   await nextTick();
-  if (process.client && pageRoot.value) {
-    const computedStyle = getComputedStyle(pageRoot.value);
-    const bgColor = computedStyle.backgroundColor;
-    if (bgColor && bgColor !== "rgba(0, 0, 0, 0)") {
-      currentThemeColor.value = bgColor;
-    } else {
-      currentThemeColor.value =
-        colorMode.value === "dark" ? "#000000" : "#ffffff";
+  if (process.client) {
+    const computedStyle = getComputedStyle(document.documentElement);
+    const bgColor = computedStyle.getPropertyValue("--color-background").trim();
+
+    // Convert CSS variable to actual color value
+    let themeColor = bgColor;
+    if (bgColor.startsWith("var(--")) {
+      // If it's still a CSS variable, get the computed value
+      const tempEl = document.createElement("div");
+      tempEl.style.backgroundColor = bgColor;
+      document.body.appendChild(tempEl);
+      themeColor = getComputedStyle(tempEl).backgroundColor;
+      document.body.removeChild(tempEl);
     }
+
+    currentThemeColor.value = themeColor;
   }
 };
 
 watchEffect(async () => {
   await updateThemeColor();
 });
+
+// Add watch for color mode changes
+watch(
+  () => colorMode.value,
+  async () => {
+    await updateThemeColor();
+  }
+);
 
 onMounted(async () => {
   await updateThemeColor(); // Initial set on mount

@@ -56,6 +56,32 @@ export const globalRouteTransition = {
           });
           ScrollTrigger.refresh();
           document.body.classList.remove("page-routing");
+
+          // Update theme-color meta tag to match --color-background
+          const computedStyle = getComputedStyle(document.documentElement);
+          const bgColor = computedStyle
+            .getPropertyValue("--color-background")
+            .trim();
+
+          // Convert CSS variable to actual color value
+          let themeColor = bgColor;
+          if (bgColor.startsWith("var(--")) {
+            // If it's still a CSS variable, get the computed value
+            const tempEl = document.createElement("div");
+            tempEl.style.backgroundColor = bgColor;
+            document.body.appendChild(tempEl);
+            themeColor = getComputedStyle(tempEl).backgroundColor;
+            document.body.removeChild(tempEl);
+          }
+
+          // Update the theme-color meta tag
+          let themeMeta = document.querySelector('meta[name="theme-color"]');
+          if (!themeMeta) {
+            themeMeta = document.createElement("meta");
+            themeMeta.name = "theme-color";
+            document.head.appendChild(themeMeta);
+          }
+          themeMeta.content = themeColor;
         },
       });
       tl.set(el, { visibility: "visible" }).fromTo(
