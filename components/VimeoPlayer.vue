@@ -33,9 +33,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch } from "vue";
+import { ref, onMounted, onBeforeUnmount, watch, computed } from "vue";
 import Player from "@vimeo/player";
 import { useMediaState } from "@/composables/useMediaState";
+import { useResponsive } from "~/composables/useResponsive";
 
 const props = defineProps({
   videoId: {
@@ -57,6 +58,9 @@ const emit = defineEmits(["ready", "play", "pause"]);
 // Media state management
 const { registerVideoPlayer, onVideoPlay, onVideoPause } = useMediaState();
 
+// Responsive
+const { screens } = useResponsive();
+
 const playerContainer = ref(null);
 let player = null;
 const isPlaying = ref(false);
@@ -67,6 +71,59 @@ let mouseMoveThrottle = null;
 
 // Auto-hide controls after 3 seconds of inactivity when playing
 const HIDE_CONTROLS_DELAY = 3000;
+
+// Get player options based on device type
+const getPlayerOptions = () => {
+  const isMobile = screens.value.isMobile;
+
+  if (isMobile) {
+    return {
+      id: props.videoId,
+      controls: false,
+      byline: false,
+      portrait: false,
+      title: false,
+      background: false,
+      responsive: true,
+      dnt: true,
+      muted: true, // Mute on mobile initially to allow programmatic play
+      autoplay: false,
+      preload: true,
+      loop: true,
+      transcript: false,
+      pip: false,
+      texttrack: false,
+      color: "000000",
+      fullscreen: false,
+      playsinline: false, // Allow native mobile player
+      unmute_button: true,
+      interactive_markers: false,
+    };
+  } else {
+    return {
+      id: props.videoId,
+      controls: false,
+      byline: false,
+      portrait: false,
+      title: false,
+      background: false,
+      responsive: true,
+      dnt: true,
+      muted: false,
+      autoplay: false,
+      preload: true,
+      loop: true,
+      transcript: false,
+      pip: false,
+      texttrack: false,
+      color: "000000",
+      fullscreen: false,
+      playsinline: true, // Use playsinline on desktop
+      unmute_button: true,
+      interactive_markers: false,
+    };
+  }
+};
 
 const hideControls = () => {
   if (isPlaying.value) {
@@ -139,20 +196,7 @@ onMounted(() => {
   }
 
   if (playerContainer.value) {
-    player = new Player(playerContainer.value, {
-      id: props.videoId,
-      controls: false,
-      byline: false,
-      portrait: false,
-      title: false,
-      background: false,
-      responsive: true,
-      dnt: true,
-      muted: false, // Enable sound
-      preload: true,
-      autoplay: false, // Don't autoplay
-      loop: true, // Loop forever once playing
-    });
+    player = new Player(playerContainer.value, getPlayerOptions());
 
     player.ready().then(() => {
       // Create a state reset function
@@ -175,20 +219,7 @@ onMounted(() => {
           // Create new player instance
           setTimeout(() => {
             if (playerContainer.value) {
-              player = new Player(playerContainer.value, {
-                id: props.videoId,
-                controls: false,
-                byline: false,
-                portrait: false,
-                title: false,
-                background: false,
-                responsive: true,
-                dnt: true,
-                muted: false,
-                preload: true,
-                autoplay: false,
-                loop: true,
-              });
+              player = new Player(playerContainer.value, getPlayerOptions());
 
               // Re-register event listeners
               player.on("play", () => {
@@ -263,10 +294,18 @@ const togglePlay = async (event) => {
   if (!player) return;
 
   try {
+    const isMobile = screens.value.isMobile;
+
     if (isPlaying.value) {
       await player.pause();
     } else {
-      await player.play();
+      // On mobile, we need to unmute before playing to satisfy browser restrictions
+      if (isMobile) {
+        await player.setMuted(false);
+        await player.play();
+      } else {
+        await player.play();
+      }
     }
   } catch (error) {
     // Silently handle playback errors

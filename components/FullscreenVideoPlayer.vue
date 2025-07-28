@@ -24,9 +24,18 @@
       <PrismicRichText :field="caption" />
     </div>
 
-    <!-- Fullscreen overlay -->
+    <!-- Mobile video player - works exactly like VimeoPlayer -->
     <div
-      v-if="isFullscreen"
+      v-if="isFullscreen && isMobile"
+      ref="mobilePlayerContainer"
+      class="mobile-vimeo-player-wrapper"
+    >
+      <!-- The Vimeo iframe will be injected here by the Player -->
+    </div>
+
+    <!-- Fullscreen overlay - only show on desktop -->
+    <div
+      v-if="isFullscreen && !isMobile"
       ref="fullscreenOverlay"
       class="fullscreen-overlay"
       @click="closeFullscreen"
@@ -77,6 +86,7 @@
             <span v-if="!isPlaying" class="play-text">Press <i>Play</i></span>
             <span v-else class="pause-text">Press <i>Pause</i></span>
           </button>
+
           <div v-if="caption" class="video-caption">
             <PrismicRichText :field="caption" />
           </div>
@@ -87,8 +97,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch, nextTick } from "vue";
+import {
+  ref,
+  onMounted,
+  onBeforeUnmount,
+  watch,
+  nextTick,
+  computed,
+} from "vue";
 import Player from "@vimeo/player";
+import { useResponsive } from "~/composables/useResponsive";
 
 const props = defineProps({
   videoId: {
@@ -110,7 +128,8 @@ const emit = defineEmits(["ready", "play", "pause"]);
 // GSAP
 const { $gsap, $CustomEase } = useNuxtApp();
 
-// Create custom ease
+// Responsive
+const { screens } = useResponsive();
 
 // Refs
 const thumbnailContainer = ref(null);
@@ -118,6 +137,7 @@ const fullscreenOverlay = ref(null);
 const fullscreenContent = ref(null);
 const videoContainer = ref(null);
 const vimeoPlayer = ref(null);
+const mobilePlayerContainer = ref(null);
 const controlsContainer = ref(null);
 const progressBar = ref(null);
 
@@ -129,71 +149,126 @@ const currentTime = ref(0);
 const duration = ref(0);
 const progress = ref(0);
 
+// Computed
+const isMobile = computed(() => screens.value.isMobile);
+
 // Player instance
 let player = null;
 let controlsTimeout = null;
 let progressInterval = null;
 
+// Get player options based on device type
+const getPlayerOptions = () => {
+  if (isMobile.value) {
+    return {
+      id: props.videoId,
+      controls: false,
+      byline: false,
+      portrait: false,
+      title: false,
+      background: false,
+      responsive: true,
+      dnt: true,
+      muted: true, // Mute on mobile initially to allow programmatic play
+      autoplay: false,
+      preload: true,
+      loop: false,
+      transcript: false,
+      pip: false,
+      texttrack: false,
+      color: "000000",
+      fullscreen: false,
+      playsinline: false, // Allow native mobile player
+      unmute_button: true,
+      interactive_markers: false,
+    };
+  } else {
+    return {
+      id: props.videoId,
+      controls: false,
+      byline: false,
+      portrait: false,
+      title: false,
+      background: false,
+      responsive: true,
+      dnt: true,
+      muted: false,
+      autoplay: false,
+      preload: true,
+      loop: false,
+      transcript: false,
+      pip: false,
+      texttrack: false,
+      color: "000000",
+      fullscreen: false,
+      playsinline: true,
+      unmute_button: true,
+      interactive_markers: false,
+    };
+  }
+};
+
 // GSAP animations
 const openFullscreen = () => {
   isFullscreen.value = true;
 
-  // Add class to body
-  document.body.classList.add("fullscreen-video-open");
-
-  // Wait for Vue to render the overlay before animating
-  nextTick(() => {
-    // Fade in overlay
-    $gsap.fromTo(
-      fullscreenOverlay.value,
-      { y: "100%" },
-      {
-        y: "0%",
-        duration: 0.6,
-        ease: $CustomEase.create("custom", "M0,0 C1,0 0,1 1,1 "),
-      }
-    );
-
-    // Initialize player after animation
-    setTimeout(() => {
+  if (isMobile.value) {
+    // On mobile, directly initialize the player without overlay animation
+    nextTick(() => {
       initializePlayer();
-    }, 400);
-  });
+    });
+  } else {
+    // On desktop, use the overlay animation
+    document.body.classList.add("fullscreen-video-open");
+
+    // Wait for Vue to render the overlay before animating
+    nextTick(() => {
+      // Fade in overlay
+      $gsap.fromTo(
+        fullscreenOverlay.value,
+        { y: "100%" },
+        {
+          y: "0%",
+          duration: 0.6,
+          ease: $CustomEase.create("custom", "M0,0 C1,0 0,1 1,1 "),
+        }
+      );
+
+      // Initialize player after animation
+      setTimeout(() => {
+        initializePlayer();
+      }, 400);
+    });
+  }
 };
 
 const closeFullscreen = () => {
-  // Remove class from body
-
-  // Animate overlay out
-  $gsap.to(fullscreenOverlay.value, {
-    y: "100%",
-    duration: 0.6,
-    ease: $CustomEase.create("custom", "M0,0 C1,0 0,1 1,1 "),
-    onComplete: () => {
-      isFullscreen.value = false;
-      destroyPlayer();
-      document.body.classList.remove("fullscreen-video-open");
-    },
-  });
+  if (isMobile.value) {
+    // On mobile, just close without animation
+    isFullscreen.value = false;
+    destroyPlayer();
+  } else {
+    // On desktop, animate overlay out
+    $gsap.to(fullscreenOverlay.value, {
+      y: "100%",
+      duration: 0.6,
+      ease: $CustomEase.create("custom", "M0,0 C1,0 0,1 1,1 "),
+      onComplete: () => {
+        isFullscreen.value = false;
+        destroyPlayer();
+        document.body.classList.remove("fullscreen-video-open");
+      },
+    });
+  }
 };
 
 const initializePlayer = () => {
-  if (!vimeoPlayer.value) return;
+  const playerElement = isMobile.value
+    ? mobilePlayerContainer.value
+    : vimeoPlayer.value;
+  if (!playerElement) return;
 
-  player = new Player(vimeoPlayer.value, {
-    id: props.videoId,
-    controls: false,
-    byline: false,
-    portrait: false,
-    title: false,
-    background: false,
-    responsive: true,
-    dnt: true,
-    muted: false,
-    preload: true,
-    autoplay: false,
-    loop: false,
-  });
+  player = new Player(playerElement, getPlayerOptions());
 
   player.ready().then(() => {
     // Get video duration
@@ -254,7 +329,13 @@ const togglePlay = async () => {
     if (isPlaying.value) {
       await player.pause();
     } else {
-      await player.play();
+      // On mobile, we need to unmute before playing to satisfy browser restrictions
+      if (isMobile.value) {
+        await player.setMuted(false);
+        await player.play();
+      } else {
+        await player.play();
+      }
     }
   } catch (error) {
     console.error("Playback error:", error);
@@ -328,7 +409,7 @@ onBeforeUnmount(() => {
   document.removeEventListener("keydown", onKeyDown);
 
   // Clean up body class if component is unmounted while fullscreen is open
-  if (isFullscreen.value) {
+  if (isFullscreen.value && !isMobile.value) {
     document.body.classList.remove("fullscreen-video-open");
   }
 
@@ -414,6 +495,28 @@ onBeforeUnmount(() => {
   }
 }
 
+// Mobile video player - works exactly like VimeoPlayer
+.mobile-vimeo-player-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  display: block;
+  aspect-ratio: 16/9;
+  background: black;
+  cursor: pointer;
+
+  :deep(iframe) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    z-index: 1;
+    pointer-events: none; // Prevent iframe from capturing clicks
+  }
+}
+
 .fullscreen-overlay {
   position: fixed;
   top: 0;
@@ -426,10 +529,16 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: center;
   padding: var(--gutterPadding);
+  @include breakpoint(mobile) {
+    height: 100dvh;
+  }
   .fullscreen-content {
     position: relative;
     width: 100vw;
     height: 100vh;
+    @include breakpoint(mobile) {
+      height: 100dvh;
+    }
     background: var(--palette-black);
     overflow: hidden;
 
@@ -452,6 +561,9 @@ onBeforeUnmount(() => {
       position: relative;
       width: 100%;
       height: 100vh;
+      @include breakpoint(mobile) {
+        height: 100dvh;
+      }
       display: flex;
       align-items: center;
 
