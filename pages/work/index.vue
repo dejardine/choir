@@ -101,6 +101,9 @@ watchEffect(async () => {
 
 onMounted(async () => {
   await updateThemeColor(); // Initial set on mount
+  setTimeout(() => {
+    $ScrollTrigger.refresh();
+  }, 1000);
 });
 
 // SEO and Theme Color

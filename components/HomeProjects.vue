@@ -102,6 +102,8 @@ const setupScrollTrigger = () => {
     trigger: homeSlices.value,
     start: "top center",
     end: "bottom center-1px",
+    invalidateOnRefresh: true,
+
     onUpdate: (self) => {
       updateCurrentProject();
     },
@@ -170,7 +172,7 @@ onMounted(async () => {
   // Small delay to ensure all slices are rendered
   setTimeout(() => {
     setupScrollTrigger();
-  }, 100);
+  }, 1000);
 
   // Add resize handler
   resizeHandler = () => {
@@ -180,8 +182,6 @@ onMounted(async () => {
       setupScrollTrigger();
     }, 250);
   };
-
-  window.addEventListener("resize", resizeHandler);
 });
 
 onUnmounted(() => {

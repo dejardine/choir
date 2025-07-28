@@ -114,6 +114,7 @@ const setupScrollTrigger = () => {
     end: "bottom bottom",
     pin: teamTitle.value,
     pinSpacing: false,
+    invalidateOnRefresh: true,
     onUpdate: (self) => {
       // Update the current team member in view
       updateCurrentTeamMember();
@@ -136,16 +137,15 @@ onMounted(() => {
   setTimeout(() => {
     setupScrollTrigger();
     updateCurrentTeamMember();
-  }, 100);
-  window.addEventListener("resize", setupScrollTrigger);
+  }, 1000);
 });
 
 onUnmounted(() => {
+  // Clean up ScrollTrigger instances
   if (scrollTriggerInstances.length > 0) {
     scrollTriggerInstances.forEach((st) => st.kill());
     scrollTriggerInstances = [];
   }
-  window.removeEventListener("resize", setupScrollTrigger);
 });
 </script>
 

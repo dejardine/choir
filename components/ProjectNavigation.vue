@@ -42,7 +42,7 @@ const scrollToTop = () => {
   if ($ScrollToPlugin) {
     $gsap.to(window, {
       duration: 1,
-      scrollTo: { y: 0, autoKill: true },
+      scrollTo: { y: 0 },
       ease: "power2.inOut",
     });
   } else {
