@@ -1,94 +1,95 @@
 <template>
-  <div>
-    <!-- Thumbnail with play button -->
-    <div
-      ref="thumbnailContainer"
-      class="fullscreen-video-thumbnail"
-      @click="openFullscreen"
-    >
-      <img
-        v-if="coverImageUrl"
-        :src="coverImageUrl"
-        class="thumbnail-image"
-        alt="Video thumbnail"
-      />
-      <div class="play-button-overlay">
-        <button class="play-button" aria-label="Play video">
-          <span class="play-text">Play</span>
-        </button>
+  <div class="fullscreen-player-wrapper">
+    <!-- Mobile Player -->
+    <VimeoPlayer
+      v-if="isMobile"
+      :video-id="videoId"
+      :cover-image-url="coverImageUrl"
+    />
+
+    <!-- Desktop Player -->
+    <div v-else>
+      <!-- Thumbnail with play button -->
+      <div
+        ref="thumbnailContainer"
+        class="fullscreen-video-thumbnail"
+        @click="openFullscreen"
+      >
+        <img
+          v-if="coverImageUrl"
+          :src="coverImageUrl"
+          class="thumbnail-image"
+          alt="Video thumbnail"
+        />
+        <div class="play-button-overlay">
+          <button class="play-button" aria-label="Play video">
+            <span class="play-text">Play</span>
+          </button>
+        </div>
       </div>
-    </div>
 
-    <!-- Caption below thumbnail -->
-    <div v-if="caption" class="video-caption-thumbnail">
-      <PrismicRichText :field="caption" />
-    </div>
+      <!-- Caption below thumbnail -->
+      <div v-if="caption" class="video-caption-thumbnail">
+        <PrismicRichText :field="caption" />
+      </div>
 
-    <!-- Mobile video player - works exactly like VimeoPlayer -->
-    <div
-      v-if="isFullscreen && isMobile"
-      ref="mobilePlayerContainer"
-      class="mobile-vimeo-player-wrapper"
-    >
-      <!-- The Vimeo iframe will be injected here by the Player -->
-    </div>
-
-    <!-- Fullscreen overlay - only show on desktop -->
-    <div
-      v-if="isFullscreen && !isMobile"
-      ref="fullscreenOverlay"
-      class="fullscreen-overlay"
-      @click="closeFullscreen"
-    >
-      <div ref="fullscreenContent" class="fullscreen-content" @click.stop>
-        <!-- Close button -->
-        <button
-          class="close-button"
-          @click="closeFullscreen"
-          aria-label="Close video"
-        >
-          Close
-        </button>
-
-        <!-- Video player -->
-        <div ref="videoContainer" class="video-container">
-          <div ref="vimeoPlayer" class="vimeo-player"></div>
-        </div>
-
-        <!-- Custom controls -->
-        <div
-          v-if="showControls"
-          ref="controlsContainer"
-          class="video-controls"
-          @click.stop
-        >
-          <!-- Progress bar -->
-          <div class="progress-container">
-            <div ref="progressBar" class="progress-bar" @click="seekTo">
-              <div
-                class="progress-fill"
-                :style="{ width: `${progress}%` }"
-              ></div>
-            </div>
-          </div>
-
-          <!-- Time display -->
-        </div>
-
-        <!-- Caption -->
-        <div class="video-caption-container">
-          <!-- Play/Pause button -->
+      <!-- Fullscreen overlay - only show on desktop -->
+      <div
+        v-if="isFullscreen"
+        ref="fullscreenOverlay"
+        class="fullscreen-overlay"
+        @click="closeFullscreen"
+      >
+        <div ref="fullscreenContent" class="fullscreen-content" @click.stop>
+          <!-- Close button -->
           <button
-            class="control-button play-pause-btn"
-            @click="togglePlay"
-            :aria-label="isPlaying ? 'Pause video' : 'Play video'"
+            class="close-button"
+            @click="closeFullscreen"
+            aria-label="Close video"
           >
-            <span v-if="!isPlaying" class="play-text">Press <i>Play</i></span>
-            <span v-else class="pause-text">Press <i>Pause</i></span>
+            Close
           </button>
 
-          <div v-if="caption" class="video-caption">
-            <PrismicRichText :field="caption" />
+          <!-- Video player -->
+          <div ref="videoContainer" class="video-container">
+            <div ref="vimeoPlayer" class="vimeo-player"></div>
+          </div>
+
+          <!-- Custom controls -->
+          <div
+            v-if="showControls"
+            ref="controlsContainer"
+            class="video-controls"
+            @click.stop
+          >
+            <!-- Progress bar -->
+            <div class="progress-container">
+              <div ref="progressBar" class="progress-bar" @click="seekTo">
+                <div
+                  class="progress-fill"
+                  :style="{ width: `${progress}%` }"
+                ></div>
+              </div>
+            </div>
+
+            <!-- Time display -->
+          </div>
+
+          <!-- Caption -->
+          <div class="video-caption-container">
+            <!-- Play/Pause button -->
+            <button
+              class="control-button play-pause-btn"
+              @click="togglePlay"
+              :aria-label="isPlaying ? 'Pause video' : 'Play video'"
+            >
+              <span v-if="!isPlaying" class="play-text">Press <i>Play</i></span>
+              <span v-else class="pause-text">Press <i>Pause</i></span>
+            </button>
+
+            <div v-if="caption" class="video-caption">
+              <PrismicRichText :field="caption" />
+            </div>
           </div>
         </div>
       </div>
@@ -107,6 +108,7 @@ import {
 } from "vue";
 import Player from "@vimeo/player";
 import { useResponsive } from "~/composables/useResponsive";
+import VimeoPlayer from "@/components/VimeoPlayer.vue";
 
 const props = defineProps({
   videoId: {
@@ -212,60 +214,45 @@ const getPlayerOptions = () => {
 const openFullscreen = () => {
   isFullscreen.value = true;
 
-  if (isMobile.value) {
-    // On mobile, directly initialize the player without overlay animation
-    nextTick(() => {
+  // On desktop, use the overlay animation
+  document.body.classList.add("fullscreen-video-open");
+
+  // Wait for Vue to render the overlay before animating
+  nextTick(() => {
+    // Fade in overlay
+    $gsap.fromTo(
+      fullscreenOverlay.value,
+      { y: "100%" },
+      {
+        y: "0%",
+        duration: 0.6,
+        ease: $CustomEase.create("custom", "M0,0 C1,0 0,1 1,1 "),
+      }
+    );
+
+    // Initialize player after animation
+    setTimeout(() => {
       initializePlayer();
-    });
-  } else {
-    // On desktop, use the overlay animation
-    document.body.classList.add("fullscreen-video-open");
-
-    // Wait for Vue to render the overlay before animating
-    nextTick(() => {
-      // Fade in overlay
-      $gsap.fromTo(
-        fullscreenOverlay.value,
-        { y: "100%" },
-        {
-          y: "0%",
-          duration: 0.6,
-          ease: $CustomEase.create("custom", "M0,0 C1,0 0,1 1,1 "),
-        }
-      );
-
-      // Initialize player after animation
-      setTimeout(() => {
-        initializePlayer();
-      }, 400);
-    });
-  }
+    }, 400);
+  });
 };
 
 const closeFullscreen = () => {
-  if (isMobile.value) {
-    // On mobile, just close without animation
-    isFullscreen.value = false;
-    destroyPlayer();
-  } else {
-    // On desktop, animate overlay out
-    $gsap.to(fullscreenOverlay.value, {
-      y: "100%",
-      duration: 0.6,
-      ease: $CustomEase.create("custom", "M0,0 C1,0 0,1 1,1 "),
-      onComplete: () => {
-        isFullscreen.value = false;
-        destroyPlayer();
-        document.body.classList.remove("fullscreen-video-open");
-      },
-    });
-  }
+  // On desktop, animate overlay out
+  $gsap.to(fullscreenOverlay.value, {
+    y: "100%",
+    duration: 0.6,
+    ease: $CustomEase.create("custom", "M0,0 C1,0 0,1 1,1 "),
+    onComplete: () => {
+      isFullscreen.value = false;
+      destroyPlayer();
+      document.body.classList.remove("fullscreen-video-open");
+    },
+  });
 };
 
 const initializePlayer = () => {
-  const playerElement = isMobile.value
-    ? mobilePlayerContainer.value
-    : vimeoPlayer.value;
+  const playerElement = vimeoPlayer.value;
   if (!playerElement) return;
 
   player = new Player(playerElement, getPlayerOptions());
