@@ -236,7 +236,7 @@ onMounted(() => {
       z-index: 10;
       width: 100%;
       @include gridSetup;
-      padding: var(--gutter);
+      padding: var(--gutterPadding);
       box-sizing: border-box;
       pointer-events: none;
       mix-blend-mode: exclusion;
