@@ -181,7 +181,7 @@ onUnmounted(() => {
   }
   .about-team-content {
     padding-top: 20vh;
-    padding-bottom: 20vh;
+    padding-bottom: 30vh;
     text-align: center;
     :deep(p) {
       @include smallHeading;

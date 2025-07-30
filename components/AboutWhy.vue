@@ -71,6 +71,6 @@ const props = defineProps({
 
 .about-why-content {
   padding-top: 20vh;
-  padding-bottom: 20vh;
+  padding-bottom: 30vh;
 }
 </style>
