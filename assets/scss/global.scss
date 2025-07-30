@@ -38,12 +38,14 @@
   --gutter-10: calc(var(--gutter) * 10);
   --gutter-half: calc(var(--gutter) / 2);
   --gutter-quarter: calc(var(--gutter) / 4);
+  --gutter-third: calc(var(--gutter) / 3);
   --gutter-three-quarters: calc(var(--gutter) * 1.5);
   overscroll-behavior: none;
   --control-height: 38px;
   --border-radius: 8px;
   --slide-padding:25vh;
   --safe-area-inset-bottom: env(safe-area-inset-bottom, 0);
+
   @include breakpoint(mobile) {
     --slide-padding:20vh;
   }

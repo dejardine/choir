@@ -47,7 +47,7 @@
 @mixin heldaneText {
   font-family: "Heldane Text", sans-serif;
   font-style: normal;
-  font-weight:normal;    
+  font-weight:normal;  
 }
 
 // Heldane Text Italic
@@ -62,7 +62,7 @@
 @mixin heldaneTextItalic {
   font-family: "Heldane Text Italic", sans-serif;
   font-style: normal;
-  font-weight:normal;    
+  font-weight:normal;
 }
 
 /* =============================================================================
@@ -92,6 +92,10 @@
     --subheading: clamp(1.938rem, calc(1.938rem + 1.5 * (100vw - 20rem) / 60), 3.438rem);
     --mobileMenu: clamp(2.625rem, calc(2.625rem + 0.625 * (100vw - 20rem) / 30.75), 3.25rem);
     --cta: clamp(2.875rem, calc(2.875rem + 0.875 * (100vw - 62rem) / 32.5), 3.75rem);
+  }
+
+  @include breakpoint(display) {
+    --body:17px;
   }
 }
 
@@ -140,14 +144,14 @@
   line-height: var(--heading-l);
   @include heldaneText;
   letter-spacing: -0.014em;
-  font-feature-settings: "dlig", "ss03", "liga", "calt";
+  font-feature-settings: "dlig" 0, "ss03", "liga", "calt";
 }
 
 @mixin heldaneHeadingItalic {
   font-size: var(--heading);
   line-height: var(--heading-l);
   @include heldaneTextItalic; 
-  font-feature-settings: "dlig", "ss03", "liga", "calt";
+  font-feature-settings: "dlig" 0, "ss03", "liga", "calt";
 }
 
 @mixin heldaneSubheading {
@@ -155,7 +159,7 @@
   line-height: var(--subheading-l);
   @include heldaneText;
   letter-spacing: -0.014em;
-  font-feature-settings: "dlig", "ss03", "liga", "calt";
+  font-feature-settings: "dlig" 0, "ss03", "liga", "calt";
 }
 
 @mixin ctaText {
@@ -176,7 +180,7 @@
   line-height: var(--smallHeading-l);
   @include heldaneText;
   letter-spacing: -0.014em;
-  font-feature-settings: "dlig", "ss03", "liga", "calt";
+  font-feature-settings: "dlig" 0, "ss03", "liga", "calt";
 }
 
 @mixin mobileMenu {
@@ -184,7 +188,7 @@
   line-height: 1;
   @include heldaneText;
   letter-spacing: -0.014em;
-  font-feature-settings: "dlig", "ss03", "liga", "calt";
+  font-feature-settings: "dlig" 0, "ss03", "liga", "calt";
 }
 /* =============================================================================
    basic rules 

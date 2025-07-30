@@ -27,6 +27,10 @@ onMounted(() => {
     document.documentElement.classList.remove("dark");
     return;
   }
+
+  // Add preloader-started class to prevent scrolling
+  document.body.classList.add("preloader-started");
+
   $gsap.set(".preloader-bar-inner", { xPercent: -100 });
 
   // Ensure GSAP is available
@@ -65,6 +69,7 @@ onMounted(() => {
         }
       },
       onStart: () => {
+        document.body.classList.remove("preloader-started");
         document.body.classList.add("preloader-finished");
       },
     })

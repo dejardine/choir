@@ -56,6 +56,14 @@ function toggleMode() {
     background-color 0.3s ease,
     color 0.3s ease,
     border-color 0.3s ease;
+  @include breakpoint(laptop) {
+    width: 8px;
+    height: 8px;
+  }
+  @include breakpoint(display) {
+    width: 8px;
+    height: 8px;
+  }
 }
 
 .theme-switcher-container:hover .theme-switcher {
