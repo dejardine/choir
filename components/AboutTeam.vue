@@ -282,18 +282,18 @@ onUnmounted(() => {
     left: 0;
     right: 0;
   }
+}
 
-  .about-team-title-text {
-    position: absolute;
-    z-index: 100;
-    top: var(--gutter);
-    left: var(--gutterPadding);
-    opacity: 0;
-    transition: opacity 0.3s ease;
+.about-team-title-text {
+  position: absolute;
+  z-index: 100;
+  top: var(--gutter);
+  left: var(--gutterPadding);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 
-    .pinned & {
-      opacity: 1;
-    }
+  .about-team-title.pinned & {
+    opacity: 1;
   }
 }
 
@@ -313,7 +313,7 @@ onUnmounted(() => {
   opacity: 0;
   transition: opacity 0.3s ease;
 
-  .pinned & {
+  .about-team-title.pinned & {
     opacity: 1;
   }
 }
