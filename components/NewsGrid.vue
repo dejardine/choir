@@ -334,6 +334,7 @@
           currentView === 'score' ||
           (screens.isMobile && currentView === 'score'),
       }"
+      :style="{ height: loadMoreContainerHeight }"
     >
       <button
         v-if="showLoadMoreButton"
@@ -374,6 +375,10 @@ const props = defineProps({
   newsLandingPage: {
     type: Object,
     required: false,
+  },
+  footerHeight: {
+    type: Number,
+    default: 0,
   },
 });
 
@@ -446,6 +451,23 @@ const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" }); // Fallback
   }
 };
+
+// Computed property to calculate load-more-container height
+const loadMoreContainerHeight = computed(() => {
+  if (!props.footerHeight) return "50vh"; // Fallback to original height
+
+  // Get the original container height (50vh on desktop, 30vh on mobile)
+  const originalHeightVh = screens.value.isMobile ? 30 : 50;
+  const originalHeightPx = (originalHeightVh / 100) * window.innerHeight;
+
+  // Calculate new height: original height minus footer height
+  const newHeightPx = Math.max(0, originalHeightPx - props.footerHeight);
+
+  // Convert back to viewport units
+  const newHeightVh = (newHeightPx / window.innerHeight) * 100;
+
+  return `${newHeightVh}vh`;
+});
 
 // View management functions
 const setView = async (view) => {
@@ -918,12 +940,12 @@ new Promise((resolve) => {
   align-items: flex-start;
   border-top: 1px solid var(--color-border);
   padding-top: var(--gutter);
-  height: 50vh;
+  height: 50vh; /* Fallback height */
   position: relative;
   transition: opacity 0.3s ease;
 
   @include breakpoint(mobile) {
-    height: 30vh;
+    height: 30vh; /* Fallback height for mobile */
     padding-top: var(--gutter);
     justify-content: flex-start;
     padding-left: var(--gutter);

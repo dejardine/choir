@@ -11,13 +11,22 @@
       v-if="newsGridData?.newsLandingPageWithData?.data?.news_items"
       :page="newsGridData"
       :newsLandingPage="page?.newsLandingPage"
+      :footer-height="footerHeight"
     />
-    <GlobalFooter />
+    <GlobalFooter ref="globalFooter" />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, nextTick, watchEffect, watch } from "vue";
+import {
+  ref,
+  onMounted,
+  onBeforeUnmount,
+  nextTick,
+  watchEffect,
+  watch,
+  computed,
+} from "vue";
 import NewsGrid from "~/components/NewsGrid.vue";
 
 import {
@@ -123,7 +132,30 @@ watch(
 
 onMounted(async () => {
   await updateThemeColor(); // Initial set on mount
+
+  // Update footer height on mount
+  await nextTick();
+  updateFooterHeight();
+
+  // Add resize listener to update footer height
+  window.addEventListener("resize", updateFooterHeight);
 });
+
+// Clean up resize listener
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", updateFooterHeight);
+});
+
+// Footer height tracking
+const globalFooter = ref(null);
+const footerHeight = ref(0);
+
+// Computed property to get footer height
+const updateFooterHeight = () => {
+  if (globalFooter.value) {
+    footerHeight.value = globalFooter.value.$el?.offsetHeight || 0;
+  }
+};
 
 // SEO and Theme Color
 useHead({

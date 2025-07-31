@@ -1,5 +1,5 @@
 <template>
-  <footer>
+  <footer class="global-footer">
     <div class="row row-1">
       <div class="row-item">Choir</div>
       <div class="row-item">
