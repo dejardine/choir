@@ -289,6 +289,7 @@ onUnmounted(() => {
     top: var(--gutter);
     left: var(--gutterPadding);
     opacity: 0;
+    transition: opacity 0.3s ease;
 
     .pinned & {
       opacity: 1;
@@ -310,6 +311,7 @@ onUnmounted(() => {
   top: var(--gutter);
   right: var(--gutterPadding);
   opacity: 0;
+  transition: opacity 0.3s ease;
 
   .pinned & {
     opacity: 1;
