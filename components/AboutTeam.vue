@@ -255,6 +255,9 @@ onUnmounted(() => {
     &:last-child {
       margin-bottom: 0;
     }
+    &:first-child {
+      margin-top: 20vh;
+    }
   }
 }
 
