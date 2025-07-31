@@ -119,7 +119,7 @@ const swiperAutoplayOptions = ref({
 }
 .about-what-content {
   padding-top: 20vh;
-  padding-bottom: 20vh;
+  padding-bottom: 30vh;
   text-align: center;
 }
 .about-what-item {

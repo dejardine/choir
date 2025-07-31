@@ -213,7 +213,7 @@ onUnmounted(() => {
   gap: var(--gutter);
   .about-team-people-item {
     position: relative;
-    margin-bottom: 20vh;
+    margin-bottom: 30vh;
     &:nth-child(6n + 1) {
       grid-column: 6 / span 3;
       display: flex;
@@ -255,17 +255,33 @@ onUnmounted(() => {
   align-items: flex-start;
   width: 100%;
   border-top: 1px solid var(--color-border);
-  padding: var(--gutter) var(--gutterPadding);
+  padding: 0;
   z-index: 100;
   @include bodyType;
   strong {
     margin-right: var(--gutter-half);
+  }
+  position: relative;
+  .about-team-title-text {
+    position: absolute;
+    z-index: 100;
+    top: var(--gutter);
+    left: var(--gutterPadding);
   }
 }
 
 .about-team-title-alt {
   :deep(p) {
     margin-bottom: var(--gutter);
+    text-align: right;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50vw;
   }
+  position: absolute;
+  z-index: 100;
+  top: var(--gutter);
+  right: var(--gutterPadding);
 }
 </style>
