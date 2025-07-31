@@ -112,6 +112,17 @@ export interface AboutDocumentDataTeamListItem {
    * - **Documentation**: https://prismic.io/docs/field#rich-text-title
    */
   alternative_title_rich: prismic.RichTextField;
+
+  /**
+   * Enable Parallax? field in *About Landing → Team List*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: about.team_list[].parallax_enabled
+   * - **Documentation**: https://prismic.io/docs/field#boolean
+   */
+  parallax_enabled: prismic.BooleanField;
 }
 
 /**

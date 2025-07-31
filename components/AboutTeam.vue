@@ -54,6 +54,8 @@
         class="about-team-people-item"
         v-for="item in tripledTeamList"
         :key="item.id"
+        :class="{ 'has-parallax': item.parallax_enabled }"
+        :data-parallax-speed="item.parallax_enabled ? 1.3 : null"
       >
         <ImageSquare :imageField="item.image" />
       </div>
@@ -78,6 +80,74 @@ const teamPeople = ref(null);
 
 // ScrollTrigger instances for cleanup
 let scrollTriggerInstances = [];
+let parallaxScrollTriggerInstances = [];
+
+// Parallax setup
+const setupParallax = async () => {
+  await nextTick();
+
+  const { $gsap, $ScrollTrigger } = useNuxtApp();
+  if (!$gsap || !$ScrollTrigger || !teamPeople.value) return;
+
+  // Kill existing parallax instances
+  parallaxScrollTriggerInstances.forEach((st) => st.kill());
+  parallaxScrollTriggerInstances = [];
+
+  // Find all team people items with parallax enabled
+  const parallaxItems = teamPeople.value.querySelectorAll(
+    ".about-team-people-item.has-parallax"
+  );
+
+  console.log(`Found ${parallaxItems.length} parallax items`);
+
+  parallaxItems.forEach((item, index) => {
+    const speed = parseFloat(item.dataset.parallaxSpeed) || 1.3;
+
+    // Calculate the parallax percentage (negative for upward movement)
+    const parallaxPercent = -(speed - 1) * 100;
+
+    console.log(
+      `Setting up parallax for item ${index + 1}: speed=${speed}, percent=${parallaxPercent}%, element:`,
+      item
+    );
+
+    // Apply parallax to the image inside, not the container
+    const imageElement = item.querySelector("img");
+    if (!imageElement) {
+      console.log(`No image found in item ${index + 1}`);
+      return;
+    }
+
+    // Use a simpler approach with direct ScrollTrigger
+    const st = $ScrollTrigger.create({
+      trigger: item,
+      start: "top bottom",
+      end: "bottom top",
+      scrub: 1,
+      onUpdate: (self) => {
+        const progress = self.progress;
+        const maxY = parallaxPercent * (item.offsetHeight / 100);
+        const currentY = progress * maxY;
+
+        console.log(
+          `Progress: ${progress.toFixed(2)}, Y: ${currentY.toFixed(2)}`
+        );
+
+        $gsap.set(imageElement, {
+          y: currentY,
+          force3D: true,
+        });
+      },
+    });
+
+    parallaxScrollTriggerInstances.push(st);
+    console.log(`Created ScrollTrigger for item ${index + 1}:`, st);
+  });
+
+  console.log(
+    `Created ${parallaxScrollTriggerInstances.length} parallax ScrollTrigger instances`
+  );
+};
 
 const tripledTeamList = computed(() => {
   if (!props.about?.team_list) return [];
@@ -240,6 +310,7 @@ onMounted(() => {
       teamPeople: !!teamPeople.value,
     });
     setupScrollTrigger();
+    setupParallax();
     updateCurrentTeamMember();
   }, 2000); // Increased delay to ensure everything is loaded
 });
@@ -249,6 +320,12 @@ onUnmounted(() => {
   if (scrollTriggerInstances.length > 0) {
     scrollTriggerInstances.forEach((st) => st.kill());
     scrollTriggerInstances = [];
+  }
+
+  // Clean up parallax ScrollTrigger instances
+  if (parallaxScrollTriggerInstances.length > 0) {
+    parallaxScrollTriggerInstances.forEach((st) => st.kill());
+    parallaxScrollTriggerInstances = [];
   }
 
   // Clean up alt text interval

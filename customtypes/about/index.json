@@ -221,6 +221,15 @@
                 "allowTargetBlank": true,
                 "multi": "paragraph"
               }
+            },
+            "parallax_enabled": {
+              "type": "Boolean",
+              "config": {
+                "label": "Enable Parallax?",
+                "placeholder_false": "false",
+                "placeholder_true": "true",
+                "default_value": false
+              }
             }
           }
         }

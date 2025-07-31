@@ -161,6 +161,7 @@ onMounted(() => {
 // Expose the player instance and methods
 defineExpose({
   player,
+  isReady: () => player && player.ready,
   play: async () => {
     if (player) {
       try {
@@ -169,7 +170,10 @@ defineExpose({
           isFadingOut.value = true;
         }
       } catch (error) {
-        console.error("Error playing video:", error);
+        // Ignore PlayInterrupted errors as they're expected during transitions
+        if (error.name !== "PlayInterrupted") {
+          console.error("Error playing video:", error);
+        }
       }
     }
   },

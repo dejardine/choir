@@ -34,6 +34,8 @@ import { globalRouteTransition } from "~/utils/GlobalRouteTransition";
 // Get the data
 const prismic = usePrismic();
 
+const { $ScrollTrigger } = useNuxtApp();
+
 const graphQuery = `{
   work {
     projects {

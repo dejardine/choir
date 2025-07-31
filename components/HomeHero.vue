@@ -95,6 +95,7 @@ const nextButton = ref(null);
 const videoPlayers = ref({});
 const readyVideos = ref({});
 let swiperInstance = null;
+let isTransitioning = false; // Prevent multiple simultaneous operations
 
 // Helper function to extract Vimeo ID
 const getVimeoId = (url) => {
@@ -124,8 +125,15 @@ const onVideoReady = (index) => {
   // If this is the first video and swiper is initialized, play it
   if (swiperInstance && swiperInstance.activeIndex === index) {
     const player = videoPlayers.value[index];
-    if (player?.play) {
-      player.play();
+    if (player?.play && player?.isReady) {
+      // Add a small delay to ensure everything is properly initialized
+      setTimeout(async () => {
+        try {
+          await player.play();
+        } catch (error) {
+          console.error("Error playing video on ready:", error);
+        }
+      }, 200);
     }
   }
 };
@@ -139,8 +147,15 @@ const onSwiperInit = (swiper) => {
   const firstIndex = swiper.activeIndex;
   if (readyVideos.value[firstIndex]) {
     const player = videoPlayers.value[firstIndex];
-    if (player?.play) {
-      player.play();
+    if (player?.play && player?.isReady) {
+      // Add a small delay to ensure everything is properly initialized
+      setTimeout(async () => {
+        try {
+          await player.play();
+        } catch (error) {
+          console.error("Error playing initial video:", error);
+        }
+      }, 200);
     }
   }
 };
@@ -148,25 +163,54 @@ const onSwiperInit = (swiper) => {
 // Handle slide changes
 const handleSlideChange = async (swiper) => {
   console.log("Slide changed to:", swiper.activeIndex);
+
+  // Prevent multiple simultaneous transitions
+  if (isTransitioning) {
+    console.log("Transition already in progress, skipping...");
+    return;
+  }
+
+  isTransitioning = true;
   const currentIndex = swiper.activeIndex;
 
-  // Pause all videos
-  Object.entries(videoPlayers.value).forEach(([index, player]) => {
-    if (player?.pause && index !== currentIndex.toString()) {
-      player.pause();
-    }
-  });
+  try {
+    // First, pause all videos and wait for them to complete
+    const pausePromises = Object.entries(videoPlayers.value).map(
+      async ([index, player]) => {
+        if (
+          player?.pause &&
+          player?.isReady &&
+          index !== currentIndex.toString()
+        ) {
+          try {
+            await player.pause();
+          } catch (error) {
+            console.error("Error pausing video:", error);
+          }
+        }
+      }
+    );
 
-  // Play the current video if it's ready
-  if (readyVideos.value[currentIndex]) {
-    const currentPlayer = videoPlayers.value[currentIndex];
-    if (currentPlayer?.play) {
-      try {
-        await currentPlayer.play();
-      } catch (error) {
-        console.error("Error playing video:", error);
+    // Wait for all pause operations to complete
+    await Promise.all(pausePromises);
+
+    // Add a small delay to ensure pause operations are fully processed
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    // Play the current video if it's ready
+    if (readyVideos.value[currentIndex]) {
+      const currentPlayer = videoPlayers.value[currentIndex];
+      if (currentPlayer?.play && currentPlayer?.isReady) {
+        try {
+          await currentPlayer.play();
+        } catch (error) {
+          console.error("Error playing video:", error);
+        }
       }
     }
+  } finally {
+    // Always reset the transition flag
+    isTransitioning = false;
   }
 };
 
