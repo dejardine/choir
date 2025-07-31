@@ -45,7 +45,7 @@ const currentProjectTitle = ref(null);
 const currentProjectLink = ref(null);
 
 // ScrollTrigger instances for cleanup
-let scrollTriggerInstances = [];
+let homeProjectsScrollTriggers = [];
 let resizeHandler = null;
 
 const props = defineProps({
@@ -64,9 +64,9 @@ const setupScrollTrigger = () => {
   }
 
   // Kill existing ScrollTrigger instances
-  if (scrollTriggerInstances.length > 0) {
-    scrollTriggerInstances.forEach((st) => st.kill());
-    scrollTriggerInstances = [];
+  if (homeProjectsScrollTriggers.length > 0) {
+    homeProjectsScrollTriggers.forEach((st) => st.kill());
+    homeProjectsScrollTriggers = [];
   }
 
   // Refresh ScrollTrigger to recalculate positions
@@ -109,7 +109,7 @@ const setupScrollTrigger = () => {
     },
   });
 
-  scrollTriggerInstances.push(pinST, updateST);
+  homeProjectsScrollTriggers.push(pinST, updateST);
 };
 
 const updateCurrentProject = () => {
@@ -182,13 +182,16 @@ onMounted(async () => {
       setupScrollTrigger();
     }, 250);
   };
+
+  // Add event listener
+  window.addEventListener("resize", resizeHandler);
 });
 
 onUnmounted(() => {
   // Clean up ScrollTrigger instances
-  if (scrollTriggerInstances.length > 0) {
-    scrollTriggerInstances.forEach((st) => st.kill());
-    scrollTriggerInstances = [];
+  if (homeProjectsScrollTriggers.length > 0) {
+    homeProjectsScrollTriggers.forEach((st) => st.kill());
+    homeProjectsScrollTriggers = [];
   }
 
   // Clean up resize handler
