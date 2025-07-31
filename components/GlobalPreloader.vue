@@ -43,6 +43,7 @@ onMounted(() => {
 
   const tl = $gsap.timeline();
   const animateInElements = document.querySelectorAll(".animate-in");
+  const wipeElements = document.querySelectorAll(".wipe-in");
 
   tl.to(".preloader-bar-inner", {
     xPercent: 0,
@@ -72,34 +73,55 @@ onMounted(() => {
         document.body.classList.remove("preloader-started");
         document.body.classList.add("preloader-finished");
       },
-    })
-    .fromTo(
-      ".animate-in",
+    });
+
+  // Animate wipe-in elements first
+  if (wipeElements.length > 0) {
+    tl.fromTo(
+      wipeElements,
       {
-        autoAlpha: 0,
-        y: 30,
+        xPercent: 0,
       },
       {
-        autoAlpha: 1,
-        y: 0,
-        duration: 0.65,
-        delay: 0.1,
+        xPercent: 100,
+        duration: 0.4,
         ease: "power4.inOut",
         stagger: {
-          each: 0.075,
+          each: 0.1,
           from: "start",
-        },
-        onComplete: () => {
-          $gsap.set(".animate-in", { clearProps: "all" });
-          // Refresh scroll triggers after animation
-          if ($ScrollTrigger) {
-            $ScrollTrigger.refresh();
-          }
-          window.dispatchEvent(new Event("resize"));
         },
       },
       "-=0.4"
     );
+  }
+
+  tl.fromTo(
+    ".animate-in",
+    {
+      autoAlpha: 0,
+      y: 30,
+    },
+    {
+      autoAlpha: 1,
+      y: 0,
+      duration: 0.65,
+      delay: 0.1,
+      ease: "power4.inOut",
+      stagger: {
+        each: 0.075,
+        from: "start",
+      },
+      onComplete: () => {
+        $gsap.set(".animate-in", { clearProps: "all" });
+        // Refresh scroll triggers after animation
+        if ($ScrollTrigger) {
+          $ScrollTrigger.refresh();
+        }
+        window.dispatchEvent(new Event("resize"));
+      },
+    },
+    "-=0.4"
+  );
 });
 </script>
 

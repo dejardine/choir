@@ -1,57 +1,72 @@
 <template>
   <div class="contact-grid">
     <div class="contact-grid-columns">
-      <div class="contact-grid-column animate-in contact-grid-column-1">
+      <div class="contact-grid-column contact-grid-column-1">
         <div class="contact-grid-item contact-grid-item-mobile-only">
           &nbsp;
         </div>
         <div class="contact-grid-item contact-grid-item-split">
-          You've come this far
+          <span class="animate-in"> You've come this far</span>
         </div>
         <div class="contact-grid-item contact-grid-item-split">
-          Might as well say hello
+          <span class="animate-in">Might as well say hello</span>
         </div>
         <div class="contact-grid-item contact-grid-item-empty">&nbsp;</div>
         <div class="contact-grid-item contact-grid-item-blank">&nbsp;</div>
         <div class="contact-grid-item contact-grid-item-blank">&nbsp;</div>
       </div>
-      <div class="contact-grid-column animate-in contact-grid-column-2">
-        <div class="contact-grid-item">Contact:</div>
+      <div class="contact-grid-column contact-grid-column-2">
         <div class="contact-grid-item">
-          <prismic-link :field="globalData?.data?.email"></prismic-link>
+          <span class="animate-in">Contact:</span>
         </div>
         <div class="contact-grid-item">
-          <prismic-link :field="globalData?.data?.phone"></prismic-link>
+          <span class="animate-in">
+            <prismic-link :field="globalData?.data?.email"></prismic-link>
+          </span>
+        </div>
+        <div class="contact-grid-item">
+          <span class="animate-in">
+            <prismic-link :field="globalData?.data?.phone"></prismic-link>
+          </span>
         </div>
         <div class="contact-grid-item">&nbsp;</div>
         <div class="contact-grid-item contact-grid-item-blank">&nbsp;</div>
       </div>
-      <div class="contact-grid-column animate-in contact-grid-column-3">
-        <div class="contact-grid-item">Studio:</div>
+      <div class="contact-grid-column contact-grid-column-3">
+        <div class="contact-grid-item">
+          <span class="animate-in">Studio:</span>
+        </div>
         <template v-if="addressLines?.length">
           <div
             v-for="(line, index) in addressLines"
             :key="index"
             class="contact-grid-item"
           >
-            {{ line }}
+            <span class="animate-in">{{ line }}</span>
           </div>
         </template>
       </div>
-      <div class="contact-grid-column animate-in contact-grid-column-4">
+      <div class="contact-grid-column contact-grid-column-4">
         <div class="contact-grid-item contact-grid-item-mobile-only">
           &nbsp;
         </div>
-        <div class="contact-grid-item">Online:</div>
         <div class="contact-grid-item">
-          <prismic-link :field="globalData?.data?.linkedin"></prismic-link>
+          <span class="animate-in">Online:</span>
         </div>
         <div class="contact-grid-item">
-          <prismic-link :field="globalData?.data?.instagram"></prismic-link>
+          <span class="animate-in">
+            <prismic-link :field="globalData?.data?.linkedin"></prismic-link>
+          </span>
+        </div>
+        <div class="contact-grid-item">
+          <span class="animate-in">
+            <prismic-link :field="globalData?.data?.instagram"></prismic-link>
+          </span>
         </div>
         <div class="contact-grid-item">&nbsp;</div>
         <div class="contact-grid-item contact-grid-item-blank">&nbsp;</div>
       </div>
+      <div class="wipe-in"></div>
     </div>
   </div>
 </template>
@@ -91,6 +106,15 @@ const addressLines = computed(() => {
 @use "@/assets/scss/global.scss" as *;
 @use "@/assets/scss/breakpoints.scss" as *;
 
+.wipe-in {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--color-background);
+}
+
 .contact-grid {
   height: 100vh;
   display: flex;
@@ -104,6 +128,7 @@ const addressLines = computed(() => {
   grid-gap: 0;
   padding: 0;
   width: 100%;
+  position: relative;
 }
 
 .contact-grid-column {

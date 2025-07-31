@@ -35,6 +35,7 @@ export const globalRouteTransition = {
   onEnter(el, done) {
     if (process.client) {
       const animateInElements = el.querySelectorAll(".animate-in");
+      const wipeElements = el.querySelectorAll(".wipe-in");
 
       document.body.classList.remove("no-overflow");
       const tl = gsap.timeline();
@@ -84,7 +85,30 @@ export const globalRouteTransition = {
           themeMeta.content = themeColor;
         },
       });
-      tl.set(el, { visibility: "visible" }).fromTo(
+      tl.set(el, { visibility: "visible" });
+
+      // Animate wipe-in elements first
+      if (wipeElements.length > 0) {
+        tl.fromTo(
+          wipeElements,
+          {
+            xPercent: 0,
+          },
+          {
+            xPercent: 100,
+            duration: 0.4,
+            ease: "power4.inOut",
+            stagger: {
+              each: 0.1,
+              from: "start",
+            },
+          },
+          0
+        );
+      }
+
+      // Then animate in elements
+      tl.fromTo(
         animateInElements,
         {
           autoAlpha: 0,

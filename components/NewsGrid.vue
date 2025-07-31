@@ -641,6 +641,7 @@ new Promise((resolve) => {
   grid-template-columns: repeat(12, 1fr);
   gap: var(--gutter);
   padding: var(--gutterPadding);
+  padding-bottom: 20vh;
   transition: opacity 0.3s ease;
 
   @include breakpoint(mobile) {
@@ -662,10 +663,13 @@ new Promise((resolve) => {
   .toggle-buttons {
     display: flex;
     justify-content: flex-start;
-    align-items: center;
+    align-items: flex-start;
     gap: var(--gutter-half);
     grid-column: 1 / 2;
     grid-row: 1;
+    position: absolute;
+    top: calc(50vh - var(--gutter-5));
+    left: 0;
     @include breakpoint(mobile) {
       display: none;
     }
