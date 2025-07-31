@@ -15,7 +15,38 @@
         }}</span>
       </div>
       <div class="about-team-title-alt">
-        <prismic-rich-text :field="currentTeamMember.alternative_title_rich" />
+        <div
+          v-if="
+            currentTeamMember.alternative_title_rich &&
+            currentTeamMember.alternative_title_rich[currentAltTextIndex]
+          "
+          class="alt-text-paragraph"
+        >
+          {{
+            currentTeamMember.alternative_title_rich[currentAltTextIndex].text
+          }}
+        </div>
+        <!-- Debug info -->
+        <div
+          v-if="false"
+          style="
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: red;
+            color: white;
+            padding: 10px;
+            z-index: 9999;
+          "
+        >
+          Index: {{ currentAltTextIndex }}<br />
+          Total: {{ currentTeamMember.alternative_title_rich?.length }}<br />
+          Current:
+          {{
+            currentTeamMember.alternative_title_rich?.[currentAltTextIndex]
+              ?.text
+          }}
+        </div>
       </div>
     </div>
     <div ref="teamPeople" class="about-team-people">
@@ -60,6 +91,10 @@ const currentTeamMember = ref({
   alternative_title_rich: null,
 });
 
+// Track current alt text paragraph for cycling
+const currentAltTextIndex = ref(0);
+const altTextInterval = ref(null);
+
 const updateCurrentTeamMember = () => {
   // Find all team people items
   const peopleItems = teamPeople.value?.querySelectorAll(
@@ -92,10 +127,60 @@ const updateCurrentTeamMember = () => {
   }
 };
 
-const setupScrollTrigger = () => {
-  if (!$gsap || !$ScrollTrigger || !teamTitle.value || !teamPeople.value) {
+const startAltTextCycle = () => {
+  console.log("Starting alt text cycle, data:", {
+    alternative_title_rich: currentTeamMember.value.alternative_title_rich,
+    length: currentTeamMember.value.alternative_title_rich?.length,
+  });
+
+  if (!currentTeamMember.value.alternative_title_rich?.length) {
+    console.log("No alt text data to cycle");
     return;
   }
+
+  // Clear existing interval
+  if (altTextInterval.value) {
+    clearInterval(altTextInterval.value);
+  }
+
+  // Start cycling through paragraphs
+  altTextInterval.value = setInterval(() => {
+    if (currentTeamMember.value.alternative_title_rich?.length) {
+      currentAltTextIndex.value =
+        (currentAltTextIndex.value + 1) %
+        currentTeamMember.value.alternative_title_rich.length;
+      console.log("Cycling to index:", currentAltTextIndex.value);
+    }
+  }, 1000); // Change every 3 seconds
+
+  console.log("Alt text cycle started with interval:", altTextInterval.value);
+};
+
+const stopAltTextCycle = () => {
+  console.log("Stopping alt text cycle");
+  if (altTextInterval.value) {
+    clearInterval(altTextInterval.value);
+    altTextInterval.value = null;
+  }
+  // Don't reset the index - preserve the current position
+  console.log(
+    "Alt text cycle stopped, keeping index at:",
+    currentAltTextIndex.value
+  );
+};
+
+const setupScrollTrigger = () => {
+  if (!$gsap || !$ScrollTrigger || !teamTitle.value || !teamPeople.value) {
+    console.log("Missing required elements or GSAP:", {
+      gsap: !!$gsap,
+      scrollTrigger: !!$ScrollTrigger,
+      teamTitle: !!teamTitle.value,
+      teamPeople: !!teamPeople.value,
+    });
+    return;
+  }
+
+  console.log("Setting up ScrollTrigger for team title");
 
   // Kill existing ScrollTrigger instances
   if (scrollTriggerInstances.length > 0) {
@@ -120,28 +205,43 @@ const setupScrollTrigger = () => {
       updateCurrentTeamMember();
     },
     onEnter: () => {
+      console.log("Team title entering pinned state (FORWARD scroll)");
       teamTitle.value.classList.add("pinned");
+      startAltTextCycle();
     },
     onLeave: () => {
+      console.log("Team title leaving pinned state (FORWARD scroll)");
       teamTitle.value.classList.remove("pinned");
+      stopAltTextCycle();
     },
     onEnterBack: () => {
+      console.log("Team title entering pinned state (BACKWARD scroll)");
       teamTitle.value.classList.add("pinned");
+      startAltTextCycle();
     },
     onLeaveBack: () => {
+      console.log("Team title leaving pinned state (BACKWARD scroll)");
       teamTitle.value.classList.remove("pinned");
+      stopAltTextCycle();
     },
   });
 
   scrollTriggerInstances.push(pinST);
+  console.log("ScrollTrigger created:", pinST);
 };
 
 onMounted(() => {
+  console.log("AboutTeam mounted, setting up ScrollTrigger");
+
   // Small delay to ensure DOM is ready
   setTimeout(() => {
+    console.log("AboutTeam setup timeout, elements:", {
+      teamTitle: !!teamTitle.value,
+      teamPeople: !!teamPeople.value,
+    });
     setupScrollTrigger();
     updateCurrentTeamMember();
-  }, 1000);
+  }, 2000); // Increased delay to ensure everything is loaded
 });
 
 onUnmounted(() => {
@@ -149,6 +249,12 @@ onUnmounted(() => {
   if (scrollTriggerInstances.length > 0) {
     scrollTriggerInstances.forEach((st) => st.kill());
     scrollTriggerInstances = [];
+  }
+
+  // Clean up alt text interval
+  if (altTextInterval.value) {
+    clearInterval(altTextInterval.value);
+    altTextInterval.value = null;
   }
 });
 </script>
@@ -315,6 +421,21 @@ onUnmounted(() => {
 
   .about-team-title.pinned & {
     opacity: 1;
+  }
+
+  // Add transition for paragraph changes
+  :deep(p) {
+    transition: opacity 0.5s ease-in-out;
+  }
+
+  .alt-text-paragraph {
+    margin-bottom: var(--gutter);
+    text-align: right;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50vw;
+    transition: opacity 0.5s ease-in-out;
   }
 }
 </style>
