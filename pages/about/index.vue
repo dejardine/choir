@@ -118,3 +118,11 @@ definePageMeta({
   pageTransition: globalRouteTransition,
 });
 </script>
+
+<style scoped lang="scss">
+.page-about {
+  .footer-wrap {
+    border-top: none;
+  }
+}
+</style>

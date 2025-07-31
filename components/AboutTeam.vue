@@ -111,21 +111,25 @@ const setupScrollTrigger = () => {
     trigger: teamTitle.value,
     start: "center center",
     endTrigger: teamPeople.value,
-    end: "bottom bottom",
+    end: "bottom center",
     pin: teamTitle.value,
     pinSpacing: false,
     invalidateOnRefresh: true,
     onUpdate: (self) => {
       // Update the current team member in view
       updateCurrentTeamMember();
-      // Fade out in the last 20% of the scroll
-      const fadeStart = 0.99;
-      let opacity = 1;
-      if (self.progress > fadeStart) {
-        const fadeProgress = (self.progress - fadeStart) / (1 - fadeStart);
-        opacity = 1 - fadeProgress;
-      }
-      $gsap.set(teamTitle.value, { opacity: opacity });
+    },
+    onEnter: () => {
+      teamTitle.value.classList.add("pinned");
+    },
+    onLeave: () => {
+      teamTitle.value.classList.remove("pinned");
+    },
+    onEnterBack: () => {
+      teamTitle.value.classList.add("pinned");
+    },
+    onLeaveBack: () => {
+      teamTitle.value.classList.remove("pinned");
     },
   });
 
@@ -211,6 +215,8 @@ onUnmounted(() => {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   gap: var(--gutter);
+  padding-bottom: 30vh;
+
   .about-team-people-item {
     position: relative;
     margin-bottom: 30vh;
@@ -246,6 +252,9 @@ onUnmounted(() => {
         grid-row: #{$i};
       }
     }
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 }
 
@@ -262,11 +271,25 @@ onUnmounted(() => {
     margin-right: var(--gutter-half);
   }
   position: relative;
+
+  &.pinned {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    right: 0;
+  }
+
   .about-team-title-text {
     position: absolute;
     z-index: 100;
     top: var(--gutter);
     left: var(--gutterPadding);
+    opacity: 0;
+
+    .pinned & {
+      opacity: 1;
+    }
   }
 }
 
@@ -283,5 +306,10 @@ onUnmounted(() => {
   z-index: 100;
   top: var(--gutter);
   right: var(--gutterPadding);
+  opacity: 0;
+
+  .pinned & {
+    opacity: 1;
+  }
 }
 </style>
