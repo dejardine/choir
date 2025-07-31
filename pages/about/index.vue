@@ -54,6 +54,8 @@ const { data: page } = await useAsyncData("aboutData", async () => {
   }
 });
 
+const { $ScrollTrigger } = useNuxtApp();
+
 // --- Theme Color Meta Tag Logic ---
 const colorMode = useColorMode();
 const currentThemeColor = ref("");
@@ -95,6 +97,9 @@ watch(
 
 onMounted(async () => {
   await updateThemeColor(); // Initial set on mount
+  setTimeout(() => {
+    $ScrollTrigger.refresh();
+  }, 1000);
 });
 
 // SEO and Theme Color
