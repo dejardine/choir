@@ -32,7 +32,12 @@ onMounted(() => {
   document.body.classList.add("preloader-started");
 
   $gsap.set(".preloader-bar-inner", { xPercent: -100 });
-
+  // Scroll to top of page
+  $gsap.to(window, {
+    duration: 0.2,
+    scrollTo: 0,
+    ease: "none",
+  });
   // Ensure GSAP is available
   if (!$gsap) {
     console.warn("GSAP not available");
