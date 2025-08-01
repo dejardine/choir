@@ -231,15 +231,18 @@ onUnmounted(() => {
   }
 }
 
+.home-project-title-exclusion {
+  mix-blend-mode: exclusion;
+}
+
 .home-project-title {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--color-reverse);
   padding: 0;
   z-index: 100;
-
   &.pinned {
     position: fixed;
     top: 50%;
@@ -249,11 +252,19 @@ onUnmounted(() => {
   }
 }
 
+// Target the GSAP-created pin-spacer wrapper
+:deep(.pin-spacer) {
+  mix-blend-mode: exclusion;
+}
+
 .home-project-title-text {
   position: absolute;
   top: var(--gutter);
   left: var(--gutterPadding);
   opacity: 0;
+  :deep(p) {
+    color: var(--color-reverse);
+  }
 
   .pinned & {
     opacity: 1;
@@ -268,6 +279,7 @@ onUnmounted(() => {
   @include foundersMedium;
   a {
     @include linkStyle;
+    color: var(--color-reverse);
   }
   position: absolute;
   top: var(--gutter);
