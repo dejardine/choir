@@ -449,7 +449,7 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: flex-start;
   width: 100%;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--color-reverse);
   padding: 0;
   z-index: 100;
   @include bodyType;
@@ -474,10 +474,15 @@ onUnmounted(() => {
   left: var(--gutterPadding);
   opacity: 0;
   transition: opacity 0.3s ease;
-
+  color: var(--color-reverse);
   .about-team-title.pinned & {
     opacity: 1;
   }
+}
+
+// Target the GSAP-created pin-spacer wrapper
+:deep(.pin-spacer) {
+  mix-blend-mode: exclusion;
 }
 
 .about-team-title-alt {
@@ -488,6 +493,7 @@ onUnmounted(() => {
     top: 0;
     right: 0;
     width: 50vw;
+    color: var(--color-reverse);
   }
   position: absolute;
   z-index: 100;
@@ -513,6 +519,7 @@ onUnmounted(() => {
     right: 0;
     width: 50vw;
     transition: opacity 0.5s ease-in-out;
+    color: var(--color-reverse);
   }
 }
 </style>
