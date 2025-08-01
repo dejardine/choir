@@ -140,8 +140,6 @@ export default defineNuxtConfig({
     },
   },
   devServer: {
-    host: "0.0.0.0", // Removed to default to localhost
-    port: 8000,
     https: true, // Enable HTTPS for local development
   },
   image: {

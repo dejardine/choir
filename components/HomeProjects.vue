@@ -169,10 +169,7 @@ onMounted(async () => {
   // Wait for SliceZone to render
   await nextTick();
 
-  // Small delay to ensure all slices are rendered
-  setTimeout(() => {
-    setupScrollTrigger();
-  }, 1000);
+  setupScrollTrigger();
 
   // Add resize handler
   resizeHandler = () => {
