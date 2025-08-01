@@ -59,7 +59,14 @@ const setupScrollTrigger = () => {
   // Get GSAP instances
   const { $gsap, $ScrollTrigger } = useNuxtApp();
 
-  if (!$gsap || !$ScrollTrigger || !projectTitle.value || !homeSlices.value) {
+  if (
+    !$gsap ||
+    !$ScrollTrigger ||
+    !projectTitle.value ||
+    !homeSlices.value ||
+    !homeProjects.value
+  ) {
+    console.warn("ScrollTrigger setup failed: missing required elements");
     return;
   }
 
@@ -68,6 +75,19 @@ const setupScrollTrigger = () => {
     homeProjectsScrollTriggers.forEach((st) => st.kill());
     homeProjectsScrollTriggers = [];
   }
+
+  // Ensure all project sections are rendered
+  const projectSections = document.querySelectorAll(".project-section");
+  if (projectSections.length === 0) {
+    console.warn("No project sections found, retrying in 100ms");
+    setTimeout(setupScrollTrigger, 100);
+    return;
+  }
+
+  // Force a layout recalculation
+  projectTitle.value.offsetHeight;
+  homeSlices.value.offsetHeight;
+  homeProjects.value.offsetHeight;
 
   // Refresh ScrollTrigger to recalculate positions
   $ScrollTrigger.refresh();
@@ -84,16 +104,23 @@ const setupScrollTrigger = () => {
       updateCurrentProject();
     },
     onEnter: () => {
+      console.log("ScrollTrigger: Entering pin state");
       projectTitle.value.classList.add("pinned");
     },
     onLeave: () => {
+      console.log("ScrollTrigger: Leaving pin state");
       projectTitle.value.classList.remove("pinned");
     },
     onEnterBack: () => {
+      console.log("ScrollTrigger: Entering pin state (back)");
       projectTitle.value.classList.add("pinned");
     },
     onLeaveBack: () => {
+      console.log("ScrollTrigger: Leaving pin state (back)");
       projectTitle.value.classList.remove("pinned");
+    },
+    onRefresh: () => {
+      console.log("ScrollTrigger: Refreshed");
     },
   });
 
@@ -103,13 +130,14 @@ const setupScrollTrigger = () => {
     start: "top center",
     end: "bottom center-1px",
     invalidateOnRefresh: true,
-
     onUpdate: (self) => {
       updateCurrentProject();
     },
   });
 
   homeProjectsScrollTriggers.push(pinST, updateST);
+
+  console.log("ScrollTrigger setup complete");
 };
 
 const updateCurrentProject = () => {
@@ -156,6 +184,15 @@ const updateCurrentProject = () => {
   }
 };
 
+// Add a method to force refresh ScrollTrigger
+const forceRefreshScrollTrigger = () => {
+  const { $ScrollTrigger } = useNuxtApp();
+  if ($ScrollTrigger) {
+    $ScrollTrigger.refresh();
+    console.log("Forced ScrollTrigger refresh");
+  }
+};
+
 onMounted(async () => {
   if (introductionContainer.value) {
     const currentHTML = introductionContainer.value.innerHTML;
@@ -166,10 +203,25 @@ onMounted(async () => {
     introductionContainer.value.innerHTML = modifiedHTML;
   }
 
-  // Wait for SliceZone to render
+  // Wait for SliceZone to render and ensure all content is loaded
   await nextTick();
 
+  // Additional wait to ensure all slices are fully rendered
+  await new Promise((resolve) => setTimeout(resolve, 100));
+
+  // Double-check that all required elements exist
+  if (!projectTitle.value || !homeSlices.value || !homeProjects.value) {
+    console.warn("Required elements not found, retrying setup");
+    setTimeout(() => setupScrollTrigger(), 200);
+    return;
+  }
+
   setupScrollTrigger();
+
+  // Force a refresh after a short delay to ensure everything is properly positioned
+  setTimeout(() => {
+    forceRefreshScrollTrigger();
+  }, 500);
 
   // Add resize handler
   resizeHandler = () => {
@@ -195,6 +247,12 @@ onUnmounted(() => {
   if (resizeHandler) {
     window.removeEventListener("resize", resizeHandler);
     clearTimeout(resizeHandler.timeout);
+  }
+
+  // Refresh ScrollTrigger to clean up any remaining instances
+  const { $ScrollTrigger } = useNuxtApp();
+  if ($ScrollTrigger) {
+    $ScrollTrigger.refresh();
   }
 });
 </script>
@@ -233,6 +291,7 @@ onUnmounted(() => {
 
 .home-project-title-exclusion {
   mix-blend-mode: exclusion;
+  background-color: var(--color-reverse);
 }
 
 .home-project-title {
@@ -243,12 +302,15 @@ onUnmounted(() => {
   border-top: 1px solid var(--color-reverse);
   padding: 0;
   z-index: 100;
+  position: relative;
   &.pinned {
     position: fixed;
     top: 50%;
     transform: translateY(-50%);
     left: 0;
     right: 0;
+    z-index: 1000;
+    background-color: var(--color-background);
   }
 }
 
