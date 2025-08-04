@@ -25,11 +25,15 @@ defineProps(
 
 <style scoped lang="scss">
 @use "@/assets/scss/global.scss" as *;
+@use "@/assets/scss/breakpoints.scss" as *;
 .text_slice {
   padding-left: var(--gutterPadding);
   padding-right: var(--gutterPadding);
   :deep(p) {
     @include heldaneSubheading;
+    @include breakpoint(display) {
+      max-width: 1900px;
+    }
   }
   padding-top: var(--gutter);
 

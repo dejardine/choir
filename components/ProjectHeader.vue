@@ -59,6 +59,7 @@ const headerImageUrl = computed(() => {
 
 <style lang="scss" scoped>
 @use "@/assets/scss/global.scss" as *;
+@use "@/assets/scss/breakpoints.scss" as *;
 
 .project-hero {
   :deep(img) {
@@ -77,6 +78,9 @@ const headerImageUrl = computed(() => {
   left: 0;
   h1 {
     @include visually-hidden;
+    @include breakpoint(display) {
+      max-width: 2000px;
+    }
   }
 }
 </style>

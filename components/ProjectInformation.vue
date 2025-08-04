@@ -303,6 +303,9 @@ watchEffect(async () => {
   :deep(h2) {
     @include heldaneSubheading;
     padding-bottom: var(--gutter-5);
+    @include breakpoint(display) {
+      max-width: 1900px;
+    }
   }
   border-bottom: 1px solid var(--color-border);
 }

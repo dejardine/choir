@@ -245,6 +245,9 @@ onUnmounted(() => {
     em {
       @include heldaneHeadingItalic;
     }
+    @include breakpoint(display) {
+      max-width: 2000px;
+    }
   }
   // Optional: Add styling for the wrapper if needed
   :deep(.em-dash-wrapper) {
