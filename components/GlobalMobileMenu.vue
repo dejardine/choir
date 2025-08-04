@@ -92,7 +92,6 @@ watch(isMobileMenuOpen, (isOpen) => {
         duration: 0.4,
         stagger: 0.1,
         ease: "expo.out",
-        from: "start",
       },
       "-=0.3"
     );
