@@ -48,6 +48,8 @@ const currentProjectLink = ref(null);
 let homeProjectsScrollTriggers = [];
 let resizeHandler = null;
 
+const { screens } = useResponsive();
+
 const props = defineProps({
   home: {
     type: Object,
@@ -209,9 +211,13 @@ onMounted(async () => {
     }, 250);
   };
 
-  // Add event listener
-  console.log("HomeProjects adding resize listener");
-  window.addEventListener("resize", resizeHandler);
+  // Add event listener only on non-mobile devices
+  if (!screens.value.isMobile) {
+    console.log("HomeProjects adding resize listener");
+    window.addEventListener("resize", resizeHandler);
+  } else {
+    console.log("HomeProjects: Skipping resize listener on mobile");
+  }
 });
 
 onUnmounted(() => {
