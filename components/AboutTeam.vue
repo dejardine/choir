@@ -457,14 +457,6 @@ onUnmounted(() => {
     margin-right: var(--gutter-half);
   }
   position: relative;
-
-  &.pinned {
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 0;
-    right: 0;
-  }
 }
 
 .about-team-title-text {
