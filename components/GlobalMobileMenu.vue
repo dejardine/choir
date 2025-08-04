@@ -168,6 +168,10 @@ const handleClickOutside = (event) => {
       color: var(--color-text);
     }
   }
+  display: none;
+  @include breakpoint(mobile) {
+    display: flex;
+  }
 }
 
 .default-menu-columns {
