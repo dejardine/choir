@@ -83,6 +83,7 @@ watch(isMobileMenuOpen, (isOpen) => {
       y: "0%",
       duration: 0.6,
       ease: "expo.inOut",
+      display: "flex",
     }).to(
       ".mobile-menu-item",
       {
@@ -108,6 +109,7 @@ watch(isMobileMenuOpen, (isOpen) => {
       y: "-100%",
       duration: 0.6,
       ease: "expo.inOut",
+      display: "none",
       onComplete: () => {
         // Reset menu items to initial state after menu closes
         $gsap.set(".mobile-menu-item", {
@@ -169,9 +171,6 @@ const handleClickOutside = (event) => {
     }
   }
   display: none;
-  @include breakpoint(mobile) {
-    display: flex;
-  }
 }
 
 .default-menu-columns {
