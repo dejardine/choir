@@ -1,7 +1,9 @@
 <template>
   <div class="page page-project" ref="pageRoot">
-    <GlobalMainMenu />
-    <GlobalMobileMenu />
+    <client-only>
+      <GlobalMainMenu />
+      <GlobalMobileMenu />
+    </client-only>
     <div id="content">
       <ProjectHeader :project="page.project.data" />
       <ProjectInformation :project="page.project.data" />

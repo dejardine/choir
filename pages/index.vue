@@ -1,7 +1,9 @@
 <template>
   <div class="page page-home" ref="pageRoot">
-    <GlobalMainMenu />
-    <GlobalMobileMenu />
+    <client-only>
+      <GlobalMainMenu />
+      <GlobalMobileMenu />
+    </client-only>
     <div id="content">
       <HomeHero :home="page?.home" />
       <HomeProjects :home="page?.home" class="animate-in" />

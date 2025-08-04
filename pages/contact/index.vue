@@ -1,7 +1,9 @@
 <template>
   <div class="page page-contact" ref="pageRoot">
-    <GlobalMainMenu />
-    <GlobalMobileMenu />
+    <client-only>
+      <GlobalMainMenu />
+      <GlobalMobileMenu />
+    </client-only>
     <ContactGrid />
     <ContactFooter />
   </div>

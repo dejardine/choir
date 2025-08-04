@@ -1,7 +1,9 @@
 <template>
   <div class="page page-work" ref="pageRoot">
-    <GlobalMainMenu />
-    <GlobalMobileMenu />
+    <client-only>
+      <GlobalMainMenu />
+      <GlobalMobileMenu />
+    </client-only>
     <PageHeader
       :heading="page?.work?.data?.heading"
       :subheading="page?.work?.data?.sub_heading"
