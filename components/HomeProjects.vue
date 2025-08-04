@@ -273,13 +273,6 @@ onUnmounted(() => {
   border-top: 1px solid var(--color-reverse);
   padding: 0;
   z-index: 100;
-  // &.pinned {
-  //   position: fixed;
-  //   top: 50%;
-  //   transform: translateY(-50%);
-  //   left: 0;
-  //   right: 0;
-  // }
 }
 
 // Target the GSAP-created pin-spacer wrapper
