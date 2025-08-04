@@ -55,13 +55,20 @@ const props = defineProps({
   },
 });
 
+const { $gsap, $ScrollTrigger } = useNuxtApp();
+
 const setupScrollTrigger = () => {
   // Get GSAP instances
   const { $gsap, $ScrollTrigger } = useNuxtApp();
-
+  console.log("HomeProjects setupScrollTrigger");
   if (!$gsap || !$ScrollTrigger || !projectTitle.value || !homeSlices.value) {
+    console.log("HomeProjects: Missing required elements or GSAP instances");
     return;
   }
+
+  console.log("HomeProjects: projectTitle element:", projectTitle.value);
+  console.log("HomeProjects: homeProjects element:", homeProjects.value);
+  console.log("HomeProjects: Window height:", window.innerHeight);
 
   // Kill existing ScrollTrigger instances
   if (homeProjectsScrollTriggers.length > 0) {
@@ -70,7 +77,9 @@ const setupScrollTrigger = () => {
   }
 
   // Refresh ScrollTrigger to recalculate positions
-  $ScrollTrigger.refresh();
+  setTimeout(() => {
+    $ScrollTrigger.refresh();
+  }, 100);
 
   // Pin the project title when it hits the center, and keep it pinned through all projects
   const pinST = $ScrollTrigger.create({
@@ -84,15 +93,19 @@ const setupScrollTrigger = () => {
       updateCurrentProject();
     },
     onEnter: () => {
+      console.log("HomeProjects: onEnter - adding pinned class");
       projectTitle.value.classList.add("pinned");
     },
     onLeave: () => {
+      console.log("HomeProjects: onLeave - removing pinned class");
       projectTitle.value.classList.remove("pinned");
     },
     onEnterBack: () => {
+      console.log("HomeProjects: onEnterBack - adding pinned class");
       projectTitle.value.classList.add("pinned");
     },
     onLeaveBack: () => {
+      console.log("HomeProjects: onLeaveBack - removing pinned class");
       projectTitle.value.classList.remove("pinned");
     },
   });
@@ -173,14 +186,31 @@ onMounted(async () => {
 
   // Add resize handler
   resizeHandler = () => {
+    console.log("HomeProjects resize event fired");
     // Debounce resize events
     clearTimeout(resizeHandler.timeout);
     resizeHandler.timeout = setTimeout(() => {
+      console.log("HomeProjects: Refreshing ScrollTrigger after resize");
+      console.log("HomeProjects: Current window height:", window.innerHeight);
+
+      // Debug element positions
+      if (projectTitle.value) {
+        const rect = projectTitle.value.getBoundingClientRect();
+        console.log("HomeProjects: projectTitle position after resize:", rect);
+      }
+      if (homeProjects.value) {
+        const rect = homeProjects.value.getBoundingClientRect();
+        console.log("HomeProjects: homeProjects position after resize:", rect);
+      }
+
+      // Force complete recalculation instead of just refresh
       setupScrollTrigger();
+      console.log("HomeProjects resize handler");
     }, 250);
   };
 
   // Add event listener
+  console.log("HomeProjects adding resize listener");
   window.addEventListener("resize", resizeHandler);
 });
 
@@ -243,13 +273,13 @@ onUnmounted(() => {
   border-top: 1px solid var(--color-reverse);
   padding: 0;
   z-index: 100;
-  &.pinned {
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 0;
-    right: 0;
-  }
+  // &.pinned {
+  //   position: fixed;
+  //   top: 50%;
+  //   transform: translateY(-50%);
+  //   left: 0;
+  //   right: 0;
+  // }
 }
 
 // Target the GSAP-created pin-spacer wrapper

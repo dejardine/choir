@@ -91,18 +91,11 @@ const setupParallax = async () => {
     ".media-item.has-parallax"
   );
 
-  console.log(`Found ${mediaItems.length} parallax items`);
-
   mediaItems.forEach((mediaItem: any, index: number) => {
     const speed = parseFloat(mediaItem.dataset.parallaxSpeed) || 1.3;
 
     // Calculate the parallax percentage (negative for upward movement)
     const parallaxPercent = -(speed - 1) * 100;
-
-    console.log(
-      `Setting up parallax for item ${index + 1}: speed=${speed}, percent=${parallaxPercent}%, element:`,
-      mediaItem
-    );
 
     // Use a simpler approach with direct ScrollTrigger
     const st = ($ScrollTrigger as any).create({
@@ -115,10 +108,6 @@ const setupParallax = async () => {
         const maxY = parallaxPercent * (mediaItem.offsetHeight / 100);
         const currentY = progress * maxY;
 
-        console.log(
-          `Progress: ${progress.toFixed(2)}, Y: ${currentY.toFixed(2)}`
-        );
-
         ($gsap as any).set(mediaItem, {
           y: currentY,
           force3D: true,
@@ -127,12 +116,7 @@ const setupParallax = async () => {
     });
 
     scrollTriggerInstances.push(st);
-    console.log(`Created ScrollTrigger for item ${index + 1}:`, st);
   });
-
-  console.log(
-    `Created ${scrollTriggerInstances.length} ScrollTrigger instances`
-  );
 };
 
 onMounted(() => {

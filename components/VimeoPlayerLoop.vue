@@ -55,37 +55,37 @@ let player = null;
 const isFadingOut = ref(false);
 
 onMounted(() => {
-  console.log(
-    "VimeoPlayerLoop: onMounted triggered. Props:",
-    JSON.parse(JSON.stringify(props))
-  );
+  // console.log(
+  //   "VimeoPlayerLoop: onMounted triggered. Props:",
+  //   JSON.parse(JSON.stringify(props))
+  // );
 
   if (props.coverImageUrl) {
     const img = new Image();
     img.onload = () =>
-      console.log(
-        "VimeoPlayerLoop: Cover image preloaded",
-        props.coverImageUrl
-      );
-    img.onerror = () =>
-      console.error(
-        "VimeoPlayerLoop: Error preloading cover image",
-        props.coverImageUrl
-      );
+      // console.log(
+      //   "VimeoPlayerLoop: Cover image preloaded",
+      //   props.coverImageUrl
+      // );
+      (img.onerror = () =>
+        console.error(
+          "VimeoPlayerLoop: Error preloading cover image",
+          props.coverImageUrl
+        ));
     img.src = props.coverImageUrl;
   } else {
-    console.log("VimeoPlayerLoop: No coverImageUrl provided.");
+    // console.log("VimeoPlayerLoop: No coverImageUrl provided.");
   }
 
   if (!playerContainer.value) {
-    console.error("VimeoPlayerLoop: playerContainer ref is not available.");
+    // console.error("VimeoPlayerLoop: playerContainer ref is not available.");
     return;
   }
 
-  console.log(
-    "VimeoPlayerLoop: Initializing Vimeo Player with videoId:",
-    props.videoId
-  );
+  // console.log(
+  //   "VimeoPlayerLoop: Initializing Vimeo Player with videoId:",
+  //   props.videoId
+  // );
   try {
     player = new Player(playerContainer.value, {
       id: props.videoId,
@@ -113,18 +113,18 @@ onMounted(() => {
     player
       .ready()
       .then(() => {
-        console.log(
-          "VimeoPlayerLoop: Player is ready for videoId:",
-          props.videoId
-        );
+        // console.log(
+        //   "VimeoPlayerLoop: Player is ready for videoId:",
+        //   props.videoId
+        // );
         if (props.autoplay) {
           player
             .play()
             .then(() => {
-              console.log(
-                "VimeoPlayerLoop: Playback started for videoId:",
-                props.videoId
-              );
+              // console.log(
+              //   "VimeoPlayerLoop: Playback started for videoId:",
+              //   props.videoId
+              // );
               if (props.coverImageUrl) {
                 // Only fade if there was a cover image
                 isFadingOut.value = true;
@@ -190,10 +190,10 @@ defineExpose({
 
 onBeforeUnmount(() => {
   if (player) {
-    console.log(
-      "VimeoPlayerLoop: Destroying player for videoId:",
-      props.videoId
-    );
+    // console.log(
+    //   "VimeoPlayerLoop: Destroying player for videoId:",
+    //   props.videoId
+    // );
     player.destroy();
     player = null;
   }

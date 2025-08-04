@@ -119,7 +119,7 @@ const getVimeoId = (url) => {
 
 // Handle video ready event
 const onVideoReady = (index) => {
-  console.log("Video ready:", index);
+  // console.log("Video ready:", index);
   readyVideos.value[index] = true;
 
   // If this is the first video and swiper is initialized, play it
@@ -140,7 +140,7 @@ const onVideoReady = (index) => {
 
 // Handle swiper initialization
 const onSwiperInit = (swiper) => {
-  console.log("Swiper initialized");
+  // console.log("Swiper initialized");
   swiperInstance = swiper;
 
   // Play the first video if it's ready
@@ -162,11 +162,11 @@ const onSwiperInit = (swiper) => {
 
 // Handle slide changes
 const handleSlideChange = async (swiper) => {
-  console.log("Slide changed to:", swiper.activeIndex);
+  // console.log("Slide changed to:", swiper.activeIndex);
 
   // Prevent multiple simultaneous transitions
   if (isTransitioning) {
-    console.log("Transition already in progress, skipping...");
+    // console.log("Transition already in progress, skipping...");
     return;
   }
 
