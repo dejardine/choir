@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { computed, watch, onMounted, onUnmounted } from "vue"; // Import computed
+import { computed, watch, onMounted, onUnmounted, nextTick } from "vue"; // Import computed
 import { useRoute } from "vue-router"; // Import useRoute
 import ThemeSwitcher from "./ThemeSwitcher.vue";
 import { useMobileMenu } from "~/composables/useMobileMenu";
@@ -46,14 +46,30 @@ const defaultMenuLinks = computed(() => {
 });
 
 // Mobile menu functionality
-const { isMobileMenuOpen, closeMobileMenu, mobileMenuRef } = useMobileMenu();
+const {
+  isMobileMenuOpen,
+  closeMobileMenu,
+  mobileMenuRef,
+  initializeMobileMenu,
+} = useMobileMenu();
 
 // GSAP animation
 const { $gsap } = useNuxtApp();
 
 let tl = null;
+let isInitialized = false;
 
-onMounted(() => {
+// Initialize mobile menu
+const initializeMenu = async () => {
+  if (isInitialized) return;
+
+  await nextTick();
+
+  if (!mobileMenuRef.value) return;
+
+  // Initialize the mobile menu state
+  initializeMobileMenu();
+
   // Set initial state - start from above the viewport
   $gsap.set(mobileMenuRef.value, { y: "-100%" });
 
@@ -63,6 +79,32 @@ onMounted(() => {
     opacity: 0,
   });
 
+  isInitialized = true;
+};
+
+// Cleanup function
+const cleanup = () => {
+  if (tl) {
+    tl.kill();
+    tl = null;
+  }
+
+  // Reset GSAP states
+  if (mobileMenuRef.value) {
+    $gsap.set(mobileMenuRef.value, { y: "-100%" });
+  }
+
+  $gsap.set(".mobile-menu-item", {
+    y: 20,
+    opacity: 0,
+  });
+
+  isInitialized = false;
+};
+
+onMounted(async () => {
+  await initializeMenu();
+
   // Add click outside listener
   document.addEventListener("click", handleClickOutside);
 });
@@ -70,53 +112,70 @@ onMounted(() => {
 onUnmounted(() => {
   // Remove click outside listener
   document.removeEventListener("click", handleClickOutside);
+
+  // Cleanup animations
+  cleanup();
 });
 
 // Watch for mobile menu state changes
-watch(isMobileMenuOpen, (isOpen) => {
-  if (isOpen) {
-    // Create fresh timeline for opening animation
-    tl = $gsap.timeline();
+watch(isMobileMenuOpen, async (isOpen) => {
+  try {
+    // Ensure menu is initialized
+    if (!isInitialized) {
+      await initializeMenu();
+    }
 
-    // Animate menu down
-    tl.to(mobileMenuRef.value, {
-      y: "0%",
-      duration: 0.6,
-      ease: "expo.inOut",
-      display: "flex",
-    }).to(
-      ".mobile-menu-item",
-      {
-        y: 0,
-        opacity: 1,
-        duration: 0.4,
-        stagger: 0.1,
-        ease: "expo.out",
-      },
-      "-=0.3"
-    );
-  } else {
-    // Fade out menu items together without stagger
-    $gsap.to(".mobile-menu-item", {
-      opacity: 0,
-      duration: 0.2,
-      ease: "power2.out",
-    });
+    if (isOpen) {
+      // Create fresh timeline for opening animation
+      tl = $gsap.timeline();
 
-    // Animate menu back up
-    $gsap.to(mobileMenuRef.value, {
-      y: "-100%",
-      duration: 0.6,
-      ease: "expo.inOut",
-      display: "none",
-      onComplete: () => {
-        // Reset menu items to initial state after menu closes
-        $gsap.set(".mobile-menu-item", {
-          y: 20,
-          opacity: 0,
-        });
-      },
-    });
+      // Animate menu down
+      tl.to(mobileMenuRef.value, {
+        y: "0%",
+        duration: 0.6,
+        ease: "expo.inOut",
+        display: "flex",
+      }).to(
+        ".mobile-menu-item",
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.4,
+          stagger: 0.1,
+          ease: "expo.out",
+        },
+        "-=0.3"
+      );
+    } else {
+      // Fade out menu items together without stagger
+      $gsap.to(".mobile-menu-item", {
+        opacity: 0,
+        duration: 0.2,
+        ease: "power2.out",
+      });
+
+      // Animate menu back up
+      $gsap.to(mobileMenuRef.value, {
+        y: "-100%",
+        duration: 0.6,
+        ease: "expo.inOut",
+        display: "none",
+        onComplete: () => {
+          // Reset menu items to initial state after menu closes
+          $gsap.set(".mobile-menu-item", {
+            y: 20,
+            opacity: 0,
+          });
+        },
+      });
+    }
+  } catch (error) {
+    console.error("Error animating mobile menu:", error);
+    // Fallback: ensure menu state is correct
+    if (!isOpen && mobileMenuRef.value) {
+      $gsap.set(mobileMenuRef.value, { y: "-100%", display: "none" });
+      $gsap.set(".mobile-menu-item", { y: 20, opacity: 0 });
+    }
   }
 });
 

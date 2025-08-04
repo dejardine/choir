@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import { computed } from "vue"; // Import computed
+import { computed, onMounted } from "vue"; // Import computed
 import { useRoute } from "vue-router"; // Import useRoute
 import ThemeSwitcher from "./ThemeSwitcher.vue";
 import { useMobileMenu } from "~/composables/useMobileMenu";
@@ -48,11 +48,28 @@ const defaultMenuLinks = computed(() => {
 });
 
 // Mobile menu functionality
-const { toggleMobileMenu, isMobileMenuOpen } = useMobileMenu();
+const {
+  toggleMobileMenu,
+  isMobileMenuOpen,
+  initializeMobileMenu,
+  forceCloseMobileMenu,
+} = useMobileMenu();
 
 const handleMobileMenuToggle = () => {
-  toggleMobileMenu();
+  try {
+    toggleMobileMenu();
+  } catch (error) {
+    console.error("Error toggling mobile menu:", error);
+    // Fallback: force close if there's an error
+    const { forceCloseMobileMenu } = useMobileMenu();
+    forceCloseMobileMenu();
+  }
 };
+
+onMounted(() => {
+  // Initialize mobile menu state
+  initializeMobileMenu();
+});
 
 // using remainingDefaultMenuLinks
 </script>
