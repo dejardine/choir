@@ -105,6 +105,7 @@ onMounted(async () => {
   await updateThemeColor(); // Initial set on mount
   setTimeout(() => {
     $ScrollTrigger.refresh();
+    console.log("ScrollTrigger refreshed homepage");
   }, 1000);
 });
 

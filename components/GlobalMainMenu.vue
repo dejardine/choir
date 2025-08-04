@@ -30,22 +30,14 @@
 import { computed } from "vue"; // Import computed
 import { useRoute } from "vue-router"; // Import useRoute
 import ThemeSwitcher from "./ThemeSwitcher.vue";
-import { usePrismic, useAsyncData } from "#imports";
 import { useMobileMenu } from "~/composables/useMobileMenu";
+import { useMainMenu } from "~/composables/useMainMenu";
 
 // Get the current route
 const route = useRoute();
 
-// Get Prismic client and fetch menu data
-const prismic = usePrismic();
-const { data: menuData } = await useAsyncData("main_menu", async () => {
-  try {
-    return await prismic.client.getSingle("main_menu");
-  } catch (error) {
-    console.error("Error fetching main menu data:", error);
-    return null; // Return null or handle error as needed
-  }
-});
+// Get menu data using shared composable
+const { menuData } = useMainMenu();
 
 // using homeMenuLinks
 

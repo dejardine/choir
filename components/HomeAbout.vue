@@ -72,13 +72,9 @@ let swiperInstance = null;
 
 onMounted(() => {
   // Debug: Log the about_slideshow data
-  console.log("HomeAbout props:", props.home?.data);
-  console.log("HomeAbout about_slideshow:", props.home?.data?.about_slideshow);
 
   if (props.home?.data?.about_slideshow) {
-    props.home.data.about_slideshow.forEach((item, index) => {
-      console.log(`HomeAbout slide ${index}:`, item);
-    });
+    props.home.data.about_slideshow.forEach((item, index) => {});
   }
 
   if (swiperRef.value) {
