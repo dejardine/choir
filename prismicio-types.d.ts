@@ -449,6 +449,7 @@ export interface CaseStudyDocumentDataIndustryItem {
 }
 
 type CaseStudyDocumentDataSlices4Slice =
+  | MediumGallerySlice
   | DoubleMediaSlice
   | AudioPlayerSlice
   | TextSliceSlice
@@ -1827,6 +1828,89 @@ export type LargeMediaSlice = prismic.SharedSlice<
 >;
 
 /**
+ * Item in *MediumGallery → Default → Primary → Images*
+ */
+export interface MediumGallerySliceDefaultPrimaryImagesItem {
+  /**
+   * Image field in *MediumGallery → Default → Primary → Images*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: medium_gallery.default.primary.images[].image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image: prismic.ImageField<never>;
+}
+
+/**
+ * Primary content in *MediumGallery → Default → Primary*
+ */
+export interface MediumGallerySliceDefaultPrimary {
+  /**
+   * Images field in *MediumGallery → Default → Primary*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: medium_gallery.default.primary.images[]
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  images: prismic.GroupField<
+    Simplify<MediumGallerySliceDefaultPrimaryImagesItem>
+  >;
+
+  /**
+   * Bottom margin field in *MediumGallery → Default → Primary*
+   *
+   * - **Field Type**: Boolean
+   * - **Placeholder**: *None*
+   * - **Default Value**: false
+   * - **API ID Path**: medium_gallery.default.primary.bottom_margin
+   * - **Documentation**: https://prismic.io/docs/field#boolean
+   */
+  bottom_margin: prismic.BooleanField;
+
+  /**
+   * Align Gallery field in *MediumGallery → Default → Primary*
+   *
+   * - **Field Type**: Select
+   * - **Placeholder**: *None*
+   * - **API ID Path**: medium_gallery.default.primary.align_gallery
+   * - **Documentation**: https://prismic.io/docs/field#select
+   */
+  align_gallery: prismic.SelectField<"Align left" | "Align right">;
+}
+
+/**
+ * Default variation for MediumGallery Slice
+ *
+ * - **API ID**: `default`
+ * - **Description**: Default
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type MediumGallerySliceDefault = prismic.SharedSliceVariation<
+  "default",
+  Simplify<MediumGallerySliceDefaultPrimary>,
+  never
+>;
+
+/**
+ * Slice variation for *MediumGallery*
+ */
+type MediumGallerySliceVariation = MediumGallerySliceDefault;
+
+/**
+ * MediumGallery Shared Slice
+ *
+ * - **API ID**: `medium_gallery`
+ * - **Description**: MediumGallery
+ * - **Documentation**: https://prismic.io/docs/slice
+ */
+export type MediumGallerySlice = prismic.SharedSlice<
+  "medium_gallery",
+  MediumGallerySliceVariation
+>;
+
+/**
  * Primary content in *MediumMedia → Image → Primary*
  */
 export interface MediumMediaSliceDefaultPrimary {
@@ -2704,6 +2788,11 @@ declare module "@prismicio/client" {
       LargeMediaSliceVariation,
       LargeMediaSliceDefault,
       LargeMediaSliceVideo,
+      MediumGallerySlice,
+      MediumGallerySliceDefaultPrimaryImagesItem,
+      MediumGallerySliceDefaultPrimary,
+      MediumGallerySliceVariation,
+      MediumGallerySliceDefault,
       MediumMediaSlice,
       MediumMediaSliceDefaultPrimary,
       MediumMediaSliceVideoPrimary,

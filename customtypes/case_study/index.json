@@ -209,6 +209,9 @@
         "fieldset": "Slice Zone",
         "config": {
           "choices": {
+            "medium_gallery": {
+              "type": "SharedSlice"
+            },
             "double_media": {
               "type": "SharedSlice"
             },

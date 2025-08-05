@@ -55,7 +55,7 @@ export const globalRouteTransition = {
           gsap.set(".global-route-transition", {
             opacity: 1,
           });
-          ScrollTrigger.refresh();
+          // ScrollTrigger.refresh();
           document.body.classList.remove("page-routing");
 
           // Update theme-color meta tag to match --color-background
