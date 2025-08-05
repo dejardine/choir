@@ -264,6 +264,7 @@ onUnmounted(() => {
   :deep(iframe) {
     will-change: transform;
   }
+  padding: 0 var(--gutterPadding);
 }
 
 .project-copy {
