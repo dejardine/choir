@@ -236,6 +236,7 @@
                     newsGroup.item.link_type === 'Document'
                   )
                 "
+                @click="openPopup(newsGroup.item, $event)"
               >
                 <!-- Case 1: Link exists AND data is populated by graphQuery -->
                 <template v-if="newsGroup.item && newsGroup.item.data">
@@ -278,6 +279,42 @@
                 <template v-else>
                   <div class="item-content error"></div>
                 </template>
+
+                <!-- Inline Popup -->
+                <div
+                  v-for="popup in popupData.filter(
+                    (p) => p.itemId === newsGroup.item?.id
+                  )"
+                  :key="popup.itemId"
+                  class="inline-popup"
+                  :style="{
+                    left: popup.clickX + 'px',
+                    top: popup.clickY + 'px',
+                  }"
+                >
+                  <button
+                    class="inline-popup-close"
+                    @click="closePopup(popup.itemId)"
+                  >
+                    ×
+                  </button>
+                  <div class="inline-popup-body">
+                    <!-- Heading -->
+                    <div v-if="popup.heading" class="inline-popup-heading">
+                      <prismic-rich-text :field="popup.heading" />
+                    </div>
+
+                    <!-- Paragraph -->
+                    <div v-if="popup.paragraph" class="inline-popup-paragraph">
+                      <prismic-rich-text :field="popup.paragraph" />
+                    </div>
+
+                    <!-- Link -->
+                    <div v-if="popup.link" class="inline-popup-link">
+                      <prismic-link :field="popup.link"></prismic-link>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </template>
@@ -358,6 +395,45 @@ const scoreContainer = ref(null);
 const scoreItems = ref(null);
 let scrollTriggerInstance = null;
 let draggableInstance = null;
+
+// Popup state - now an array to handle multiple popups
+const popupData = ref([]);
+
+// Popup functions
+const openPopup = (item, event) => {
+  if (item && item.data) {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const clickX = event.clientX - rect.left;
+    const clickY = event.clientY - rect.top;
+
+    // Check if popup already exists for this item
+    const existingPopupIndex = popupData.value.findIndex(
+      (popup) => popup.itemId === item.id
+    );
+
+    if (existingPopupIndex !== -1) {
+      // If popup already exists for this item, don't do anything
+      return;
+    }
+
+    // Add new popup to the array
+    popupData.value.push({
+      itemId: item.id,
+      heading: item.data.heading,
+      paragraph: item.data.paragraph,
+      link: item.data.link,
+      clickX: clickX,
+      clickY: clickY,
+    });
+  }
+};
+
+const closePopup = (itemId) => {
+  const index = popupData.value.findIndex((popup) => popup.itemId === itemId);
+  if (index !== -1) {
+    popupData.value.splice(index, 1);
+  }
+};
 
 // Computed properties to separate news items
 const allNewsItems = computed(() => {
@@ -456,6 +532,11 @@ const setView = async (view) => {
   }
 
   currentView.value = view;
+
+  // Close all popups when switching to grid view
+  if (view === "grid") {
+    popupData.value = [];
+  }
 
   // Wait for DOM update
   await nextTick();
@@ -867,6 +948,16 @@ new Promise((resolve) => {
   height: 100%;
   display: flex;
   align-items: center;
+  &:hover {
+    z-index: 2000;
+    position: relative;
+  }
+  .score-item-wrapper {
+    width: 400px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    position: relative;
+  }
 
   .item-content {
     width: 100%;
@@ -1032,6 +1123,74 @@ new Promise((resolve) => {
   @include breakpoint(mobile) {
     right: var(--gutter);
     top: var(--gutter);
+  }
+}
+
+// Inline Popup Styles
+.inline-popup {
+  position: absolute;
+  width: 400px;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+}
+
+.inline-popup-close {
+  position: absolute;
+  top: var(--gutter-half);
+  right: var(--gutter-half);
+  background: var(--color-border);
+  color: var(--color-text);
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  z-index: 1001;
+  transition: background 0.3s ease;
+
+  &:hover {
+    background: var(--color-primary);
+  }
+}
+
+.inline-popup-body {
+  padding: var(--gutter);
+  max-height: 300px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.inline-popup-heading {
+  margin-bottom: var(--gutter-half);
+  :deep(h2) {
+    margin: 0;
+    @include smallType;
+    @include foundersMedium;
+  }
+}
+
+.inline-popup-paragraph {
+  margin-bottom: var(--gutter-half);
+  :deep(p) {
+    margin: 0;
+    @include smallType;
+    color: var(--color-border);
+  }
+}
+
+.inline-popup-link {
+  margin-top: var(--gutter-half);
+  :deep(a) {
+    @include smallType;
+    @include linkStyle;
   }
 }
 </style>
