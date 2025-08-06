@@ -96,6 +96,8 @@
 
   @include breakpoint(display) {
     --body:17px;
+    --small:17px;
+    --largeBody:20px;
   }
 }
 

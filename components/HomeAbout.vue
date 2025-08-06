@@ -125,12 +125,18 @@ const swiperAutoplayOptions = ref({
   padding-top: 20vh;
   .about-slideshow {
     grid-row: 2 / span 1;
-    grid-column: 5 / span 4;
+    grid-column: 1 / span 12;
     margin-top: 20vh;
     aspect-ratio: 1/1;
     display: block;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(25% + calc(var(--gutter) * 2) - calc(var(--gutterPadding) * 2));
     @include breakpoint(mobile) {
-      grid-column: 4 / span 6;
+      width: calc(
+        50% + calc(var(--gutter) * 5) - calc(var(--gutterPadding) * 2)
+      );
     }
   }
 }

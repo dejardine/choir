@@ -371,7 +371,7 @@ watchEffect(async () => {
     @include foundersMedium;
   }
   :deep(a) {
-    @include foundersMedium;
+    @include heldaneTextItalic;
     margin-top: var(--gutter);
     display: block;
     @include linkStyle;
@@ -395,7 +395,13 @@ watchEffect(async () => {
   :deep(p) {
     @include largeBodyType;
     margin-bottom: var(--gutter);
-    max-width: 460px;
+    max-width: 520px;
+    // em {
+    //   @include heldaneTextItalic;
+    // }
+    @include breakpoint(display) {
+      max-width: 600px;
+    }
   }
   blockquote {
     margin-top: var(--gutter-5);

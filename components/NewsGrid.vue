@@ -228,6 +228,7 @@
           >
             <div class="score-item">
               <div
+                class="score-item-wrapper"
                 v-if="
                   !(
                     newsGroup.item &&
@@ -238,66 +239,29 @@
               >
                 <!-- Case 1: Link exists AND data is populated by graphQuery -->
                 <template v-if="newsGroup.item && newsGroup.item.data">
-                  <div class="item-content">
-                    <!-- Link wrapper if link exists -->
-                    <prismic-link
-                      v-if="newsGroup.item.data.link"
-                      :field="newsGroup.item.data.link"
-                      class="score-link"
-                    >
-                      <!-- Video Thumbnail with Cover (only if both exist) -->
-                      <VimeoPlayerLoop
-                        v-if="
-                          newsGroup.item.data.video_thumbnail &&
-                          newsGroup.item.data.image_thumbnail?.url
-                        "
-                        :video-id="newsGroup.item.data.video_thumbnail"
-                        :cover-image-url="
-                          newsGroup.item.data.image_thumbnail.url
-                        "
-                        :cover-image="newsGroup.item.data.image_thumbnail"
-                        class="thumbnail-video"
-                      />
-                      <!-- Image Thumbnail (if no video, but image exists) -->
-                      <ImageHalf
-                        v-else-if="
-                          newsGroup.item.data.image_thumbnail &&
-                          newsGroup.item.data.image_thumbnail.url
-                        "
-                        :imageField="newsGroup.item.data.image_thumbnail"
-                        class="thumbnail-image"
-                      />
-                      <!-- Fallback if no media (but data object exists) -->
-                      <div v-else class="no-media"></div>
-                    </prismic-link>
-
-                    <!-- No link wrapper - just media -->
-                    <template v-else>
-                      <!-- Video Thumbnail with Cover (only if both exist) -->
-                      <VimeoPlayerLoop
-                        v-if="
-                          newsGroup.item.data.video_thumbnail &&
-                          newsGroup.item.data.image_thumbnail?.url
-                        "
-                        :video-id="newsGroup.item.data.video_thumbnail"
-                        :cover-image-url="
-                          newsGroup.item.data.image_thumbnail.url
-                        "
-                        :cover-image="newsGroup.item.data.image_thumbnail"
-                        class="thumbnail-video"
-                      />
-                      <!-- Image Thumbnail (if no video, but image exists) -->
-                      <ImageHalf
-                        v-else-if="
-                          newsGroup.item.data.image_thumbnail &&
-                          newsGroup.item.data.image_thumbnail.url
-                        "
-                        :imageField="newsGroup.item.data.image_thumbnail"
-                        class="thumbnail-image"
-                      />
-                      <!-- Fallback if no media (but data object exists) -->
-                      <div v-else class="no-media"></div>
-                    </template>
+                  <div class="item-content score-item-content">
+                    <!-- Video Thumbnail with Cover (only if both exist) -->
+                    <VimeoPlayerLoop
+                      v-if="
+                        newsGroup.item.data.video_thumbnail &&
+                        newsGroup.item.data.image_thumbnail?.url
+                      "
+                      :video-id="newsGroup.item.data.video_thumbnail"
+                      :cover-image-url="newsGroup.item.data.image_thumbnail.url"
+                      :cover-image="newsGroup.item.data.image_thumbnail"
+                      class="thumbnail-video"
+                    />
+                    <!-- Image Thumbnail (if no video, but image exists) -->
+                    <ImageHalf
+                      v-else-if="
+                        newsGroup.item.data.image_thumbnail &&
+                        newsGroup.item.data.image_thumbnail.url
+                      "
+                      :imageField="newsGroup.item.data.image_thumbnail"
+                      class="thumbnail-image"
+                    />
+                    <!-- Fallback if no media (but data object exists) -->
+                    <div v-else class="no-media"></div>
                   </div>
                 </template>
 
@@ -452,6 +416,19 @@ const scrollToTop = () => {
   }
 };
 
+const scrollToTopFast = () => {
+  if ($ScrollToPlugin) {
+    $gsap.to(window, {
+      duration: 0.2,
+      scrollTo: { y: 0 },
+      ease: "power2.inOut",
+    });
+  } else {
+    console.warn("ScrollToPlugin is not available.");
+    window.scrollTo({ top: 0, behavior: "smooth" }); // Fallback
+  }
+};
+
 // Computed property to calculate load-more-container height
 const loadMoreContainerHeight = computed(() => {
   if (!props.footerHeight) return "50vh"; // Fallback to original height
@@ -487,6 +464,8 @@ const setView = async (view) => {
   if (view === "score") {
     await nextTick();
     initializeScrollTrigger();
+    // Scroll to top when switching to score view
+    scrollToTopFast();
   }
 };
 
@@ -861,7 +840,7 @@ new Promise((resolve) => {
 
 .score-items {
   display: flex;
-  gap: 40px;
+  gap: 0vw;
   height: 100%;
   align-items: center;
   justify-content: flex-start;
@@ -905,15 +884,81 @@ new Promise((resolve) => {
   }
 
   // Score view specific styling for videos
-  .score-view .score-link {
-    height: 300px; // Only in score view
+  .score-item-wrapper {
+    width: 400px;
+  }
+  &:nth-child(10n + 2) {
+    width: 360px;
+    .item-content {
+      width: 400px;
+    }
+  }
+  &:nth-child(10n + 3) {
+    width: 360px;
+    .item-content {
+      transform: translateY(-33.333%);
+      width: 400px;
+    }
+  }
+  &:nth-child(10n + 4) {
+    .item-content {
+      transform: translateY(33.33333%);
+    }
+  }
+  &:nth-child(10n + 5) {
+    width: 360px;
+    margin-left: 160px;
+    .score-item-wrapper {
+      width: 400px;
+    }
+    .item-content {
+      width: 400px;
+    }
+  }
+  &:nth-child(10n + 6) {
+    position: relative;
+    z-index: 10;
+    width: 360px;
+
+    .item-content {
+      transform: translateY(33.33333%);
+      width: 400px;
+    }
+  }
+  &:nth-child(10n + 7) {
+    margin-left: 240px;
+    margin-right: 200px;
+  }
+  &:nth-child(10n + 8) {
+    width: 360px;
+    .item-content {
+      transform: translateY(-33.33333%);
+      width: 400px;
+    }
+  }
+  &:nth-child(10n + 9) {
+    width: 360px;
+    .item-content {
+      transform: translateY(33.33333%);
+      width: 400px;
+    }
+  }
+  &:nth-child(10n + 10) {
+    .item-content {
+      transform: translateY(-33.33333%);
+    }
+  }
+  &:nth-child(10n + 11) {
+    margin-left: 240px;
+    margin-right: 200px;
+    .item-content {
+      transform: translateY(-33.33333%);
+    }
   }
 }
 
 // Ensure VimeoPlayerLoop gets proper dimensions in score view
 .score-item :deep(.vimeo-player-wrapper) {
-  width: 100% !important;
-  height: 300px !important;
 }
 
 .thumbnail-image,

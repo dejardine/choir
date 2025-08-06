@@ -183,7 +183,7 @@
           "label": "Information",
           "placeholder": "",
           "allowTargetBlank": true,
-          "multi": "paragraph,hyperlink"
+          "multi": "paragraph,hyperlink,strong,em"
         }
       },
       "quote": {
