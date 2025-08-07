@@ -34,9 +34,11 @@ const props = defineProps({
 .image-full-container {
   width: 100%;
   line-height: 0; /* Prevent extra space below image */
+  height: 100%; /* Inherit height from parent */
   :deep(img) {
     width: 100%;
-    height: auto;
+    height: 100%;
+    object-fit: cover;
   }
 }
 </style>

@@ -9,13 +9,19 @@ export const useResponsive = () => {
     display: 1800,
   };
 
+  // Initialize with SSR-safe defaults
   const screens = ref({
-    isMobile: false,
+    isMobile: typeof window !== "undefined" ? window.innerWidth <= 812 : true,
     isTablet: false,
     isSmallLaptop: false,
     isLaptop: false,
     isDisplay: false,
-    current: "laptop",
+    current:
+      typeof window !== "undefined"
+        ? window.innerWidth <= 812
+          ? "mobile"
+          : "laptop"
+        : "mobile",
   });
 
   const updateScreens = () => {
@@ -56,10 +62,13 @@ export const useResponsive = () => {
     console.log(
       "updateScreens called - width:",
       width,
+      "isMobile:",
+      newScreens.isMobile,
       "isDisplay:",
       newScreens.isDisplay
     );
     screens.value = newScreens;
+    console.log("screens.value updated:", screens.value);
   };
 
   if (typeof window !== "undefined") {

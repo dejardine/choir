@@ -73,7 +73,7 @@ const props = defineProps({
 });
 
 // GSAP and Prismic instances
-const { $gsap, $ScrollTrigger, $ScrollToPlugin } = useNuxtApp();
+const { $gsap, $ScrollTrigger, $ScrollToPlugin, $screens } = useNuxtApp();
 const { client: prismicClient } = usePrismic();
 
 // --- Component State & Data ---
@@ -191,6 +191,8 @@ const toggleInfo = () => {
 const MARGIN_TOP_OFFSET = 48; // Additional offset in pixels
 
 const calculateMarginTop = async () => {
+  console.log("ProjectInformation - calculateMarginTop called");
+
   // Ensure Vue has processed DOM updates before measurement
   await nextTick();
 
@@ -202,7 +204,39 @@ const calculateMarginTop = async () => {
     ) {
       const headerHeight = projectInformationHeaderEl.value.offsetHeight;
       if (typeof headerHeight === "number" && headerHeight >= 0) {
-        projectInformationContainerEl.value.style.marginTop = `calc(100vh - (${headerHeight}px + ${MARGIN_TOP_OFFSET}px))`;
+        const windowWidth =
+          typeof window !== "undefined" ? window.innerWidth : 0;
+        const isMobile =
+          $screens.value?.isMobile || (windowWidth > 0 && windowWidth <= 812);
+
+        console.log(
+          "ProjectInformation - isMobile:",
+          $screens.value?.isMobile,
+          "fallback isMobile:",
+          isMobile,
+          "width:",
+          windowWidth,
+          "headerHeight:",
+          headerHeight,
+          "full $screens:",
+          $screens
+        );
+
+        // Use 66.666vh on mobile, calculated height on desktop
+        if (isMobile) {
+          console.log("ProjectInformation - using mobile margin: 66.666vh");
+          projectInformationContainerEl.value.style.marginTop = "66.666vh";
+          // Force a reflow to ensure the style is applied
+          projectInformationContainerEl.value.offsetHeight;
+        } else {
+          const calculatedMargin = `calc(100vh - (${headerHeight}px + ${MARGIN_TOP_OFFSET}px))`;
+          console.log(
+            "ProjectInformation - using calculated margin:",
+            calculatedMargin
+          );
+          projectInformationContainerEl.value.style.marginTop =
+            calculatedMargin;
+        }
       } else {
         // console.warn("ProjectInformationHeader: Could not determine valid header height on RAF.");
       }

@@ -3,8 +3,13 @@ export default defineNuxtPlugin((nuxtApp) => {
 
   // Force an immediate update
   if (typeof window !== "undefined") {
-    // Run immediately
+    // Run immediately and ensure it's synchronous
     updateScreens();
+
+    // Also run on next tick to ensure it's applied
+    setTimeout(() => {
+      updateScreens();
+    }, 0);
 
     // Add resize listener
     window.addEventListener("resize", updateScreens);
