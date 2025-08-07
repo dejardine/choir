@@ -236,7 +236,7 @@
                     newsGroup.item.link_type === 'Document'
                   )
                 "
-                @click="openPopup(newsGroup.item, $event)"
+                @click="handleItemClick(newsGroup.item, $event)"
               >
                 <!-- Case 1: Link exists AND data is populated by graphQuery -->
                 <template v-if="newsGroup.item && newsGroup.item.data">
@@ -291,8 +291,7 @@
                     left: popup.clickX + 'px',
                     top: popup.clickY + 'px',
                   }"
-                  @mousedown="startDrag($event, popup)"
-                  @touchstart="startDrag($event, popup)"
+                  @click.stop
                 >
                   <div class="inline-popup-body">
                     <!-- Heading -->
@@ -380,7 +379,7 @@ const props = defineProps({
 });
 
 // Load GSAP libraries we need
-const { $gsap, $ScrollTrigger, $ScrollToPlugin, $Draggable } = useNuxtApp();
+const { $gsap, $ScrollTrigger, $ScrollToPlugin } = useNuxtApp();
 
 // Reactive state for load more functionality
 const itemsToShow = ref(13); // Start with 13 items (2 top + 11 bottom)
@@ -390,7 +389,6 @@ const currentView = ref("grid");
 const scoreContainer = ref(null);
 const scoreItems = ref(null);
 let scrollTriggerInstance = null;
-let draggableInstance = null;
 
 // Popup state - now an array to handle multiple popups
 const popupData = ref([]);
@@ -408,19 +406,31 @@ const openPopup = (item, event) => {
     );
 
     if (existingPopupIndex !== -1) {
-      // If popup already exists for this item, don't do anything
-      return;
+      // Update existing popup position
+      popupData.value[existingPopupIndex].clickX = clickX;
+      popupData.value[existingPopupIndex].clickY = clickY;
+    } else {
+      // Add new popup to the array
+      popupData.value.push({
+        itemId: item.id,
+        heading: item.data.heading,
+        paragraph: item.data.paragraph,
+        link: item.data.link,
+        clickX: clickX,
+        clickY: clickY,
+      });
     }
+  }
+};
 
-    // Add new popup to the array
-    popupData.value.push({
-      itemId: item.id,
-      heading: item.data.heading,
-      paragraph: item.data.paragraph,
-      link: item.data.link,
-      clickX: clickX,
-      clickY: clickY,
-    });
+const handleItemClick = (item, event) => {
+  // Check if the click target is inside a popup
+  const clickedElement = event.target;
+  const isInsidePopup = clickedElement.closest(".inline-popup");
+
+  // Only open/update popup if not clicking inside a popup
+  if (!isInsidePopup) {
+    openPopup(item, event);
   }
 };
 
@@ -429,49 +439,6 @@ const closePopup = (itemId) => {
   if (index !== -1) {
     popupData.value.splice(index, 1);
   }
-};
-
-// Drag functionality
-let isDragging = false;
-let dragOffset = { x: 0, y: 0 };
-
-const startDrag = (event, popup) => {
-  isDragging = true;
-  const rect = event.currentTarget.getBoundingClientRect();
-  const clientX = event.touches ? event.touches[0].clientX : event.clientX;
-  const clientY = event.touches ? event.touches[0].clientY : event.clientY;
-
-  dragOffset.x = clientX - rect.left;
-  dragOffset.y = clientY - rect.top;
-
-  document.addEventListener("mousemove", (e) => handleDrag(e, popup));
-  document.addEventListener("touchmove", (e) => handleDrag(e, popup));
-  document.addEventListener("mouseup", stopDrag);
-  document.addEventListener("touchend", stopDrag);
-
-  event.preventDefault();
-};
-
-const handleDrag = (event, popup) => {
-  if (!isDragging) return;
-
-  const clientX = event.touches ? event.touches[0].clientX : event.clientX;
-  const clientY = event.touches ? event.touches[0].clientY : event.clientY;
-
-  const parentRect = event.currentTarget
-    .closest(".score-item-wrapper")
-    .getBoundingClientRect();
-
-  popup.clickX = clientX - parentRect.left - dragOffset.x;
-  popup.clickY = clientY - parentRect.top - dragOffset.y;
-};
-
-const stopDrag = () => {
-  isDragging = false;
-  document.removeEventListener("mousemove", handleDrag);
-  document.removeEventListener("touchmove", handleDrag);
-  document.removeEventListener("mouseup", stopDrag);
-  document.removeEventListener("touchend", stopDrag);
 };
 
 // Computed properties to separate news items
@@ -651,31 +618,6 @@ const initializeScrollTrigger = () => {
   // Store the trigger element for cleanup
   scrollTriggerInstance.triggerElement = triggerElement;
 
-  // Draggable functionality disabled for score view
-  // if ($Draggable && scoreItems.value) {
-  //   const maxDrag = totalWidth - window.innerWidth;
-  //
-  //   draggableInstance = $Draggable.create(scoreItems.value, {
-  //     type: "x",
-  //     bounds: {
-  //       minX: -maxDrag,
-  //       maxX: 0,
-  //     },
-  //     inertia: true,
-  //     onDrag: function () {
-  //       // Update ScrollTrigger progress based on drag position
-  //       const progress = Math.abs(this.x) / maxDrag;
-  //       if (scrollTriggerInstance) {
-  //         scrollTriggerInstance.progress = progress;
-  //       }
-  //     },
-  //     onDragEnd: function () {
-  //       // Optional: Add snap-to-item functionality
-  //       console.log("Drag ended at position:", this.x);
-  //     },
-  //   })[0];
-  // }
-
   console.log("ScrollTrigger initialized with:", {
     totalWidth,
     windowWidth: window.innerWidth,
@@ -696,12 +638,6 @@ const destroyScrollTrigger = () => {
       document.body.removeChild(scrollTriggerInstance.triggerElement);
     }
     scrollTriggerInstance = null;
-  }
-
-  // Clean up draggable instance
-  if (draggableInstance) {
-    draggableInstance.kill();
-    draggableInstance = null;
   }
 };
 
