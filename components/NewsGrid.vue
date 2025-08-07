@@ -226,7 +226,10 @@
             v-for="(newsGroup, index) in allNewsItems"
             :key="newsGroup.item?.id || `score-item-${index}`"
           >
-            <div class="score-item">
+            <div
+              class="score-item"
+              :class="getAspectRatioClass(newsGroup.item)"
+            >
               <div
                 class="score-item-wrapper"
                 v-if="
@@ -432,6 +435,37 @@ const handleItemClick = (item, event) => {
   if (!isInsidePopup) {
     openPopup(item, event);
   }
+};
+
+const getAspectRatioClass = (item) => {
+  if (!item || !item.data) return "square";
+
+  // Check if there's an image thumbnail
+  if (item.data.image_thumbnail && item.data.image_thumbnail.url) {
+    const img = new Image();
+    img.src = item.data.image_thumbnail.url;
+
+    // If we can get dimensions from the image object
+    if (item.data.image_thumbnail.dimensions) {
+      const { width, height } = item.data.image_thumbnail.dimensions;
+      const ratio = width / height;
+
+      if (ratio > 1.2) return "landscape";
+      if (ratio < 0.8) return "portrait";
+      return "square";
+    }
+
+    // Fallback: try to determine from image URL or default to square
+    return "square";
+  }
+
+  // If there's a video thumbnail but no image, default to landscape
+  if (item.data.video_thumbnail) {
+    return "landscape";
+  }
+
+  // Default fallback
+  return "square";
 };
 
 const closePopup = (itemId) => {
@@ -923,6 +957,7 @@ new Promise((resolve) => {
   height: 100%;
   display: flex;
   align-items: center;
+
   &:hover {
     z-index: 2000;
     position: relative;
@@ -942,13 +977,6 @@ new Promise((resolve) => {
     justify-content: center;
   }
 
-  .score-link {
-    display: block;
-    width: 400px;
-    height: 100%;
-    text-decoration: none;
-  }
-
   // Score view specific styling for videos
   .score-item-wrapper {
     width: 400px;
@@ -958,6 +986,24 @@ new Promise((resolve) => {
     .item-content {
       width: 400px;
     }
+    &.landscape {
+      width: 360px;
+      .item-content {
+        width: 400px;
+      }
+    }
+    &.portrait {
+      width: 280px;
+      .item-content {
+        width: 320px;
+      }
+    }
+    &.square {
+      width: 260px;
+      .item-content {
+        width: 300px;
+      }
+    }
   }
   &:nth-child(10n + 3) {
     width: 360px;
@@ -965,10 +1011,41 @@ new Promise((resolve) => {
       transform: translateY(-33.333%);
       width: 400px;
     }
+    &.landscape {
+      width: 360px;
+      .item-content {
+        width: 400px;
+      }
+    }
+    &.portrait {
+      width: 280px;
+      .item-content {
+        width: 320px;
+      }
+    }
+
+    &.square {
+      width: 260px;
+      .item-content {
+        width: 300px;
+      }
+    }
   }
   &:nth-child(10n + 4) {
     .item-content {
       transform: translateY(33.33333%);
+    }
+    &.square {
+      width: 260px;
+      .item-content {
+        width: 300px;
+      }
+    }
+    &.portrait {
+      width: 280px;
+      .item-content {
+        width: 320px;
+      }
     }
   }
   &:nth-child(10n + 5) {
@@ -980,6 +1057,18 @@ new Promise((resolve) => {
     .item-content {
       width: 400px;
     }
+    &.square {
+      width: 260px;
+      .item-content {
+        width: 300px;
+      }
+    }
+    &.portrait {
+      width: 280px;
+      .item-content {
+        width: 320px;
+      }
+    }
   }
   &:nth-child(10n + 6) {
     position: relative;
@@ -990,16 +1079,52 @@ new Promise((resolve) => {
       transform: translateY(33.33333%);
       width: 400px;
     }
+    &.square {
+      width: 260px;
+      .item-content {
+        width: 300px;
+      }
+    }
+    &.portrait {
+      width: 280px;
+      .item-content {
+        width: 320px;
+      }
+    }
   }
   &:nth-child(10n + 7) {
     margin-left: 240px;
     margin-right: 200px;
+    &.square {
+      width: 260px;
+      .item-content {
+        width: 300px;
+      }
+    }
+    &.portrait {
+      width: 280px;
+      .item-content {
+        width: 320px;
+      }
+    }
   }
   &:nth-child(10n + 8) {
     width: 360px;
     .item-content {
       transform: translateY(-33.33333%);
       width: 400px;
+    }
+    &.square {
+      width: 260px;
+      .item-content {
+        width: 300px;
+      }
+    }
+    &.portrait {
+      width: 280px;
+      .item-content {
+        width: 320px;
+      }
     }
   }
   &:nth-child(10n + 9) {
@@ -1008,10 +1133,34 @@ new Promise((resolve) => {
       transform: translateY(33.33333%);
       width: 400px;
     }
+    &.square {
+      width: 260px;
+      .item-content {
+        width: 300px;
+      }
+    }
+    &.portrait {
+      width: 280px;
+      .item-content {
+        width: 320px;
+      }
+    }
   }
   &:nth-child(10n + 10) {
     .item-content {
       transform: translateY(-33.33333%);
+    }
+    &.square {
+      width: 260px;
+      .item-content {
+        width: 300px;
+      }
+    }
+    &.portrait {
+      width: 280px;
+      .item-content {
+        width: 320px;
+      }
     }
   }
   &:nth-child(10n + 11) {
@@ -1020,11 +1169,19 @@ new Promise((resolve) => {
     .item-content {
       transform: translateY(-33.33333%);
     }
+    &.square {
+      width: 260px;
+      .item-content {
+        width: 300px;
+      }
+    }
+    &.portrait {
+      width: 280px;
+      .item-content {
+        width: 320px;
+      }
+    }
   }
-}
-
-// Ensure VimeoPlayerLoop gets proper dimensions in score view
-.score-item :deep(.vimeo-player-wrapper) {
 }
 
 .thumbnail-image,
