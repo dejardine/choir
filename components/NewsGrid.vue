@@ -385,7 +385,7 @@ const props = defineProps({
 const { $gsap, $ScrollTrigger, $ScrollToPlugin } = useNuxtApp();
 
 // Reactive state for load more functionality
-const itemsToShow = ref(13); // Start with 13 items (2 top + 11 bottom)
+const itemsToShow = ref(14); // Start with 13 items (2 top + 11 bottom)
 
 // View state management
 const currentView = ref("grid");
@@ -474,22 +474,7 @@ const closePopup = (itemId) => {
 
 // Computed properties to separate news items
 const allNewsItems = computed(() => {
-  const originalItems =
-    props.page?.newsLandingPageWithData?.data?.news_items || [];
-  // Multiply the array by 3 for more content
-  const multipliedItems = [];
-  for (let i = 0; i < 3; i++) {
-    originalItems.forEach((item, index) => {
-      // Create a deep copy of the item with a unique key
-      const clonedItem = JSON.parse(JSON.stringify(item));
-      // Add a suffix to make each item unique
-      if (clonedItem.item?.id) {
-        clonedItem.item.id = `${clonedItem.item.id}-copy-${i + 1}`;
-      }
-      multipliedItems.push(clonedItem);
-    });
-  }
-  return multipliedItems;
+  return props.page?.newsLandingPageWithData?.data?.news_items || [];
 });
 
 const topNewsItems = computed(() => {
@@ -513,7 +498,7 @@ const showLoadMoreButton = computed(() => {
 });
 
 const loadMore = () => {
-  itemsToShow.value += 11;
+  itemsToShow.value += 12;
 };
 
 const scrollToTop = () => {
@@ -944,7 +929,7 @@ new Promise((resolve) => {
 }
 
 .end-spacer {
-  width: 33.333vw; // End gap
+  width: 0px; // End gap
   display: block;
 }
 
