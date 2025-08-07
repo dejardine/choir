@@ -291,13 +291,9 @@
                     left: popup.clickX + 'px',
                     top: popup.clickY + 'px',
                   }"
+                  @mousedown="startDrag($event, popup)"
+                  @touchstart="startDrag($event, popup)"
                 >
-                  <button
-                    class="inline-popup-close"
-                    @click="closePopup(popup.itemId)"
-                  >
-                    ×
-                  </button>
                   <div class="inline-popup-body">
                     <!-- Heading -->
                     <div v-if="popup.heading" class="inline-popup-heading">
@@ -433,6 +429,49 @@ const closePopup = (itemId) => {
   if (index !== -1) {
     popupData.value.splice(index, 1);
   }
+};
+
+// Drag functionality
+let isDragging = false;
+let dragOffset = { x: 0, y: 0 };
+
+const startDrag = (event, popup) => {
+  isDragging = true;
+  const rect = event.currentTarget.getBoundingClientRect();
+  const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+  const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+
+  dragOffset.x = clientX - rect.left;
+  dragOffset.y = clientY - rect.top;
+
+  document.addEventListener("mousemove", (e) => handleDrag(e, popup));
+  document.addEventListener("touchmove", (e) => handleDrag(e, popup));
+  document.addEventListener("mouseup", stopDrag);
+  document.addEventListener("touchend", stopDrag);
+
+  event.preventDefault();
+};
+
+const handleDrag = (event, popup) => {
+  if (!isDragging) return;
+
+  const clientX = event.touches ? event.touches[0].clientX : event.clientX;
+  const clientY = event.touches ? event.touches[0].clientY : event.clientY;
+
+  const parentRect = event.currentTarget
+    .closest(".score-item-wrapper")
+    .getBoundingClientRect();
+
+  popup.clickX = clientX - parentRect.left - dragOffset.x;
+  popup.clickY = clientY - parentRect.top - dragOffset.y;
+};
+
+const stopDrag = () => {
+  isDragging = false;
+  document.removeEventListener("mousemove", handleDrag);
+  document.removeEventListener("touchmove", handleDrag);
+  document.removeEventListener("mouseup", stopDrag);
+  document.removeEventListener("touchend", stopDrag);
 };
 
 // Computed properties to separate news items
@@ -1129,7 +1168,7 @@ new Promise((resolve) => {
 // Inline Popup Styles
 .inline-popup {
   position: absolute;
-  width: 400px;
+  width: 300px;
   background: var(--color-background);
   border: 1px solid var(--color-border);
 
@@ -1169,7 +1208,7 @@ new Promise((resolve) => {
 }
 
 .inline-popup-heading {
-  margin-bottom: var(--gutter-half);
+  margin-bottom: 0;
   :deep(h2) {
     margin: 0;
     @include smallType;
@@ -1178,7 +1217,7 @@ new Promise((resolve) => {
 }
 
 .inline-popup-paragraph {
-  margin-bottom: var(--gutter-half);
+  margin-bottom: 0;
   :deep(p) {
     margin: 0;
     @include smallType;
@@ -1187,7 +1226,7 @@ new Promise((resolve) => {
 }
 
 .inline-popup-link {
-  margin-top: var(--gutter-half);
+  margin-top: 0;
   :deep(a) {
     @include smallType;
     @include linkStyle;
