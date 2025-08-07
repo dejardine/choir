@@ -150,7 +150,7 @@ export default defineNuxtConfig({
       sm: 812,
       md: 1180,
       lg: 1512,
-      xl: 2200,
+      xl: 1800,
     },
   },
   css: ["~/assets/scss/reset.scss", "~/assets/scss/global.scss"],

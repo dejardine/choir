@@ -2,19 +2,20 @@ import { ref } from "vue";
 
 export const useResponsive = () => {
   const breakpoints = {
-    sm: 640,
-    md: 768,
-    lg: 1024,
-    xl: 1280,
-    "2xl": 1536,
+    mobile: 812,
+    tablet: 1380,
+    smallLaptop: 1280,
+    laptop: 1512,
+    display: 1800,
   };
 
   const screens = ref({
     isMobile: false,
     isTablet: false,
-    isDesktop: false,
-    isLargeDesktop: false,
-    current: "desktop",
+    isSmallLaptop: false,
+    isLaptop: false,
+    isDisplay: false,
+    current: "laptop",
   });
 
   const updateScreens = () => {
@@ -22,8 +23,9 @@ export const useResponsive = () => {
       screens.value = {
         isMobile: true,
         isTablet: false,
-        isDesktop: false,
-        isLargeDesktop: false,
+        isSmallLaptop: false,
+        isLaptop: false,
+        isDisplay: false,
         current: "mobile",
       };
       return;
@@ -31,18 +33,24 @@ export const useResponsive = () => {
 
     const width = window.innerWidth;
     screens.value = {
-      isMobile: width < breakpoints.md,
-      isTablet: width >= breakpoints.md && width < breakpoints.lg,
-      isDesktop: width >= breakpoints.lg && width < breakpoints.xl,
-      isLargeDesktop: width >= breakpoints.xl,
+      isMobile: width <= breakpoints.mobile,
+      isTablet: width <= breakpoints.tablet && width > breakpoints.mobile,
+      isSmallLaptop:
+        width <= breakpoints.smallLaptop && width > breakpoints.tablet,
+      isLaptop: width <= breakpoints.laptop && width > breakpoints.smallLaptop,
+      isDisplay: width >= breakpoints.display,
       current:
-        width < breakpoints.md
+        width <= breakpoints.mobile
           ? "mobile"
-          : width < breakpoints.lg
+          : width <= breakpoints.tablet
             ? "tablet"
-            : width < breakpoints.xl
-              ? "desktop"
-              : "largeDesktop",
+            : width <= breakpoints.smallLaptop
+              ? "smallLaptop"
+              : width <= breakpoints.laptop
+                ? "laptop"
+                : width >= breakpoints.display
+                  ? "display"
+                  : "laptop",
     };
   };
 
