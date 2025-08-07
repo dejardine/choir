@@ -385,7 +385,7 @@ const props = defineProps({
 const { $gsap, $ScrollTrigger, $ScrollToPlugin } = useNuxtApp();
 
 // Reactive state for load more functionality
-const itemsToShow = ref(14); // Start with 13 items (2 top + 11 bottom)
+const itemsToShow = ref(12); // Start with 12 items in bottom grid
 
 // View state management
 const currentView = ref("grid");
@@ -482,7 +482,15 @@ const topNewsItems = computed(() => {
   if (screens.value.isMobile) {
     return [];
   }
-  return allNewsItems.value.slice(0, 2);
+  // Show 3 items on display screens, 2 items on other screens
+  const itemCount = screens.value.isDisplay ? 3 : 2;
+  console.log(
+    "topNewsItems computed - isDisplay:",
+    screens.value.isDisplay,
+    "itemCount:",
+    itemCount
+  );
+  return allNewsItems.value.slice(0, itemCount);
 });
 
 const bottomNewsItems = computed(() => {
@@ -490,11 +498,30 @@ const bottomNewsItems = computed(() => {
   if (screens.value.isMobile) {
     return allNewsItems.value.slice(0, itemsToShow.value);
   }
-  return allNewsItems.value.slice(2, itemsToShow.value);
+  // Start from the appropriate index based on how many items are in the top section
+  const topItemCount = screens.value.isDisplay ? 3 : 2;
+  const endIndex = topItemCount + itemsToShow.value;
+  console.log(
+    "bottomNewsItems computed - isDisplay:",
+    screens.value.isDisplay,
+    "topItemCount:",
+    topItemCount,
+    "itemsToShow:",
+    itemsToShow.value,
+    "endIndex:",
+    endIndex
+  );
+  return allNewsItems.value.slice(topItemCount, endIndex);
+});
+
+// Computed property to calculate total items to show
+const totalItemsToShow = computed(() => {
+  const topItemCount = screens.value.isDisplay ? 3 : 2;
+  return topItemCount + itemsToShow.value;
 });
 
 const showLoadMoreButton = computed(() => {
-  return itemsToShow.value < allNewsItems.value.length;
+  return totalItemsToShow.value < allNewsItems.value.length;
 });
 
 const loadMore = () => {
@@ -674,6 +701,33 @@ watch(currentView, (newView) => {
   }
 });
 
+// Watch for screen size changes to update item counts
+watch(
+  () => screens.value.isDisplay,
+  (isDisplay) => {
+    console.log("Screen size changed - isDisplay:", isDisplay);
+    console.log("Current screens state:", screens.value);
+    console.log("Current itemsToShow:", itemsToShow.value);
+    // Force a re-render by triggering nextTick
+    nextTick(() => {
+      // This ensures the computed properties are recalculated
+      console.log("Updated top items count:", topNewsItems.value.length);
+      console.log("Updated bottom items count:", bottomNewsItems.value.length);
+      console.log("Updated total items to show:", totalItemsToShow.value);
+    });
+  },
+  { immediate: true }
+);
+
+// Also watch the entire screens object for any changes
+watch(
+  screens,
+  (newScreens) => {
+    console.log("Screens object changed:", newScreens);
+  },
+  { deep: true }
+);
+
 new Promise((resolve) => {
   const script = document.createElement("script");
   script.src = "https://player.vimeo.com/api/player.js";
@@ -710,7 +764,7 @@ new Promise((resolve) => {
 
 .news-grid-top {
   position: relative;
-
+  padding-bottom: var(--gutter);
   .toggle-buttons {
     display: flex;
     justify-content: flex-start;
@@ -745,29 +799,34 @@ new Promise((resolve) => {
   @include breakpoint(mobile) {
     display: none;
   }
-}
-
-.news-grid-item {
-  &:nth-child(2) {
-    grid-column: 7 / span 3;
-    grid-row: 1;
-    @include breakpoint(display) {
-      grid-column: 9 / span 2;
+  .news-grid-item {
+    &:nth-child(2) {
+      grid-column: 7 / span 3;
+      grid-row: 1;
+      @include breakpoint(display) {
+        grid-column: 7 / span 2;
+      }
+      @include breakpoint(mobile) {
+        grid-column: auto / span 6;
+        grid-row: auto;
+      }
     }
-    @include breakpoint(mobile) {
-      grid-column: auto / span 6;
-      grid-row: auto;
+    &:nth-child(3) {
+      grid-column: 10 / span 3;
+      grid-row: 1;
+      @include breakpoint(display) {
+        grid-column: 9 / span 2;
+      }
+      @include breakpoint(mobile) {
+        grid-column: auto / span 6;
+        grid-row: auto;
+      }
     }
-  }
-  &:nth-child(3) {
-    grid-column: 10 / span 3;
-    grid-row: 1;
-    @include breakpoint(display) {
-      grid-column: 11 / span 2;
-    }
-    @include breakpoint(mobile) {
-      grid-column: auto / span 6;
-      grid-row: auto;
+    &:nth-child(4) {
+      grid-row: 1;
+      @include breakpoint(display) {
+        grid-column: 11 / span 2;
+      }
     }
   }
 }

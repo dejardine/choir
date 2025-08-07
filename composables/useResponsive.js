@@ -32,7 +32,7 @@ export const useResponsive = () => {
     }
 
     const width = window.innerWidth;
-    screens.value = {
+    const newScreens = {
       isMobile: width <= breakpoints.mobile,
       isTablet: width <= breakpoints.tablet && width > breakpoints.mobile,
       isSmallLaptop:
@@ -52,10 +52,34 @@ export const useResponsive = () => {
                   ? "display"
                   : "laptop",
     };
+
+    console.log(
+      "updateScreens called - width:",
+      width,
+      "isDisplay:",
+      newScreens.isDisplay
+    );
+    screens.value = newScreens;
   };
 
   if (typeof window !== "undefined") {
     updateScreens();
+
+    // Add resize listener to ensure updates
+    window.addEventListener("resize", updateScreens);
+
+    // Cleanup function to remove listener
+    const cleanup = () => {
+      window.removeEventListener("resize", updateScreens);
+    };
+
+    // Return cleanup function for components to use if needed
+    return {
+      screens,
+      breakpoints,
+      updateScreens,
+      cleanup,
+    };
   }
 
   return {
