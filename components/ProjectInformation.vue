@@ -408,9 +408,9 @@ watchEffect(async () => {
     @include largeBodyType;
     margin-bottom: var(--gutter);
     max-width: 520px;
-    // em {
-    //   @include heldaneTextItalic;
-    // }
+    em {
+      @include heldaneTextItalic;
+    }
     @include breakpoint(display) {
       max-width: 600px;
     }

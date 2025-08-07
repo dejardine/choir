@@ -217,8 +217,8 @@ const nextProjectLink = computed(() => {
 .hover-image {
   position: absolute;
   top: 0;
-  left: 50%;
-  transform: translate(-50%, calc(-100% - var(--gutter)));
+  left: 66.6666%;
+  transform: translate(-25%, calc(-50%));
   pointer-events: none;
   z-index: 2000;
   transition: opacity 0.3s ease;
