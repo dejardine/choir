@@ -442,9 +442,6 @@ const getAspectRatioClass = (item) => {
 
   // Check if there's an image thumbnail
   if (item.data.image_thumbnail && item.data.image_thumbnail.url) {
-    const img = new Image();
-    img.src = item.data.image_thumbnail.url;
-
     // If we can get dimensions from the image object
     if (item.data.image_thumbnail.dimensions) {
       const { width, height } = item.data.image_thumbnail.dimensions;
