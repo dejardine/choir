@@ -590,12 +590,15 @@ const setView = async (view) => {
   // Wait for DOM update
   await nextTick();
 
-  // Initialize new view
+  // Initialize new view and scroll to top
   if (view === "score") {
     await nextTick();
     initializeScrollTrigger();
     // Scroll to top when switching to score view
     scrollToTopFast();
+  } else if (view === "grid") {
+    // Scroll to top when switching to grid view
+    scrollToTop();
   }
 };
 
