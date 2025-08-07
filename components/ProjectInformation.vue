@@ -144,6 +144,18 @@ const toggleInfo = () => {
       },
       "-=0.3" // Start fading in content slightly before height animation finishes
     );
+
+    // Scroll to the project-information-content element
+    if (projectInformationEl.value) {
+      $gsap.to(window, {
+        scrollTo: {
+          y: projectInformationEl.value,
+          offsetY: 44,
+        },
+        duration: 1,
+        ease: "expo.inOut",
+      });
+    }
   } else {
     // Animate close
     // Set overflow to hidden before starting the close animation
