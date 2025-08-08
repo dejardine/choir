@@ -460,6 +460,21 @@ type CaseStudyDocumentDataSlices4Slice =
   | MediumMediaSlice;
 
 /**
+ * Item in *Case Study → Gallery Archive*
+ */
+export interface CaseStudyDocumentDataGalleryArchiveItem {
+  /**
+   * Image field in *Case Study → Gallery Archive*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: case_study.gallery_archive[].image
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image: prismic.ImageField<never>;
+}
+
+/**
  * Content for Case Study documents
  */
 interface CaseStudyDocumentData {
@@ -677,10 +692,45 @@ interface CaseStudyDocumentData {
    * - **Placeholder**: *None*
    * - **Default Value**: false
    * - **API ID Path**: case_study.archived
-   * - **Tab**: Status
+   * - **Tab**: Archive
    * - **Documentation**: https://prismic.io/docs/field#boolean
    */;
-  archived: prismic.BooleanField /**
+  archived: prismic.BooleanField;
+
+  /**
+   * Image Archive field in *Case Study*
+   *
+   * - **Field Type**: Image
+   * - **Placeholder**: *None*
+   * - **API ID Path**: case_study.image_archive
+   * - **Tab**: Archive
+   * - **Documentation**: https://prismic.io/docs/field#image
+   */
+  image_archive: prismic.ImageField<never>;
+
+  /**
+   * Gallery Archive field in *Case Study*
+   *
+   * - **Field Type**: Group
+   * - **Placeholder**: *None*
+   * - **API ID Path**: case_study.gallery_archive[]
+   * - **Tab**: Archive
+   * - **Documentation**: https://prismic.io/docs/field#group
+   */
+  gallery_archive: prismic.GroupField<
+    Simplify<CaseStudyDocumentDataGalleryArchiveItem>
+  >;
+
+  /**
+   * Vimeo Loop Archive field in *Case Study*
+   *
+   * - **Field Type**: Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: case_study.vimeo_loop_archive
+   * - **Tab**: Archive
+   * - **Documentation**: https://prismic.io/docs/field#key-text
+   */
+  vimeo_loop_archive: prismic.KeyTextField /**
    * Call to action field in *Case Study*
    *
    * - **Field Type**: Rich Text
@@ -2746,6 +2796,7 @@ declare module "@prismicio/client" {
       CaseStudyDocumentDataClientItem,
       CaseStudyDocumentDataIndustryItem,
       CaseStudyDocumentDataSlices4Slice,
+      CaseStudyDocumentDataGalleryArchiveItem,
       ClientDocument,
       ClientDocumentData,
       ContactDocument,

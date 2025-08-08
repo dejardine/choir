@@ -240,7 +240,7 @@
         }
       }
     },
-    "Status": {
+    "Archive": {
       "archived": {
         "type": "Boolean",
         "config": {
@@ -248,6 +248,38 @@
           "placeholder_false": "false",
           "placeholder_true": "true",
           "default_value": false
+        }
+      },
+      "image_archive": {
+        "type": "Image",
+        "config": {
+          "label": "Image Archive",
+          "constraint": {},
+          "thumbnails": []
+        }
+      },
+      "gallery_archive": {
+        "type": "Group",
+        "config": {
+          "label": "Gallery Archive",
+          "repeat": true,
+          "fields": {
+            "image": {
+              "type": "Image",
+              "config": {
+                "label": "Image",
+                "constraint": {},
+                "thumbnails": []
+              }
+            }
+          }
+        }
+      },
+      "vimeo_loop_archive": {
+        "type": "Text",
+        "config": {
+          "label": "Vimeo Loop Archive",
+          "placeholder": ""
         }
       }
     },
