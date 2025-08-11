@@ -16,7 +16,14 @@
           :key="index"
           class="client-name"
         >
-          {{ clientNames[item.client.uid] || "" }}
+          <prismic-rich-text
+            v-if="
+              clientNames[item.client.uid] &&
+              typeof clientNames[item.client.uid] === 'object'
+            "
+            :field="clientNames[item.client.uid]"
+          />
+          <span v-else>{{ clientNames[item.client.uid] || "" }}</span>
         </div>
       </div>
       <div class="project-information-content-right">
@@ -318,11 +325,14 @@ watchEffect(async () => {
           if (
             fetchedClient &&
             fetchedClient.data &&
-            fetchedClient.data.client_name
+            fetchedClient.data.client_name_new
           ) {
-            clientNames.value[clientLink.uid] = fetchedClient.data.client_name;
+            clientNames.value[clientLink.uid] =
+              fetchedClient.data.client_name_new;
           } else {
-            clientNames.value[clientLink.uid] = "Client name not found";
+            // Fallback to old client_name field if client_name_new is not available
+            clientNames.value[clientLink.uid] =
+              fetchedClient?.data?.client_name || "Client name not found";
           }
         } catch (error) {
           console.error(`Error fetching client ${clientLink.uid}:`, error);
@@ -370,15 +380,23 @@ watchEffect(async () => {
 .project-information-content-left {
   grid-column: 1 / span 4;
   :deep(.client-name) {
-    @include foundersMedium;
     display: inline-block;
-    &:after {
-      content: ", ";
-      white-space: pre;
-    }
+
     &:last-child {
+      p {
+        &:after {
+          content: "";
+        }
+      }
+    }
+    p {
+      @include foundersRegular;
       &:after {
-        content: "";
+        content: ", ";
+        white-space: pre;
+      }
+      strong {
+        @include foundersMedium;
       }
     }
   }

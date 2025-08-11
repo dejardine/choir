@@ -39,7 +39,7 @@ const graphQuery = `{
           client {
             client {
               ...on client {
-                client_name
+                client_name_new
               }
             }
           }

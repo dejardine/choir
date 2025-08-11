@@ -18,6 +18,15 @@
           "label": "Client Name",
           "placeholder": ""
         }
+      },
+      "client_name_new": {
+        "type": "StructuredText",
+        "config": {
+          "label": "Client Name",
+          "placeholder": "",
+          "allowTargetBlank": true,
+          "multi": "paragraph,strong"
+        }
       }
     }
   }

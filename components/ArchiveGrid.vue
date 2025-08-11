@@ -35,10 +35,16 @@
                       v-for="(clientItem, clientIndex) in projectGroup
                         .case_study.data.client"
                       :key="`client-${projectGroup.case_study.id}-${clientIndex}`"
+                      class="client-name"
                     >
-                      {{
-                        clientItem.client?.data?.client_name || "Unknown Client"
-                      }}
+                      <prismic-rich-text
+                        v-if="
+                          clientItem.client?.data?.client_name_new &&
+                          typeof clientItem.client?.data?.client_name_new ===
+                            'object'
+                        "
+                        :field="clientItem.client?.data?.client_name_new"
+                      />
                       <span
                         v-if="
                           clientIndex <
@@ -509,6 +515,23 @@ onUnmounted(() => {
     gap: var(--gutter);
     @include breakpoint(mobile) {
       grid-template-columns: 6fr 6fr;
+    }
+  }
+  .client-column {
+    .client-name {
+      @include foundersRegular;
+      display: inline-block;
+      :deep(p) {
+        display: inline-block;
+      }
+      span {
+        display: inline-block;
+        white-space: pre;
+      }
+    }
+    span {
+      @include foundersRegular;
+      display: inline-block;
     }
   }
 

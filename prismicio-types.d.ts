@@ -789,6 +789,17 @@ interface ClientDocumentData {
    * - **Documentation**: https://prismic.io/docs/field#key-text
    */
   client_name: prismic.KeyTextField;
+
+  /**
+   * Client Name field in *Client*
+   *
+   * - **Field Type**: Rich Text
+   * - **Placeholder**: *None*
+   * - **API ID Path**: client.client_name_new
+   * - **Tab**: Main
+   * - **Documentation**: https://prismic.io/docs/field#rich-text-title
+   */
+  client_name_new: prismic.RichTextField;
 }
 
 /**
