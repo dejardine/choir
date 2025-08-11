@@ -453,7 +453,7 @@ onUnmounted(() => {
         @include smallType;
         @include foundersMedium;
         text-transform: uppercase;
-        letter-spacing: 0.05rem;
+        letter-spacing: 0.025rem;
       }
     }
     :deep(p) {
