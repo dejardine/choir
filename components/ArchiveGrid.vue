@@ -6,9 +6,6 @@
       <div class="label">Client</div>
       <div class="label">Industry</div>
     </div>
-    <div class="archive-grid-image">
-      <prismic-image v-if="currentThumbnail" :field="currentThumbnail" />
-    </div>
     <template
       v-for="(projectGroup, index) in page?.archive?.data?.projects"
       :key="`archive-item-${projectGroup.case_study?.id || index}`"
@@ -19,6 +16,7 @@
         :class="{
           'is-open': openItemId === projectGroup.case_study.id,
           [`archive-grid-item-${index + 1}`]: true,
+          'is-last': index === page?.archive?.data?.projects?.length - 1,
         }"
         @click="toggleItem(projectGroup.case_study.id)"
       >
@@ -86,23 +84,115 @@
               </div>
             </div>
             <div class="project-info-bottom">
-              <p v-if="projectGroup.case_study.data.scope" class="scope">
-                {{ processScopeText(projectGroup.case_study.data.scope) }}
-              </p>
-              <prismic-rich-text
-                v-if="projectGroup.case_study.data.header_paragraph"
-                :field="projectGroup.case_study.data.header_paragraph"
-              />
+              <div class="project-info-bottom-left">
+                <div class="project-info-bottom-left-media">
+                  <!-- Archive Media Display -->
+                  <!-- Vimeo Loop Archive with Cover Image -->
+                  <VimeoPlayerLoop
+                    v-if="
+                      projectGroup.case_study.data.vimeo_loop_archive &&
+                      projectGroup.case_study.data.image_archive &&
+                      projectGroup.case_study.data.image_archive.url
+                    "
+                    :video-id="projectGroup.case_study.data.vimeo_loop_archive"
+                    :cover-image-url="
+                      projectGroup.case_study.data.image_archive.url
+                    "
+                    :cover-image="projectGroup.case_study.data.image_archive"
+                    :class="`archive-video ${getImageOrientationClass(projectGroup.case_study.data.image_archive)}`"
+                  />
 
-              <p v-if="projectGroup.case_study.data.year" class="project-year">
-                {{ projectGroup.case_study.data.year }}
-              </p>
+                  <!-- Archive Image (if no video) -->
+                  <ImageHalf
+                    v-else-if="
+                      projectGroup.case_study.data.image_archive &&
+                      projectGroup.case_study.data.image_archive.url
+                    "
+                    :imageField="projectGroup.case_study.data.image_archive"
+                    :class="`archive-image ${getImageOrientationClass(projectGroup.case_study.data.image_archive)}`"
+                  />
 
-              <p class="view-project-link">
-                <prismic-link :field="projectGroup.case_study">
-                  View project
-                </prismic-link>
-              </p>
+                  <!-- Archive Slideshow (using Swiper with autoplay) -->
+                  <div
+                    v-else-if="
+                      projectGroup.case_study.data.gallery_archive &&
+                      projectGroup.case_study.data.gallery_archive.length > 0
+                    "
+                    :class="`archive-slideshow ${getImageOrientationClass(projectGroup.case_study.data.gallery_archive[0]?.image)}`"
+                  >
+                    <client-only>
+                      <swiper
+                        :ref="(el) => setSwiperRef(el, `archive-${index}`)"
+                        :modules="[EffectFade, Autoplay]"
+                        :slides-per-view="1"
+                        :space-between="0"
+                        effect="fade"
+                        :fade-effect="{ crossFade: true }"
+                        :loop="true"
+                        :autoplay="{
+                          delay: 2500,
+                          disableOnInteraction: false,
+                          pauseOnMouseEnter: false,
+                        }"
+                        class="archive-swiper"
+                      >
+                        <swiper-slide
+                          v-for="(item, slideIndex) in projectGroup.case_study
+                            .data.gallery_archive"
+                          :key="slideIndex"
+                        >
+                          <ImageHalf
+                            :imageField="item.image"
+                            class="slideshow-image"
+                          />
+                        </swiper-slide>
+                      </swiper>
+                    </client-only>
+                  </div>
+
+                  <!-- Fallback if no archive media available -->
+                  <div v-else class="no-archive-media">
+                    <!-- No archive media available -->
+                  </div>
+                </div>
+              </div>
+              <div class="project-info-bottom-right">
+                <div class="project-info-bottom-right-left">
+                  <prismic-rich-text
+                    v-if="projectGroup.case_study.data.scope"
+                    :field="projectGroup.case_study.data.scope"
+                  />
+
+                  <p
+                    v-if="projectGroup.case_study.data.year"
+                    class="project-year"
+                  >
+                    {{ projectGroup.case_study.data.year }}
+                  </p>
+
+                  <p class="view-project-link">
+                    <prismic-link :field="projectGroup.case_study">
+                      View project
+                    </prismic-link>
+                  </p>
+                </div>
+                <div class="project-info-bottom-right-right">
+                  <prismic-rich-text
+                    v-if="projectGroup.case_study.data.header_paragraph"
+                    :field="projectGroup.case_study.data.header_paragraph"
+                  />
+                  <blockquote v-if="projectGroup.case_study.data.quote">
+                    <prismic-rich-text
+                      :field="projectGroup.case_study.data.quote"
+                    />
+                    <cite>
+                      <prismic-rich-text
+                        :field="projectGroup.case_study.data.quote_cite"
+                      />
+                    </cite>
+                  </blockquote>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -113,6 +203,12 @@
 
 <script setup>
 import { defineProps, onMounted, onUnmounted, ref, nextTick } from "vue";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { EffectFade, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-fade";
+import ImageHalf from "./ImageHalf.vue";
+import VimeoPlayerLoop from "./VimeoPlayerLoop.vue";
 
 const props = defineProps({
   page: {
@@ -124,24 +220,32 @@ const props = defineProps({
 // State to track which archive item is open
 const openItemId = ref(null);
 
-// State to track current thumbnail
-const currentThumbnail = ref(null);
+// Swiper instances for archive slideshows
+const swiperInstances = ref({});
 
-// State to track current scroll position for debug
-const currentScrollPosition = ref(0);
+const setSwiperRef = (el, index) => {
+  if (el) {
+    swiperInstances.value[index] = el.swiper;
+  }
+};
 
-// ScrollTrigger instances for cleanup
-let scrollTriggerInstances = [];
+// Function to determine image orientation and return appropriate class
+const getImageOrientationClass = (imageField) => {
+  if (!imageField || !imageField.dimensions) {
+    return "square"; // Default fallback
+  }
 
-// Store resize handler reference for cleanup
-let resizeHandler = null;
-let resizeTimeout = null;
+  const { width, height } = imageField.dimensions;
+  const ratio = width / height;
 
-// Store pending timeouts for cleanup
-let pendingTimeouts = [];
-
-// Get GSAP and ScrollTrigger from Nuxt app
-const { $gsap, $ScrollTrigger } = useNuxtApp();
+  if (ratio > 1.2) {
+    return "landscape";
+  } else if (ratio < 0.8) {
+    return "portrait";
+  } else {
+    return "square";
+  }
+};
 
 // Method to toggle accordion items
 const toggleItem = (itemId) => {
@@ -152,172 +256,6 @@ const toggleItem = (itemId) => {
     // Open the clicked item and close any other open item
     openItemId.value = itemId;
   }
-
-  // Refresh ScrollTrigger after accordion state changes
-  // to recalculate positions for image swapping
-  // Delay based on CSS transition duration (0.6s) plus a small buffer
-  nextTick(() => {
-    const refreshTimeout = setTimeout(() => {
-      if ($ScrollTrigger) {
-        $ScrollTrigger.refresh();
-        console.log("ScrollTrigger refreshed");
-      }
-    }, 650); // 600ms for transition + 50ms buffer
-
-    // Store timeout reference for potential cleanup (though this is short-lived)
-    // In a more complex scenario, you might want to store this and clear it on unmount
-  });
-};
-
-// Method to process scope text and replace line breaks with commas
-const processScopeText = (scopeField) => {
-  if (!scopeField || !scopeField.length) return "";
-
-  // Convert the rich text field to plain text and replace line breaks with commas
-  return scopeField
-    .map((item) => item.text || "")
-    .join(", ")
-    .replace(/\s*\n\s*/g, ", ") // Replace line breaks (with any surrounding spaces) with ", "
-    .replace(/,\s*,/g, ",") // Remove double commas
-    .replace(/^,\s*/, "") // Remove leading comma
-    .replace(/,\s*$/, ""); // Remove trailing comma
-};
-
-// Setup ScrollTrigger for thumbnail updates
-const setupScrollTrigger = () => {
-  console.log("Setting up ScrollTrigger...");
-
-  // Kill existing ScrollTrigger instances
-  if (scrollTriggerInstances.length > 0) {
-    scrollTriggerInstances.forEach((st) => {
-      if (st && typeof st.kill === "function") {
-        st.kill();
-      }
-    });
-    scrollTriggerInstances = [];
-  }
-
-  // Create ScrollTrigger for fade out effect when archive-grid reaches top
-  const archiveGrid = document.querySelector(".archive-grid");
-  const archiveHeader = document.querySelector(".archive-grid-header");
-  const imageElement = document.querySelector(".archive-grid-image");
-
-  if (archiveHeader && imageElement) {
-    // First ScrollTrigger: Fade out archive-grid-image
-    const imageTl = $gsap.timeline().to(imageElement, {
-      opacity: 0,
-      duration: 1,
-      scrollTrigger: {
-        trigger: archiveHeader,
-        start: "top top",
-        end: "+=100",
-        markers: false,
-        scrub: true,
-      },
-    });
-
-    scrollTriggerInstances.push(imageTl.scrollTrigger);
-  } else {
-    console.warn("Archive header or image element not found for fade effect");
-  }
-
-  // Second ScrollTrigger: Image swapping functionality
-  const items = document.querySelectorAll(".archive-grid-item");
-
-  items.forEach((item, index) => {
-    const projectGroup = props.page?.archive?.data?.projects[index];
-    if (!projectGroup?.case_study?.data?.alt_thumbnail) return;
-
-    const st = $ScrollTrigger.create({
-      trigger: item,
-      start: "top center",
-      end: "bottom center",
-      onEnter: () => {
-        console.log(`Entering item ${index}`);
-        currentThumbnail.value = projectGroup.case_study.data.alt_thumbnail;
-      },
-      onLeave: () => {
-        console.log(`Leaving item ${index}`);
-        // Only clear if we're not entering another item
-        const timeout = setTimeout(() => {
-          const isAnyItemActive = Array.from(items).some(
-            (otherItem, otherIndex) => {
-              if (otherIndex === index) return false;
-              const otherRect = otherItem.getBoundingClientRect();
-              const imageElement = document.querySelector(
-                ".archive-grid-image"
-              );
-              if (!imageElement) return false;
-              const imageRect = imageElement.getBoundingClientRect();
-
-              return !(
-                imageRect.right < otherRect.left ||
-                imageRect.left > otherRect.right ||
-                imageRect.bottom < otherRect.top ||
-                imageRect.top > otherRect.bottom
-              );
-            }
-          );
-
-          if (!isAnyItemActive) {
-            currentThumbnail.value = null;
-            console.log("No items active, clearing image");
-          }
-
-          // Remove timeout from pending list
-          const timeoutIndex = pendingTimeouts.indexOf(timeout);
-          if (timeoutIndex > -1) {
-            pendingTimeouts.splice(timeoutIndex, 1);
-          }
-        }, 50);
-
-        pendingTimeouts.push(timeout);
-      },
-      onEnterBack: () => {
-        console.log(`Entering back item ${index}`);
-        currentThumbnail.value = projectGroup.case_study.data.alt_thumbnail;
-      },
-      onLeaveBack: () => {
-        console.log(`Leaving back item ${index}`);
-        // Only clear if we're not entering another item
-        const timeout = setTimeout(() => {
-          const isAnyItemActive = Array.from(items).some(
-            (otherItem, otherIndex) => {
-              if (otherIndex === index) return false;
-              const otherRect = otherItem.getBoundingClientRect();
-              const imageElement = document.querySelector(
-                ".archive-grid-image"
-              );
-              if (!imageElement) return false;
-              const imageRect = imageElement.getBoundingClientRect();
-
-              return !(
-                imageRect.right < otherRect.left ||
-                imageRect.left > otherRect.right ||
-                imageRect.bottom < otherRect.top ||
-                imageRect.top > otherRect.bottom
-              );
-            }
-          );
-
-          if (!isAnyItemActive) {
-            currentThumbnail.value = null;
-            console.log("No items active, clearing image");
-          }
-
-          // Remove timeout from pending list
-          const timeoutIndex = pendingTimeouts.indexOf(timeout);
-          if (timeoutIndex > -1) {
-            pendingTimeouts.splice(timeoutIndex, 1);
-          }
-        }, 50);
-
-        pendingTimeouts.push(timeout);
-      },
-    });
-
-    scrollTriggerInstances.push(st);
-  });
 };
 
 // Debug logging to understand the data structure
@@ -329,78 +267,12 @@ onMounted(async () => {
       "Number of projects:",
       props.page?.archive?.data?.projects?.length
     );
-
-    // Wait for DOM to be ready
-    await nextTick();
-    console.log("After nextTick");
-
-    // Longer delay to ensure all elements are rendered
-    setTimeout(() => {
-      console.log("Setting up ScrollTrigger after delay");
-      console.log(
-        "Archive grid element exists:",
-        !!document.querySelector(".archive-grid")
-      );
-      console.log(
-        "Archive header element exists:",
-        !!document.querySelector(".archive-grid-header")
-      );
-      console.log(
-        "Image element exists:",
-        !!document.querySelector(".archive-grid-image")
-      );
-      setupScrollTrigger();
-    }, 500); // Increased from 100ms to 500ms
-
-    // Add resize handler
-    resizeHandler = () => {
-      // Debounce resize events
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => {
-        console.log("Resize detected, re-setting up ScrollTrigger");
-        setupScrollTrigger();
-      }, 250);
-    };
-
-    window.addEventListener("resize", resizeHandler);
   }
 });
 
 onUnmounted(() => {
   if (process.client) {
-    try {
-      // Clean up resize event listener
-      if (resizeHandler) {
-        window.removeEventListener("resize", resizeHandler);
-        resizeHandler = null;
-      }
-
-      // Clear any pending resize timeout
-      if (resizeTimeout) {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = null;
-      }
-
-      // Clear all pending timeouts
-      pendingTimeouts.forEach((timeout) => {
-        clearTimeout(timeout);
-      });
-      pendingTimeouts = [];
-
-      // Clean up ScrollTrigger instances
-      if (scrollTriggerInstances.length > 0) {
-        scrollTriggerInstances.forEach((st) => {
-          if (st && typeof st.kill === "function") {
-            st.kill();
-          }
-        });
-        scrollTriggerInstances = [];
-      }
-
-      console.log("ArchiveGrid ScrollTrigger cleanup completed");
-    } catch (error) {
-      console.warn("Error during ScrollTrigger cleanup:", error);
-    }
+    console.log("ArchiveGrid cleanup completed");
   }
 });
 </script>
@@ -417,45 +289,6 @@ onUnmounted(() => {
   padding-top: calc(50vh - 1px);
   position: relative;
   z-index: 20;
-}
-
-.archive-grid-image {
-  position: fixed;
-  top: 50vh;
-  transform: translateY(-50%);
-  left: 0;
-  height: calc(var(--gutter) + var(--gutter-half));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  overflow: visible;
-  width: 100%;
-  :deep(img) {
-    height: auto;
-    object-fit: cover;
-    position: absolute;
-    top: 50%;
-    left: calc((7 / 12 * 100vw) + var(--gutterPadding) + (7 * var(--gutter)));
-    transform: translateY(-50%);
-    width: calc((2.5 / 12 * 100vw) + (1.5 * var(--gutter)));
-    @include breakpoint(mobile) {
-      left: 66.6666vw;
-      width: 33.3333vw;
-    }
-  }
-
-  &:after {
-    content: "";
-    display: block;
-    width: 100%;
-    height: 1px;
-    background: var(--color-border);
-    position: absolute;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-  }
 }
 
 .archive-grid-header {
@@ -485,7 +318,10 @@ onUnmounted(() => {
 }
 
 .project-info-bottom {
-  max-width: 480px;
+  display: grid;
+  grid-template-columns: 4fr 8fr;
+  gap: var(--gutter);
+
   max-height: 0px;
   overflow: hidden;
   transition: max-height 0.6s ease-in-out;
@@ -496,25 +332,137 @@ onUnmounted(() => {
     strong {
       @include foundersRegular;
     }
+    padding-top: var(--gutter-3);
+  }
+
+  .project-info-bottom-left {
+    max-width: 480px;
+    width: 100%;
+    display: block;
+  }
+  .project-info-bottom-left-media {
+    width: 100%;
+    display: block;
+    max-width: 480px;
+
+    // Archive media styling
+    .archive-video,
+    .archive-image,
+    .archive-slideshow {
+      width: 100%;
+      padding-top: var(--gutter-3);
+      overflow: hidden;
+
+      // Orientation-based styling
+      &.portrait {
+        max-width: 140px;
+      }
+
+      &.landscape {
+        max-width: 20vw;
+      }
+
+      &.square {
+        max-width: 240px;
+      }
+
+      :deep(img) {
+        width: 100%;
+        height: auto;
+        max-width: 300px;
+      }
+
+      :deep(iframe) {
+        transition: all 1s;
+        transform-origin: center center;
+        max-width: 300px;
+      }
+    }
+
+    .archive-slideshow {
+      cursor: pointer;
+
+      .archive-swiper {
+        width: 100%;
+        height: 100%;
+      }
+
+      .slideshow-image {
+        :deep(img) {
+          display: block;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          aspect-ratio: 3/2;
+        }
+      }
+    }
+
+    .no-archive-media {
+    }
+  }
+  .project-info-bottom-right {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    gap: var(--gutter-2);
+    padding-bottom: var(--gutter-2);
+  }
+  .project-info-bottom-right-left {
+    width: auto;
+    display: block;
+  }
+  .project-info-bottom-right-right {
+    max-width: 480px;
+    width: 100%;
+    display: block;
+  }
+  blockquote {
+    position: relative;
+    margin-top: var(--gutter-3);
+    cite {
+      :deep(p) {
+        @include smallType;
+        @include foundersMedium;
+        text-transform: uppercase;
+        letter-spacing: 0.05rem;
+      }
+    }
+    :deep(p) {
+      padding-top: 0;
+    }
+    &:before {
+      content: "“";
+      font-size: 2rem;
+      color: var(--color-text);
+      @include largeBodyType;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: translateX(calc(-100% - 1px));
+    }
   }
   .project-year {
     @include bodyType;
     color: var(--color-text-secondary);
     display: block;
     margin-bottom: var(--gutter);
+    padding-top: 0;
   }
   .view-project-link {
     @include bodyType;
     color: var(--color-text-secondary);
     padding-bottom: var(--gutter-3);
+    padding-top: 0;
 
     a {
       @include linkStyle;
     }
   }
 
-  .scope {
+  :deep(p) {
     @include bodyType;
+    @include foundersMedium;
     color: var(--color-text-secondary);
     padding-top: var(--gutter-3);
 
@@ -524,10 +472,8 @@ onUnmounted(() => {
 
 .archive-grid-item {
   grid-column: auto / span 12;
-  padding: 0 var(--gutterPadding);
-  &.archive-grid-item-1 {
-    padding-top: var(--gutter);
-  }
+  padding: var(--gutter) var(--gutterPadding) 0 var(--gutterPadding);
+
   .item-content {
   }
 
@@ -547,32 +493,20 @@ onUnmounted(() => {
     }
   }
 
-  &:nth-last-child(-n + 2) {
-    .item-content {
-      margin-bottom: 0;
-    }
-  }
-
   // Accordion functionality
   &.is-open {
     .project-info-bottom {
       max-height: 500px; // Adjust this value based on your content
     }
-    border-bottom: 1px solid var(--color-border);
-    border-top: 1px solid var(--color-border);
-    padding-top: var(--gutter);
   }
 
   // Add cursor pointer to indicate clickable
   cursor: pointer;
 
-  // Optional: Add hover effect
-  &:hover {
-    .project-info-top {
-      opacity: 0.8;
-    }
+  border-top: 1px solid var(--color-border);
+  &.is-last {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--gutter);
   }
-  border-bottom: 1px solid transparent;
-  border-top: 1px solid transparent;
 }
 </style>

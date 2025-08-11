@@ -54,6 +54,13 @@ const graphQuery = `{
           scope
           year
           alt_thumbnail
+          quote
+          quote_cite
+          image_archive
+          gallery_archive {
+            image
+          }
+          vimeo_loop_archive
         }
       }
     }
