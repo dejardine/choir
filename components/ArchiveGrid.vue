@@ -325,6 +325,10 @@ onUnmounted(() => {
   max-height: 0px;
   overflow: hidden;
   transition: max-height 0.6s ease-in-out;
+
+  @include breakpoint(mobile) {
+    grid-template-columns: 6fr 6fr;
+  }
   :deep(h2) {
     @include bodyType;
     color: var(--color-text-secondary);
@@ -356,26 +360,43 @@ onUnmounted(() => {
       // Orientation-based styling
       &.portrait {
         max-width: 140px;
+        @include breakpoint(mobile) {
+          max-width: 100%;
+          padding-right: var(--gutter);
+        }
       }
 
       &.landscape {
         max-width: 20vw;
+        @include breakpoint(mobile) {
+          max-width: calc(50vw - calc(var(--gutterPadding) * 2));
+          padding-right: 0;
+        }
       }
 
       &.square {
         max-width: 240px;
+        @include breakpoint(mobile) {
+          max-width: 100%;
+        }
       }
 
       :deep(img) {
         width: 100%;
         height: auto;
         max-width: 300px;
+        @include breakpoint(mobile) {
+          max-width: 100%;
+        }
       }
 
       :deep(iframe) {
         transition: all 1s;
         transform-origin: center center;
         max-width: 300px;
+        @include breakpoint(mobile) {
+          max-width: 100%;
+        }
       }
     }
 
@@ -391,9 +412,7 @@ onUnmounted(() => {
         :deep(img) {
           display: block;
           width: 100%;
-          height: 100%;
-          object-fit: cover;
-          aspect-ratio: 3/2;
+          height: auto;
         }
       }
     }
@@ -407,6 +426,9 @@ onUnmounted(() => {
     justify-content: flex-start;
     gap: var(--gutter-2);
     padding-bottom: var(--gutter-2);
+    @include breakpoint(mobile) {
+      display: block;
+    }
   }
   .project-info-bottom-right-left {
     width: auto;
@@ -458,6 +480,10 @@ onUnmounted(() => {
     a {
       @include linkStyle;
     }
+    @include breakpoint(mobile) {
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
   }
 
   :deep(p) {
@@ -497,6 +523,9 @@ onUnmounted(() => {
   &.is-open {
     .project-info-bottom {
       max-height: 500px; // Adjust this value based on your content
+      @include breakpoint(mobile) {
+        max-height: 800px;
+      }
     }
   }
 
