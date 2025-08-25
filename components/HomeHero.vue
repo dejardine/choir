@@ -7,7 +7,7 @@
         effect="fade"
         :loop="true"
         :autoplay="{
-          delay: 50000000,
+          delay: 5000,
           disableOnInteraction: false,
         }"
         :navigation="{
