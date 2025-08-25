@@ -96,19 +96,27 @@ const setupScrollTrigger = () => {
     },
     onEnter: () => {
       console.log("HomeProjects: onEnter - adding pinned class");
-      projectTitle.value.classList.add("pinned");
+      if (projectTitle.value) {
+        projectTitle.value.classList.add("pinned");
+      }
     },
     onLeave: () => {
       console.log("HomeProjects: onLeave - removing pinned class");
-      projectTitle.value.classList.remove("pinned");
+      if (projectTitle.value) {
+        projectTitle.value.classList.remove("pinned");
+      }
     },
     onEnterBack: () => {
       console.log("HomeProjects: onEnterBack - adding pinned class");
-      projectTitle.value.classList.add("pinned");
+      if (projectTitle.value) {
+        projectTitle.value.classList.add("pinned");
+      }
     },
     onLeaveBack: () => {
       console.log("HomeProjects: onLeaveBack - removing pinned class");
-      projectTitle.value.classList.remove("pinned");
+      if (projectTitle.value) {
+        projectTitle.value.classList.remove("pinned");
+      }
     },
   });
 
