@@ -13,9 +13,7 @@
       From the start
     </button>
     <div
-      v-show="
-        isHovering && nextProjectAltThumbnail && nextProjectAltThumbnail.url
-      "
+      v-if="isHovering && nextProjectAltThumbnail"
       ref="hoverImageRef"
       class="hover-image"
       :class="`hover-image--${imageOrientation}`"
@@ -32,7 +30,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, nextTick } from "vue";
 import { PrismicText } from "@prismicio/vue";
 
 // Load GSAP libraries we need
@@ -55,8 +53,11 @@ const scrollToTop = () => {
 const isHovering = ref(false);
 const hoverImageRef = ref(null);
 
-const handleMouseEnter = () => {
+const handleMouseEnter = async () => {
   isHovering.value = true;
+
+  // Wait for the DOM to update since we're using v-if
+  await nextTick();
 
   // Animate image in with GSAP
   if (hoverImageRef.value && $gsap) {
@@ -135,10 +136,14 @@ const nextProject = computed(() => {
 
 // Get the alt_thumbnail for the next project
 const nextProjectAltThumbnail = computed(() => {
-  if (!nextProject.value || !nextProject.value.data) {
+  const altThumbnail = nextProject.value?.data?.alt_thumbnail;
+
+  // Check if alt_thumbnail has the required properties
+  if (!altThumbnail?.url || !altThumbnail?.dimensions) {
     return null;
   }
-  return nextProject.value.data.alt_thumbnail;
+
+  return altThumbnail;
 });
 
 // Determine image orientation and size class
